@@ -6,15 +6,16 @@ body {
 }
 
 .titre {
-    color: rgb(0, 0, 0);
-    font-size: 50px;
+    font-size: 60px;
+    margin: 0 0 20px 0;
 }
 
 .description {
-    color: #000000;
     font-size: 20px;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-bottom: 30px;
 }
-
 .bouton {
     background-color: #fd0202;
     color: white;
@@ -44,6 +45,7 @@ nav {
     display: flex;
 justify-content: space-between;
 align-items: center;
+box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
 }
 .logo {
     font-size: 24px;
@@ -58,6 +60,11 @@ align-items: center;
 
 .liens {
     margin-right: 40px;
+    transition: color 0.3s, transform 0.3s;
+}
+.liens a:hover {
+    color: red;
+    transform: translateY(-2px);
 }
 
 
@@ -84,7 +91,7 @@ nav a:hover::after {
 }
 
 nav a:hover {
-    color: #000000;
+    color: #020202;
 }
 img {
     width: 300px;
@@ -96,16 +103,21 @@ img {
     align-items: center;
     gap: 60px;
     margin-top: 150px;
+    
 }
 
 .texte {
     text-align: left;
+    animation: apparition 1s ease;
 }
 
 .photo {
-    width: 300px;
-    border-radius: 20px;
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 30px;
     transition: transform 0.3s;
+    animation: apparition 1s ease 0.3s backwards;
 }
 
 .photo:hover {
@@ -129,6 +141,43 @@ img {
     text-align: center;
     padding: 100px 20px;
 }
+.projets {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cartes-projets {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.projet {
+    width: 300px;
+    padding: 30px;
+    background-color: #c91010;
+    border-radius: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.projet:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+.bouton-projet {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: rgb(1, 1, 1);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.bouton-projet:hover {
+    transform: scale(1.05);
+}
 @media (max-width: 700px) {
     .accueil {
         flex-direction: column;
@@ -147,6 +196,10 @@ img {
     .titre {
         font-size: 35px;
     }
+    .cartes {
+    flex-direction: column;
+    align-items: center;
+}
 }
 form {
     display: flex;
@@ -194,4 +247,49 @@ form button {
 }
 nav a.actif {
     color: #fe0000;
+}
+
+@keyframes apparition {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.competences {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cartes {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.carte {
+    padding: 30px;
+    width: 200px;
+    border-radius: 20px;
+    background-color: #ca1515;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.carte:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+body.mode-sombre {
+    background-color: #111827;
+    color: white;
+}
+#theme-bouton {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 8px;
 }
