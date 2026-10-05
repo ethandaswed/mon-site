@@ -4,37 +4,72 @@
 <head>
     <title>Contact</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<body>  
 
     <nav>
-    <div class="logo">Ethan</div>
+    <a href="index.html" class="logo">Ethan Gallery</a>
+
+    <button class="menu-mobile" id="menu-mobile">☰</button>
 
     <div class="liens">
         <a href="index.html">Accueil</a>
-        <a href="apropos.html">À propos</a>
-        <a href="contact.html" class="actif">Contact</a>
+        <a href="creations.html">Créations</a>
+        <a href="fonctionnement.html">Comment ça marche</a>
+        <a href="contact.html">Contact</a>
+        <a href="commande.html" class="bouton-nav-commander">Commander</a>
     </div>
+
     <button id="theme-bouton">🌙</button>
 </nav>
 
-    <h1>Contact</h1>
+    <section class="contact-page">
 
-    <p>Vous pouvez me contacter ici.</p>
+    <div class="contact-entete">
+        <p class="petit-titre">ETHAN GALLERY</p>
+
+        <h1>Parlons de votre projet.</h1>
+
+        <p>
+            Une question, une idée ou envie de créer un tableau personnalisé ?
+            Envoyez-moi un message et expliquez-moi votre projet.
+            Je vous répondrai dès que possible.
+        </p>
+    </div>
 
     <form id="formulaire">
 
-        <p id="confirmation"></p>
+       <p id="confirmation"></p>
 
-    <input id="nom" type="text" placeholder="Votre nom">
+<div class="champ-contact">
+    <label for="nom">Votre nom</label>
+    <input id="nom" type="text" placeholder="Ethan" required>
+</div>
 
-<input id="email" type="email" placeholder="Votre email">
+<div class="champ-contact">
+    <label for="email">Votre e-mail</label>
+    <input id="email" type="email" placeholder="exemple@email.com" required>
+</div>
 
-<textarea id="message" placeholder="Votre message"></textarea>
+<div class="champ-contact">
+    <label for="sujet">Sujet</label>
+    <input id="sujet" type="text" placeholder="Ex : Question sur un tableau">
+</div>
 
-    <button type="submit">Envoyer</button>
+<div class="champ-contact">
+    <label for="message">Votre message</label>
+    <textarea id="message" placeholder="Écrivez votre message ici..." required></textarea>
+</div>
+
+<button type="submit" class="bouton-contact">
+    Envoyer mon message
+</button>
+
 </form>
+
+</section>
 
     <a href="index.html">Retour à l'accueil</a>
 <script src="script.js"></script>

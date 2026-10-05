@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ethan Gallery - Tableaux personnalisés</title>
+   <link rel="stylesheet" href="style.css?v=100">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <nav>
+    <a href="index.html" class="logo">Ethan Gallery</a>
+
+    <button class="menu-mobile" id="menu-mobile">☰</button>
+
+  <div class="liens">
+    <a href="index.html">Accueil</a>
+<a href="creations.html">Créations</a>
+<a href="fonctionnement.html">Comment ça marche</a>
+<a href="contact.html">Contact</a>
+<a href="commande.html" class="bouton-nav-commander">Commander</a>
+</div>
+
+    <button id="theme-bouton">🌙</button>
+</nav>
+
+
+<section class="projets" id="tableaux">
+    <h2>Mes créations</h2>
+
+    <p>Découvrez quelques tableaux réalisés à la main.</p>
+
+    <div class="cartes-projets">
+
+        <div class="projet">
+           <img src="./michael-jackson.jpeg" alt="Tableau Michael Jackson" class="image-tableau">
+            <h3>Michael Jackson</h3>
+            <p>Portrait peint à la main.</p>
+            <p class="prix">À partir de 1000 ₪</p>
+        </div>
+
+        <div class="projet">
+            <img src="./street-fighter.jpeg" alt="Tableau Street Fighter" class="image-tableau">
+            <h3>Street Fighter</h3>
+            <p>Tableau inspiré de l'univers du combat.</p>
+            <p class="prix">À partir de 600 ₪</p>
+        </div>
+
+        <div class="projet">
+            <img src="./dark-angel.jpeg" alt="Tableau Dark Angel" class="image-tableau">
+            <h3>Dark Angel</h3>
+            <p>Création artistique sur toile.</p>
+            <p class="prix">À partir de 400 ₪</p>
+        </div>
+
+    </div>
+</section>
+<section id="commande" class="commande">
+    <h2>Créez votre tableau</h2>
+
+    <p>Envoyez votre photo et choisissez vos options.</p>
+
+    <form class="formulaire-commande">
+
+        <label for="photo-client">Votre photo</label>
+        <input type="file" id="photo-client" accept="image/*">
+        <img id="apercu-photo" src="" alt="Aperçu de votre photo">
+
+        <label for="taille">Taille du tableau</label>
+        <select id="taille">
+            <option value="">Choisissez une taille</option>
+            <option value="30x40">30 × 40 cm</option>
+            <option value="50x70">50 × 70 cm</option>
+            <option value="70x100">70 × 100 cm</option>
+        </select>
+
+        <p id="prix-estime"></p>
+
+        <label for="style">Style souhaité</label>
+        <select id="style">
+            <option value="">Choisissez un style</option>
+            <option value="portrait">Portrait</option>
+            <option value="pop-art">Pop Art</option>
+            <option value="libre">Laissez l'artiste choisir</option>
+        </select>
+
+        <label for="message-commande">Votre idée</label>
+        <textarea id="message-commande" placeholder="Décrivez le tableau que vous souhaitez..."></textarea>
+
+       <button type="button" class="bouton" id="bouton-commande">
+    Demander mon tableau
+</button>
+
+    </form>
+</section>
+<section id="apropos">
+    <h2>À propos de moi</h2>
+    <p>Bienvenue sur mon site. Ici, je peux me présenter.</p>
+</section>
+
+<section id="contact">
+    <h2>Contact</h2>
+    <p>Tu peux me contacter ici.</p>
+</section>
+    <script src="script.js?v=3"></script>
+</body>
+</html>

@@ -73,6 +73,7 @@ if (choixTaille && prixEstime) {
 
     });
 }
+
 const boutonCommande = document.getElementById("bouton-commande");
 
 if (boutonCommande) {
@@ -81,22 +82,37 @@ if (boutonCommande) {
         const taille = document.getElementById("taille").value;
         const style = document.getElementById("style").value;
         const idee = document.getElementById("message-commande").value;
+        const photo = document.getElementById("photo-client").files[0];
+        const prix = document.getElementById("prix-estime").textContent;
+
+        if (!photo) {
+            alert("Ajoutez une photo.");
+            return;
+        }
 
         if (taille === "") {
-    alert("Choisissez une taille.");
-    return;
-}
+            alert("Choisissez une taille.");
+            return;
+        }
 
-if (style === "") {
-    alert("Choisissez un style.");
-    return;
-}
+        if (style === "") {
+            alert("Choisissez un style.");
+            return;
+        }
+
+        if (idee.trim() === "") {
+            alert("Décrivez votre idée.");
+            return;
+        }
+
         const message =
-            "Bonjour, je souhaite commander un tableau personnalisé.\n" +
-            "Taille : " + taille + "\n" +
-            "Style : " + style + "\n" +
-            "Mon idée : " + idee + "\n" +
-"Je vais vous envoyer ma photo juste après ce message.";
+            "🎨 NOUVELLE DEMANDE - ETHAN GALLERY\n\n" +
+            "📐 Taille : " + taille + "\n" +
+            "🎨 Style : " + style + "\n" +
+            "💰 " + prix + "\n\n" +
+            "✍️ Idée du tableau :\n" + idee + "\n\n" +
+            "📸 J'ai sélectionné la photo : " + photo.name + "\n" +
+            "Je joins la photo à ce message.";
 
         const numero = "972559955591";
 
@@ -106,6 +122,8 @@ if (style === "") {
         );
     });
 }
+
+
 const menuMobile = document.getElementById("menu-mobile");
 const liensMenu = document.querySelector(".liens");
 
@@ -114,11 +132,5 @@ if (menuMobile && liensMenu) {
         liensMenu.classList.toggle("ouvert");
     });
 }
-const liensNavigation = document.querySelectorAll(".liens a");
 
-liensNavigation.forEach(function (lien) {
-    lien.addEventListener("click", function () {
-        liensMenu.classList.remove("ouvert");
-    });
-});
 
