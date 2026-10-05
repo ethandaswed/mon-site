@@ -458,12 +458,7 @@ html {
         font-weight: bold;
     }
 
-    .liens {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px 18px;
-    }
+  
 
     .liens a {
         font-size: 14px;
