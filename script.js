@@ -106,3 +106,18 @@ if (style === "") {
         );
     });
 }
+const menuMobile = document.getElementById("menu-mobile");
+const liensMenu = document.querySelector(".liens");
+
+if (menuMobile && liensMenu) {
+    menuMobile.addEventListener("click", function () {
+        liensMenu.classList.toggle("ouvert");
+    });
+}
+const liensNavigation = document.querySelectorAll(".liens a");
+
+liensNavigation.forEach(function (lien) {
+    lien.addEventListener("click", function () {
+        liensMenu.classList.remove("ouvert");
+    });
+});

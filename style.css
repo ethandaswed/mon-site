@@ -178,6 +178,9 @@ img {
 .bouton-projet:hover {
     transform: scale(1.05);
 }
+.menu-mobile {
+    display: none;
+}
 @media (max-width: 700px) {
     .accueil {
         flex-direction: column;
@@ -197,9 +200,87 @@ img {
         font-size: 35px;
     }
     .cartes {
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 0 25px;
 }
+
+.carte {
+    width: 100%;
+    min-height: 140px;
+    padding: 25px 20px;
+    box-sizing: border-box;
+}
+
+.carte h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.carte p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+.cartes-projets {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 0 20px;
+}
+
+.projet {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.image-tableau {
+    width: 100%;
+    height: auto;
+    max-height: 450px;
+    object-fit: cover;
+}
+.accueil {
+    padding: 40px 20px;
+    gap: 25px;
+}
+
+.texte {
+    width: 100%;
+}
+
+.titre {
+    font-size: 38px;
+    line-height: 1.1;
+}
+
+.description {
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.photo {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+}
+.menu-mobile {
+    display: block;
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+nav .liens {
+    display: none !important;
+}
+
+nav .liens.ouvert {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
 }
 form {
     display: flex;
