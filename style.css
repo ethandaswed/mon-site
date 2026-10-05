@@ -1763,3 +1763,44 @@ nav .liens a {
         padding: 25px 20px;
     }
 }
+/* ===== CENTRAGE COMMANDE SUR TELEPHONE ===== */
+@media (max-width: 700px) {
+
+    .commande {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 110px auto 60px !important;
+        padding: 0 15px !important;
+        box-sizing: border-box !important;
+    }
+
+    .commande-entete {
+        width: 100% !important;
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .formulaire-commande {
+        width: 100% !important;
+        margin: 0 auto !important;
+        grid-template-columns: 1fr !important;
+    }
+
+    .etape-commande {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+/* ===== PHOTOS CRÉATIONS MOBILE ===== */
+@media (max-width: 700px) {
+    .cartes-projets .image-tableau {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+}
