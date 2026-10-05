@@ -121,4 +121,4 @@ liensNavigation.forEach(function (lien) {
         liensMenu.classList.remove("ouvert");
     });
 });
-alert("Largeur écran : " + window.innerWidth);
+

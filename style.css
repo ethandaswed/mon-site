@@ -224,7 +224,7 @@ img {
 }
 .cartes-projets {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
     padding: 0 20px;
 }
@@ -377,11 +377,32 @@ body.mode-sombre {
     color: white;
 }
 #theme-bouton {
-    background: none;
-    border: none;
-    font-size: 22px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f1f1f1;
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+
+    font-size: 17px;
     cursor: pointer;
-    padding: 8px;
+
+    transition: 0.3s;
+}
+
+#theme-bouton:hover {
+    transform: scale(1.08);
+    background: #e5e5e5;
+}
+
+body.mode-sombre #theme-bouton {
+    background: #292b35;
+    border-color: #3d404c;
 }
 .image-tableau {
     width: 100%;
@@ -526,5 +547,146 @@ html, body {
         margin-top: 70px !important;
         padding-top: 0 !important;
         min-height: auto !important;
+    }
+   .cartes-projets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0 8px;
+    width: 100%;
+}
+
+.cartes-projets .projet {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 14px;
+}
+
+.cartes-projets .image-tableau {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 6px;
+}
+
+.cartes-projets .projet h3 {
+    font-size: 16px;
+    margin: 8px 0 5px;
+}
+
+.cartes-projets .projet p {
+    font-size: 12px;
+    line-height: 1.25;
+    margin: 4px 0;
+}
+
+.cartes-projets .projet h2 {
+    font-size: 16px;
+    margin: 8px 0 4px;
+}
+}
+/* ===== CORRECTION FINALE MOBILE CREATIONS ===== */
+@media (max-width: 500px) {
+
+    .cartes-projets {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        padding: 0 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .cartes-projets .projet {
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: 10px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        border-radius: 14px !important;
+    }
+
+    .cartes-projets .image-tableau {
+        width: 100% !important;
+        height: 160px !important;
+        max-height: 160px !important;
+        object-fit: cover !important;
+        margin: 0 0 8px 0 !important;
+        border-radius: 10px !important;
+    }
+
+    .cartes-projets .projet h3 {
+        font-size: 16px !important;
+        margin: 8px 0 !important;
+    }
+
+    .cartes-projets .projet p {
+        font-size: 12px !important;
+        line-height: 1.25 !important;
+        margin: 5px 0 !important;
+    }
+
+    .cartes-projets .projet h2 {
+        font-size: 16px !important;
+        margin: 8px 0 !important;
+    }
+}
+/* ===== CARTES MOBILE - CORRECTION FINALE ===== */
+@media (max-width: 700px) {
+
+    .projets {
+        padding: 30px 10px !important;
+    }
+
+    .cartes-projets {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 15px !important;
+        width: 100% !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+    }
+
+    .cartes-projets .projet {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 6px !important;
+        margin: 0 !important;
+        border-radius: 14px !important;
+        display: flex !important;
+flex-direction: column !important;
+align-self: stretch !important;
+    }
+
+    .cartes-projets .image-tableau {
+    display: block !important;
+    width: 100% !important;
+    height: 220px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    margin: 0 0 8px 0 !important;
+    border-radius: 10px !important;
+}
+
+    .cartes-projets .projet h3 {
+        font-size: 15px !important;
+        margin: 8px 0 5px !important;
+        line-height: 1.1 !important;
+    }
+
+    .cartes-projets .projet p {
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+        margin: 5px 0 !important;
+    }
+
+    .cartes-projets .projet .prix {
+        font-size: 15px !important;
+        margin-top: 8px !important;
+        margin-top: auto !important;
     }
 }
