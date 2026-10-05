@@ -293,3 +293,72 @@ body.mode-sombre {
     cursor: pointer;
     padding: 8px;
 }
+.image-tableau {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.projet {
+    overflow: hidden;
+}
+.commande {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.commande h2 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.formulaire-commande {
+    max-width: 600px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.formulaire-commande label {
+    font-weight: bold;
+}
+
+.formulaire-commande input,
+.formulaire-commande select,
+.formulaire-commande textarea {
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.formulaire-commande textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.formulaire-commande .bouton {
+    margin-top: 10px;
+    cursor: pointer;
+}
+#apercu-photo {
+    display: none;
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 15px;
+    margin-top: 10px;
+}
+.prix {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}

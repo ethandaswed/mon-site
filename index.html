@@ -1,80 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mon site</title>
+    <title>Ethan Gallery - Tableaux personnalisés</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <nav>
-    <div class="logo">Ethan</div>
+    <div class="logo">Ethan Gallery</div>
 
-    <div class="liens">
-        <a href="index.html" class="actif">Accueil</a>
-        <a href="apropos.html">À propos</a>
-        <a href="contact.html">Contact</a>
-    </div>
+  <div class="liens">
+    <a href="#accueil">Accueil</a>
+    <a href="#tableaux">Créations</a>
+    <a href="#fonctionnement">Comment ça marche</a>
+    <a href="#commande">Commander</a>
+    <a href="#contact">Contact</a>
+</div>
+</div>
     <button id="theme-bouton">🌙</button>
 </nav>
-<div class="accueil">
+<div class="accueil" id="accueil">
+<div class="texte">
+    <p class="petit-titre">ETHAN GALLERY</p>
 
-    <div class="texte">
-    <p class="petit-titre">Bonjour, je suis</p>
-
-    <h1 class="titre">Ethan Bitan</h1>
+    <h1 class="titre">Votre photo devient une œuvre.</h1>
 
     <p class="description">
-        J'apprends le développement web et je construis mes premiers projets.
+        Transformez vos plus belles photos en tableaux personnalisés,
+        créés spécialement pour vous.
     </p>
 
-    <a href="contact.html" class="bouton">Me contacter</a>
+   <a href="#commande" class="bouton">Créer mon tableau</a>
+</div>
     
 </div>
         
 
        
 
-    <img class="photo" src="dessin joker.jpg.jpeg" alt="Dessin Joker">
+    <img class="photo" src="./dark-angel.jpeg" alt="Tableau Dark Angel">
 
 </div>
-<section class="competences">
-    <h2>Mes compétences</h2>
+<section class="competences" id="fonctionnement">
+    <h2>Comment ça marche ?</h2>
 
     <div class="cartes">
+
         <div class="carte">
-            <h3>HTML</h3>
-            <p>Structure des pages web</p>
+            <h3>1. Envoyez votre photo 📸</h3>
+            <p>Choisissez la photo que vous souhaitez transformer en tableau.</p>
         </div>
 
         <div class="carte">
-            <h3>CSS</h3>
-            <p>Design et animations</p>
+            <h3>2. Personnalisez 🎨</h3>
+            <p>Choisissez le format et le style de votre tableau.</p>
         </div>
 
         <div class="carte">
-            <h3>JavaScript</h3>
-            <p>Interactions avec l'utilisateur</p>
+            <h3>3. Création 🖌️</h3>
+            <p>Votre tableau est réalisé à la main avec soin.</p>
         </div>
-       
+
+        <div class="carte">
+            <h3>4. Votre œuvre 🖼️</h3>
+            <p>Votre tableau personnalisé est prêt.</p>
+        </div>
+
     </div>
 </section>
-<section class="projets">
-    <h2>Mes projets</h2>
+<section class="projets" id="tableaux">
+    <h2>Mes créations</h2>
+
+    <p>Découvrez quelques tableaux réalisés à la main.</p>
 
     <div class="cartes-projets">
-        <div class="projet">
-            <h3>Mon premier site</h3>
-            <p>Mon premier projet créé avec HTML, CSS et JavaScript.</p>
-            <a href="jeu.html" class="bouton-projet">Voir le projet</a>
-        </div>
-        
 
         <div class="projet">
-            <h3>Prochain projet</h3>
-            <p>Bientôt disponible...</p>
+           <img src="./michael-jackson.jpeg" alt="Tableau Michael Jackson" class="image-tableau">
+            <h3>Michael Jackson</h3>
+            <p>Portrait peint à la main.</p>
+            <p class="prix">À partir de 1000 ₪</p>
         </div>
+
+        <div class="projet">
+            <img src="./street-fighter.jpeg" alt="Tableau Street Fighter" class="image-tableau">
+            <h3>Street Fighter</h3>
+            <p>Tableau inspiré de l'univers du combat.</p>
+            <p class="prix">À partir de 600 ₪</p>
+        </div>
+
+        <div class="projet">
+            <img src="./dark-angel.jpeg" alt="Tableau Dark Angel" class="image-tableau">
+            <h3>Dark Angel</h3>
+            <p>Création artistique sur toile.</p>
+            <p class="prix">À partir de 400 ₪</p>
+        </div>
+
     </div>
+</section>
+<section id="commande" class="commande">
+    <h2>Créez votre tableau</h2>
+
+    <p>Envoyez votre photo et choisissez vos options.</p>
+
+    <form class="formulaire-commande">
+
+        <label for="photo-client">Votre photo</label>
+        <input type="file" id="photo-client" accept="image/*">
+        <img id="apercu-photo" src="" alt="Aperçu de votre photo">
+
+        <label for="taille">Taille du tableau</label>
+        <select id="taille">
+            <option value="">Choisissez une taille</option>
+            <option value="30x40">30 × 40 cm</option>
+            <option value="50x70">50 × 70 cm</option>
+            <option value="70x100">70 × 100 cm</option>
+        </select>
+
+        <p id="prix-estime"></p>
+
+        <label for="style">Style souhaité</label>
+        <select id="style">
+            <option value="">Choisissez un style</option>
+            <option value="portrait">Portrait</option>
+            <option value="pop-art">Pop Art</option>
+            <option value="libre">Laissez l'artiste choisir</option>
+        </select>
+
+        <label for="message-commande">Votre idée</label>
+        <textarea id="message-commande" placeholder="Décrivez le tableau que vous souhaitez..."></textarea>
+
+       <button type="button" class="bouton" id="bouton-commande">
+    Demander mon tableau
+</button>
+
+    </form>
 </section>
 <section id="apropos">
     <h2>À propos de moi</h2>

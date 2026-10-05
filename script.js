@@ -40,3 +40,69 @@ boutonTheme.addEventListener("click", function() {
     localStorage.setItem("theme", "clair");
 }
 });
+const photoClient = document.getElementById("photo-client");
+const apercuPhoto = document.getElementById("apercu-photo");
+
+if (photoClient && apercuPhoto) {
+    photoClient.addEventListener("change", function () {
+
+        const fichier = this.files[0];
+
+        if (fichier) {
+            apercuPhoto.src = URL.createObjectURL(fichier);
+            apercuPhoto.style.display = "block";
+        }
+
+    });
+}
+const choixTaille = document.getElementById("taille");
+const prixEstime = document.getElementById("prix-estime");
+
+if (choixTaille && prixEstime) {
+    choixTaille.addEventListener("change", function () {
+
+        if (choixTaille.value === "30x40") {
+            prixEstime.textContent = "Prix estimé : 400 ₪";
+        } else if (choixTaille.value === "50x70") {
+            prixEstime.textContent = "Prix estimé : 650 ₪";
+        } else if (choixTaille.value === "70x100") {
+            prixEstime.textContent = "Prix estimé : 900 ₪";
+        } else {
+            prixEstime.textContent = "";
+        }
+
+    });
+}
+const boutonCommande = document.getElementById("bouton-commande");
+
+if (boutonCommande) {
+    boutonCommande.addEventListener("click", function () {
+
+        const taille = document.getElementById("taille").value;
+        const style = document.getElementById("style").value;
+        const idee = document.getElementById("message-commande").value;
+
+        if (taille === "") {
+    alert("Choisissez une taille.");
+    return;
+}
+
+if (style === "") {
+    alert("Choisissez un style.");
+    return;
+}
+        const message =
+            "Bonjour, je souhaite commander un tableau personnalisé.\n" +
+            "Taille : " + taille + "\n" +
+            "Style : " + style + "\n" +
+            "Mon idée : " + idee + "\n" +
+"Je vais vous envoyer ma photo juste après ce message.";
+
+        const numero = "972559955591";
+
+        window.open(
+            "https://wa.me/" + numero + "?text=" + encodeURIComponent(message),
+            "_blank"
+        );
+    });
+}
