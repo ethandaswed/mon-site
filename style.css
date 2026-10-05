@@ -280,7 +280,16 @@ nav .liens.ouvert {
     flex-direction: column !important;
     align-items: center;
     gap: 15px;
+
+    position: absolute;
+    top: 70px;
+    left: 0;
+
     width: 100%;
+    padding: 20px 0;
+
+    background-color: white;
+    z-index: 9999;
 }
 form {
     display: flex;
@@ -442,4 +451,55 @@ body.mode-sombre {
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
+}
+
+.competences .cartes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.competences .carte {
+    width: 90%;
+    max-width: 380px;
+    min-height: auto;
+    box-sizing: border-box;
+}
+.accueil {
+    margin-top: 70px;
+    padding-top: 0;
+}
+nav {
+    height: 70px !important;
+    min-height: 70px !important;
+    padding: 0 20px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+.logo {
+    margin: 0 !important;
+}
+
+.menu-mobile {
+    margin: 0 !important;
+}
+
+#theme-bouton {
+    margin: 0 !important;
+}
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+@media (max-width: 500px) {
+    .accueil {
+        margin-top: 70px !important;
+        padding-top: 0 !important;
+        min-height: auto !important;
+    }
 }
