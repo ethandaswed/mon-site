@@ -392,4 +392,25 @@ html {
     #theme-bouton {
         margin: 0;
     }
+    .cartes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 0 15px;
+}
+
+.carte {
+    width: auto;
+    min-height: 160px;
+    padding: 20px 12px;
+}
+
+.carte h3 {
+    font-size: 16px;
+}
+
+.carte p {
+    font-size: 14px;
+    line-height: 1.4;
+}
 }
