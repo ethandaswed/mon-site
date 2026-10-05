@@ -496,6 +496,30 @@ html, body {
     max-width: 100%;
     overflow-x: hidden;
 }
+.competences {
+    width: 100%;
+    padding: 40px 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.competences .cartes {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    gap: 15px;
+}
+
+.competences .carte {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+}
 @media (max-width: 500px) {
     .accueil {
         margin-top: 70px !important;
