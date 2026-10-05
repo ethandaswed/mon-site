@@ -1804,3 +1804,267 @@ nav .liens a {
         display: block !important;
     }
 }
+/* ===== POPUP CREATIONS ===== */
+
+.grille-dessins img {
+    cursor: pointer;
+}
+
+.popup-creation {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.popup-creation.active {
+    display: flex;
+}
+
+.popup-contenu {
+    position: relative;
+    background: white;
+    width: 900px;
+    max-width: 95%;
+    max-height: 90vh;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+#popup-image {
+    width: 55%;
+    max-height: 80vh;
+    object-fit: contain;
+    background: #111;
+}
+
+.popup-infos {
+    width: 45%;
+    padding: 45px 30px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.popup-infos h2 {
+    font-size: 30px;
+    margin: 0 0 15px;
+}
+
+.popup-infos p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #666;
+}
+
+.popup-fermer {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    z-index: 2;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Téléphone */
+@media (max-width: 700px) {
+    .popup-contenu {
+        width: 95%;
+        max-height: 90vh;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    #popup-image {
+        width: 100%;
+        height: auto;
+        max-height: 60vh;
+    }
+
+    .popup-infos {
+        width: 100%;
+        padding: 25px 20px;
+        text-align: center;
+    }
+
+    .popup-infos h2 {
+        font-size: 24px;
+    }
+}
+/* ===== MEME TAILLE POUR TOUTES LES POPUPS ===== */
+
+.popup-contenu {
+    width: 850px !important;
+    height: 600px !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+}
+
+#popup-image {
+    width: 55% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+/* Téléphone */
+@media (max-width: 700px) {
+
+    .popup-contenu {
+        width: 92vw !important;
+        height: 75vh !important;
+        flex-direction: column !important;
+    }
+
+    #popup-image {
+        width: 100% !important;
+        height: 65% !important;
+        object-fit: contain !important;
+    }
+
+    .popup-infos {
+        width: 100% !important;
+        height: 35% !important;
+    }
+}
+#popup-image {
+    width: 55% !important;
+    height: 600px !important;
+    object-fit: cover !important;
+}
+/* ===== MEME TAILLE DES 10 PHOTOS ACCUEIL ===== */
+
+.grille-dessins img {
+    width: 100% !important;
+    height: 350px !important;
+    object-fit: cover !important;
+    border-radius: 15px !important;
+}
+/* ===== POPUP MOBILE CORRIGÉE ===== */
+@media (max-width: 700px) {
+
+    .popup-contenu {
+        width: 92% !important;
+        height: auto !important;
+        max-height: 85vh !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+        border-radius: 20px !important;
+    }
+
+    #popup-image {
+        width: 100% !important;
+        height: 380px !important;
+        min-height: 0 !important;
+        object-fit: contain !important;
+        background: #fffefe !important;
+    }
+
+    .popup-infos {
+        width: 100% !important;
+        height: auto !important;
+        padding: 25px 20px 30px !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+    }
+
+    .popup-infos h2 {
+        font-size: 25px !important;
+        margin: 0 0 15px !important;
+    }
+
+    .popup-infos p {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        margin: 0 !important;
+    }
+
+    .popup-fermer {
+        position: absolute !important;
+        top: 12px !important;
+        right: 12px !important;
+        width: 45px !important;
+        height: 45px !important;
+        z-index: 100 !important;
+    }
+}
+/* ===== CRÉER MON TABLEAU - PAGE CRÉATIONS ===== */
+
+.creation-commande {
+    max-width: 900px;
+    margin: 120px auto;
+    padding: 70px 40px;
+    text-align: center;
+    background: #f8f8f8;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.creation-commande .petit-titre {
+    font-size: 14px;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.creation-commande h2 {
+    font-size: 40px;
+    margin: 0 0 20px;
+}
+
+.creation-commande-texte {
+    max-width: 650px;
+    margin: 0 auto 35px;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.creation-commande-bouton {
+    display: inline-block;
+    padding: 17px 35px;
+    background: red;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.creation-commande-bouton:hover {
+    transform: translateY(-3px);
+}
+
+/* VERSION TÉLÉPHONE */
+@media (max-width: 700px) {
+    .creation-commande {
+        width: calc(100% - 30px);
+        margin: 70px auto;
+        padding: 45px 20px;
+        box-sizing: border-box;
+    }
+
+    .creation-commande h2 {
+        font-size: 30px;
+    }
+
+    .creation-commande-texte {
+        font-size: 16px;
+    }
+
+    .creation-commande-bouton {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

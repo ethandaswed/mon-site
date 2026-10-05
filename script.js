@@ -133,4 +133,33 @@ if (menuMobile && liensMenu) {
     });
 }
 
+// ===== POPUP CREATIONS =====
+
+function ouvrirImage(src, titre, description) {
+    const popup = document.getElementById("popup-creation");
+    const image = document.getElementById("popup-image");
+    const titrePopup = document.getElementById("popup-titre");
+    const descriptionPopup = document.getElementById("popup-description");
+
+    image.src = src;
+    titrePopup.textContent = titre;
+    descriptionPopup.textContent = description;
+
+    popup.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function fermerImage() {
+    const popup = document.getElementById("popup-creation");
+
+    popup.classList.remove("active");
+    document.body.style.overflow = "";
+}
+
+// Fermer en cliquant sur le fond noir
+document.getElementById("popup-creation")?.addEventListener("click", function(event) {
+    if (event.target === this) {
+        fermerImage();
+    }
+});
 

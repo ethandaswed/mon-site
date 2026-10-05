@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Ethan Gallery - Tableaux personnalisés</title>
-   <link rel="stylesheet" href="style.css?v=3">
+   <link rel="stylesheet" href="style.css?v=4">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -60,16 +60,35 @@
     <h2>Quelques-unes de mes créations</h2>
 
     <div class="grille-dessins">
-        <img src="./batman qui rit.jpeg" alt="Batman qui rit">
-        <img src="./black goku.jpeg" alt="Black Goku">
-        <img src="./deadpool.jpeg" alt="Deadpool">
-        <img src="./dessin joker.jpg.jpeg" alt="Joker">
-        <img src="./ghost face.jpeg" alt="Ghost Face">
-        <img src="./gohan beast.jpeg" alt="Gohan Beast">
-        <img src="./it.jpeg" alt="It">
-        <img src="./joker.jpeg" alt="Joker">
-        <img src="./kid buu.jpeg" alt="Kid Buu">
-        <img src="./street-fighter.jpeg" alt="Street Fighter">
+    <img src="./batman qui rit.jpeg" alt="Batman qui rit"
+onclick="ouvrirImage(this.src, 'Batman qui rit', 'Un portrait sombre entièrement réalisé au crayon, avec un travail important sur les ombres, les contrastes et les nombreux détails du personnage. L’objectif était de créer une ambiance inquiétante tout en donnant beaucoup de profondeur au dessin.')">
+
+<img src="./black goku.jpeg" alt="Black Goku"
+onclick="ouvrirImage(this.src, 'Black Goku', 'Une création très colorée inspirée de Black Goku, réalisée avec différentes nuances de rose, violet et rouge. J’ai cherché à mettre en avant la puissance du personnage tout en donnant beaucoup d’énergie et de mouvement à l’ensemble du tableau.')">
+
+<img src="./deadpool.jpeg" alt="Deadpool"
+onclick="ouvrirImage(this.src, 'Deadpool', 'Une création dynamique et très colorée mettant en scène Deadpool. Les couleurs vives et les nombreux détails permettent de donner beaucoup d’énergie au tableau et de représenter le côté explosif et décalé du personnage.')">
+
+<img src="./dessin joker.jpg.jpeg" alt="Joker"
+onclick="ouvrirImage(this.src, 'Joker - Crayon', 'Un portrait du Joker réalisé principalement au crayon, avec une attention particulière portée au visage, au regard et aux différentes ombres. Le but était de faire ressortir son expression tout en conservant un style réaliste et sombre.')">
+
+<img src="./ghost face.jpeg" alt="Ghost Face"
+onclick="ouvrirImage(this.src, 'Ghost Face', 'Une création inspirée de Ghost Face avec une ambiance volontairement sombre. Le mélange du noir, du blanc et du rouge crée un contraste puissant qui permet au personnage de ressortir immédiatement au centre du tableau.')">
+
+<img src="./gohan beast.jpeg" alt="Gohan Beast"
+onclick="ouvrirImage(this.src, 'Gohan Beast', 'Une création inspirée de Gohan Beast qui cherche à représenter toute la puissance du personnage. Les couleurs intenses, les contrastes et les différents détails donnent au tableau une apparence dynamique inspirée de l’univers de Dragon Ball.')">
+
+<img src="./it.jpeg" alt="It"
+onclick="ouvrirImage(this.src, 'It', 'Un portrait réalisé au crayon avec un travail particulier sur le visage, les ombres et les différents détails du personnage. J’ai voulu créer une atmosphère sombre tout en conservant suffisamment de précision pour rendre le portrait reconnaissable au premier regard.')">
+
+<img src="./joker.jpeg" alt="Joker"
+onclick="ouvrirImage(this.src, 'Joker - Couleur', 'Une interprétation plus artistique et colorée du Joker, avec un travail autour des couleurs, des contrastes et de son expression. Cette création cherche à représenter le personnage avec un style original tout en conservant son ambiance sombre et reconnaissable.')">
+
+<img src="./kid buu.jpeg" alt="Kid Buu"
+onclick="ouvrirImage(this.src, 'Kid Buu', 'Une création très colorée inspirée de Kid Buu et de l’univers de Dragon Ball. Les différentes nuances de rose ainsi que les couleurs plus intenses donnent beaucoup d’énergie au tableau et permettent de mettre le personnage au centre de la composition.')">
+
+<img src="./street-fighter.jpeg" alt="Street Fighter"
+onclick="ouvrirImage(this.src, 'Street Fighter', 'Une illustration inspirée de l’univers de Street Fighter, pensée pour transmettre l’énergie et l’intensité des combats. Les couleurs, les contrastes et la composition donnent au tableau un style dynamique qui rappelle directement l’ambiance du jeu.')">
     </div>
     <a href="creations.html" class="bouton-galerie">Voir toutes mes créations</a>
 
@@ -77,8 +96,8 @@
 
 <section id="apropos">
     <h2>À propos de moi</h2>
-    <p>Bienvenue sur mon site. Ici, je peux me présenter.</p>
-    <p>Je me présente, je m’appelle Ethan et ma passion est l’art. J’aime dessiner, peindre et donner vie à mes idées à travers des créations uniques. Au fil du temps, j’ai développé mon propre style et commencé à réaliser des portraits et des tableaux personnalisés. À travers Ethan Gallery, je souhaite partager mon univers et créer des œuvres qui ont une vraie signification pour chaque personne.</p>
+    <p>Je me présente, je m’appelle Ethan et ma passion est l’art. J’aime dessiner, peindre et donner vie à mes idées à travers des créations uniques. Au fil du temps, j’ai développé mon propre style et commencé à réaliser des portraits et des tableaux personnalisés. À travers Ethan Gallery, je souhaite partager mon univers et créer des œuvres qui ont une vraie signification pour chaque personne.</p> 
+    <p>decouvrer plus de tableaux portraits et tout ce qui concerne mon travail d'artiste sur instagram @Ethan.bitan.</p>
 </section>
 
 <section id="contact">
@@ -89,5 +108,20 @@
 </section>
 
 <script src="script.js?v=4"></script>
+<!-- Fenêtre pour afficher une création en grand -->
+<div id="popup-creation" class="popup-creation">
+    <div class="popup-contenu">
+
+        <button class="popup-fermer" onclick="fermerImage()">×</button>
+
+        <img id="popup-image" src="" alt="Création en grand">
+
+        <div class="popup-infos">
+            <h2 id="popup-titre"></h2>
+            <p id="popup-description"></p>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>
