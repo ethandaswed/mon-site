@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Ethan Gallery</title>
-    <meta name="description" content="Une question ou un projet de tableau personnalisé ? Contactez Ethan Gallery, réponse dès que possible.">
+    <title>Mon panier - Ethan Gallery</title>
+    <meta name="description" content="Vérifiez votre panier et envoyez votre commande sur WhatsApp.">
     <meta name="theme-color" content="#e00000">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Contact - Ethan Gallery">
-    <meta property="og:description" content="Une question ou un projet de tableau personnalisé ? Contactez Ethan Gallery, réponse dès que possible.">
+    <meta property="og:title" content="Mon panier - Ethan Gallery">
+    <meta property="og:description" content="Vérifiez votre panier et envoyez votre commande sur WhatsApp.">
     <meta property="og:image" content="dark-angel.jpeg">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,27 +22,14 @@
     <a href="index.html" class="logo">Ethan Gallery</a>
     <button class="menu-mobile" id="menu-mobile" aria-label="Ouvrir le menu" aria-expanded="false" type="button">☰</button>
     <div class="liens">
-        <a href="index.html">Accueil</a><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="contact.html" aria-current="page">Contact</a>
+        <a href="index.html">Accueil</a><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="contact.html">Contact</a>
         <a href="commande.html" class="bouton-nav-commander">Commander</a>
     </div>
 </nav>
 <main>
 <section class="section">
-    <h1>Parlons de votre projet.</h1>
-    <p>Une question, une idée ou envie de créer un tableau personnalisé ? Envoyez-moi un message et expliquez-moi votre projet. Je vous répondrai dès que possible.</p>
-    <div class="reseaux">
-        <a class="bouton whatsapp" href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
-        <a class="bouton contour" href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
-    </div>
-    <form id="formulaire" class="formulaire" action="https://formspree.io/f/xeaeoegv" method="POST">
-        <p id="confirmation" class="message-etat" role="status"></p>
-        <div class="champ"><label for="nom">Votre nom</label><input id="nom" name="nom" type="text" autocomplete="name" required></div>
-        <div class="champ"><label for="email">Votre e-mail</label><input id="email" name="email" type="email" autocomplete="email" placeholder="exemple@email.com" required></div>
-        <div class="champ"><label for="sujet">Sujet</label><input id="sujet" name="sujet" type="text" placeholder="Ex : Question sur un tableau"></div>
-        <div class="champ"><label for="message">Votre message</label><textarea id="message" name="message" placeholder="Écrivez votre message ici..." required></textarea></div>
-        <input type="text" name="_gotcha" class="cache" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" class="bouton">Envoyer mon message</button>
-    </form>
+    <h1>Mon panier</h1>
+    <div id="contenu-panier"></div>
 </section>
 </main>
 <footer>

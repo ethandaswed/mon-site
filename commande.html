@@ -14,7 +14,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
-    <link rel="stylesheet" href="style.css?v=6">
+    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <nav>
@@ -27,52 +28,53 @@
 </nav>
 <main>
 <section class="section" id="commande">
-    <p class="petit-titre">ETHAN GALLERY</p>
     <h1>Créez votre tableau</h1>
-    <p>Configurez votre œuvre personnalisée en quelques étapes.</p>
+    <p>Configurez votre œuvre personnalisée en quelques étapes, le récapitulatif se met à jour au fur et à mesure.</p>
+    <div class="commande-grille">
     <form class="formulaire" onsubmit="return false">
         <div class="etape-commande"><span>01</span><div>
-            <h3><label for="photo-client">Ajoutez votre photo 📸</label></h3>
-            <p>Choisissez la photo à transformer. Plus elle est nette et lumineuse, plus le résultat sera fidèle.</p>
-            <input type="file" id="photo-client" accept="image/*">
+            <h3><label for="photo-client">Ajoutez votre photo</label></h3>
+            <p>Plus elle est nette et lumineuse, plus le résultat sera fidèle.</p>
+            <input type="file" id="photo-client" class="entree-fichier" accept="image/*"><label class="depot" for="photo-client"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span id="depot-texte">Choisir une photo</span><small>JPG ou PNG, la plus nette possible</small></label>
             <img id="apercu-photo" src="" alt="Aperçu de votre photo">
         </div></div>
         <div class="etape-commande"><span>02</span><div>
-            <h3><label for="taille">Choisissez le format 📐</label></h3>
-            <select id="taille">
-                <option value="">Choisissez une taille</option>
-                <option value="30x40">30 × 40 cm</option>
-                <option value="50x70">50 × 70 cm</option>
-                <option value="70x100">70 × 100 cm</option>
-            </select>
+            <h3 id="t-taille">Choisissez le format</h3>
+            <div class="tuiles" role="radiogroup" aria-labelledby="t-taille" data-cible="taille"><button type="button" class="tuile" role="radio" aria-checked="false" data-val="30x40"><i class="cadre" style="--w:30;--h:40"></i><strong>30 × 40 cm</strong><small>Bureau, étagère</small><span class="tp" data-prix="30x40"></span></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="50x70"><i class="cadre" style="--w:50;--h:70"></i><strong>50 × 70 cm</strong><small>Salon, chambre</small><span class="tp" data-prix="50x70"></span></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="70x100"><i class="cadre" style="--w:70;--h:100"></i><strong>70 × 100 cm</strong><small>Grand format, pièce maîtresse</small><span class="tp" data-prix="70x100"></span></button></div>
+            <select id="taille" hidden><option value="">Choisissez une taille</option><option value="30x40">30 × 40 cm</option><option value="50x70">50 × 70 cm</option><option value="70x100">70 × 100 cm</option></select>
             <p id="prix-estime" aria-live="polite"></p>
         </div></div>
         <div class="etape-commande"><span>03</span><div>
-            <h3><label for="style">Choisissez votre style 🎨</label></h3>
-            <select id="style">
-                <option value="">Choisissez un style</option>
-                <option value="portrait">Portrait</option>
-                <option value="pop-art">Pop Art</option>
-                <option value="libre">Laissez l'artiste choisir</option>
-            </select>
+            <h3 id="t-style">Choisissez votre style</h3>
+            <div class="tuiles" role="radiogroup" aria-labelledby="t-style" data-cible="style"><button type="button" class="tuile" role="radio" aria-checked="false" data-val="portrait"><strong>Portrait</strong><small>Visage détaillé, rendu fidèle</small></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="pop-art"><strong>Pop Art</strong><small>Couleurs vives et contrastées</small></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="libre"><strong>Carte blanche</strong><small>Laissez l'artiste choisir</small></button></div>
+            <select id="style" hidden><option value="">Choisissez un style</option><option value="portrait">Portrait</option><option value="pop-art">Pop Art</option><option value="libre">Laissez l'artiste choisir</option></select>
         </div></div>
         <div class="etape-commande"><span>04</span><div>
-            <h3><label for="message-commande">Décrivez votre idée ✍️</label></h3>
+            <h3><label for="message-commande">Décrivez votre idée</label></h3>
             <textarea id="message-commande" placeholder="Parlez-moi de votre idée, des couleurs, du rendu souhaité..."></textarea>
         </div></div>
-        <p>Un clic ouvre WhatsApp avec votre demande déjà écrite. Il ne vous restera qu'à envoyer votre photo dans la conversation. Le prix affiché est une estimation, confirmée ensemble avant de commencer.</p>
-        <p id="erreur-commande" class="message-etat" role="alert"></p>
-        <button type="button" class="bouton whatsapp" id="bouton-commande">Commander sur WhatsApp</button>
-        <p id="info-whatsapp" class="message-etat" role="status"></p>
     </form>
+    <aside class="recap" aria-label="Récapitulatif de votre commande">
+        <h2>Votre commande</h2>
+        <ul class="recap-liste"><li><span>Photo</span><strong id="r-photo"></strong></li><li><span>Format</span><strong id="r-taille"></strong></li><li><span>Style</span><strong id="r-style"></strong></li><li><span>Idée</span><strong id="r-idee"></strong></li></ul>
+        <p class="recap-prix">Prix estimé <strong id="r-prix">—</strong></p>
+        <p id="erreur-commande" class="message-etat" role="alert"></p>
+        <div class="recap-actions"><button type="button" class="bouton whatsapp" id="bouton-commande">Commander sur WhatsApp</button></div>
+        <p id="info-whatsapp" class="message-etat" role="status"></p>
+        <ul class="recap-garanties"><li>✓ Prix confirmé ensemble avant de commencer</li><li>✓ Fait main, pièce unique</li><li>✓ WhatsApp s'ouvre avec votre demande déjà écrite : il ne reste qu'à envoyer votre photo</li></ul>
+    </aside>
+    </div>
 </section>
 </main>
 <footer>
-    <a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
-    <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
-    <a href="contact.html">Contact</a>
-    <p>© 2026 Ethan Gallery. Tableaux faits main, pièces uniques.</p>
+    <div class="pied">
+        <div class="pied-marque"><strong>Ethan Gallery</strong><p>Tableaux et portraits personnalisés, peints et dessinés à la main.</p></div>
+        <div class="pied-col"><span class="pied-titre">Découvrir</span><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="commande.html">Commander</a></div>
+        <div class="pied-col"><span class="pied-titre">Contact</span><a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a><a href="contact.html">Formulaire de contact</a></div>
+    </div>
+    <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=6"></script>
+<script src="script.js?v=14"></script>
+<script src="langues.js?v=14"></script>
 </body>
 </html>

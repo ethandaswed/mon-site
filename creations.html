@@ -14,7 +14,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
-    <link rel="stylesheet" href="style.css?v=6">
+    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <nav>
@@ -26,14 +27,27 @@
     </div>
 </nav>
 <main>
-<section class="section" id="tableaux">
+<section class="section boutique" id="tableaux">
+    <p class="fil"><a href="index.html">Accueil</a> › Créations</p>
     <h1>Mes créations</h1>
-    <p>Chaque tableau est une pièce unique réalisée à la main. Cliquez sur une création pour la voir en grand et la commander.</p>
-    <label class="filtre"><input type="checkbox" id="filtre-dispo"> Afficher seulement les tableaux disponibles</label>
-    <div class="cartes-projets"></div>
+    <p>Chaque original est une pièce unique réalisée à la main, et chaque tableau existe aussi en poster imprimé, avec ou sans cadre. Choisissez votre version sur la carte, le prix s'adapte. Cliquez sur une création pour la voir en grand.</p>
+    <ul class="reassurance"><li>Originaux faits main, posters imprimés en option</li><li>Pièces uniques</li><li>Paiement et livraison convenus sur WhatsApp</li><li>Prix annoncé d'avance</li></ul>
+    <div class="boutique-corps">
+        <aside class="filtres" aria-label="Filtres">
+            <div class="filtre-bloc"><label for="recherche">Rechercher</label><input id="recherche" type="search" placeholder="Ex : Joker, Goku..."></div>
+            <div class="filtre-bloc"><h2>Univers</h2><div class="facette" id="f-univers"></div></div>
+            <div class="filtre-bloc"><h2>Technique</h2><div class="facette" id="f-tech"></div></div>
+            <div class="filtre-bloc"><label for="filtre-prix">Prix</label><select id="filtre-prix"><option value="">Tous les prix</option><option value="0-450">Jusqu'à 450 ₪</option><option value="451-600">451 à 600 ₪</option><option value="601-99999">Plus de 600 ₪</option></select></div>
+            <label class="filtre"><input type="checkbox" id="filtre-dispo"> Disponibles seulement</label>
+            <button type="button" class="lien-danger" id="reinitialiser">Réinitialiser les filtres</button>
+        </aside>
+        <div class="resultats">
+            <div class="barre-tri"><p id="nb-resultats" aria-live="polite"></p><label for="tri">Trier par <select id="tri"><option value="pertinence">Sélection</option><option value="prix_asc">Prix croissant</option><option value="prix_desc">Prix décroissant</option><option value="nom">Nom (A à Z)</option><option value="dispo">Disponibles d'abord</option></select></label></div>
+            <div class="cartes-projets"></div>
+        </div>
+    </div>
 </section>
 <section class="creation-commande">
-    <p class="petit-titre">ETHAN GALLERY</p>
     <h2>Créez votre propre tableau</h2>
     <p>Une de mes créations vous inspire ? Transformez votre photo, votre idée ou votre souvenir en une œuvre créée spécialement pour vous.</p>
     <a href="commande.html" class="bouton">Créer mon tableau</a>
@@ -52,11 +66,14 @@
 </dialog>
 </main>
 <footer>
-    <a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
-    <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
-    <a href="contact.html">Contact</a>
-    <p>© 2026 Ethan Gallery. Tableaux faits main, pièces uniques.</p>
+    <div class="pied">
+        <div class="pied-marque"><strong>Ethan Gallery</strong><p>Tableaux et portraits personnalisés, peints et dessinés à la main.</p></div>
+        <div class="pied-col"><span class="pied-titre">Découvrir</span><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="commande.html">Commander</a></div>
+        <div class="pied-col"><span class="pied-titre">Contact</span><a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a><a href="contact.html">Formulaire de contact</a></div>
+    </div>
+    <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=6"></script>
+<script src="script.js?v=14"></script>
+<script src="langues.js?v=14"></script>
 </body>
 </html>

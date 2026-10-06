@@ -14,7 +14,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
-    <link rel="stylesheet" href="style.css?v=6">
+    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <nav>
@@ -26,77 +27,78 @@
     </div>
 </nav>
 <main>
-<div class="accueil" id="accueil">
-    <div class="texte">
-        <p class="petit-titre">ETHAN GALLERY</p>
-        <h1>Votre photo devient une œuvre.</h1>
-        <p class="description">Transformez vos plus belles photos en tableaux personnalisés, créés spécialement pour vous.</p>
+
+<section class="heros">
+    <div class="heros-in">
+        <div class="heros-texte">
+            <h1>Votre photo devient une œuvre.</h1>
+            <p class="lead">Un tableau peint à la main à partir de votre photo : un portrait, un souvenir, votre personnage préféré. Envoyez votre image, choisissez le format, je m'occupe du reste.</p>
+            <div class="actions">
+                <a href="commande.html" class="bouton">Commander mon tableau</a>
+                <a href="creations.html" class="bouton contour-clair">Voir les créations</a>
+            </div>
+            <ul class="heros-points"><li>Peint à la main</li><li>Prix annoncé d'avance</li><li>Poster imprimé en option</li></ul>
+        </div>
+        <div class="mosaique" role="group" aria-label="Quelques-unes de mes créations"><div class="col"><button type="button" class="oeuvre" data-oeuvre="deadpool.jpeg" aria-label="Voir Deadpool"><img src="./deadpool.jpeg" alt="Deadpool"></button><button type="button" class="oeuvre" data-oeuvre="tate langdon.jpeg" aria-label="Voir Tate Langdon"><img src="./tate langdon.jpeg" alt="Tate Langdon"></button></div><div class="col"><button type="button" class="oeuvre" data-oeuvre="sukuna.jpeg" aria-label="Voir Sukuna"><img src="./sukuna.jpeg" alt="Sukuna"></button><button type="button" class="oeuvre" data-oeuvre="dark-angel.jpeg" aria-label="Voir Dark Angel"><img src="./dark-angel.jpeg" alt="Dark Angel"></button></div><div class="col"><button type="button" class="oeuvre" data-oeuvre="ghost face.jpeg" aria-label="Voir Ghost Face"><img src="./ghost face.jpeg" alt="Ghost Face"></button><button type="button" class="oeuvre" data-oeuvre="street-fighter.jpeg" aria-label="Voir Street Fighter"><img src="./street-fighter.jpeg" alt="Street Fighter"></button></div></div>
+    </div>
+</section>
+
+<section class="zone">
+    <div class="bloc vitrine">
+        <div class="vitrine-tete">
+            <h2>Mes dernières créations</h2>
+            <a href="creations.html" class="lien-fleche">Voir les 23 créations</a>
+        </div>
+        <div class="grille-dessins"></div>
+    </div>
+</section>
+
+<section class="zone zone-douce">
+    <div class="bloc">
+        <h2>De votre photo à votre tableau</h2>
+        <ol class="parcours">
+            <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>1. Envoyez votre photo</h3><p>Une photo nette et bien éclairée donne le meilleur résultat. Ajoutez-la sur la page Commander.</p></li>
+            <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span><h3>2. Choisissez votre format</h3><p>Trois tailles, un style, et quelques mots sur vos couleurs et votre idée. Le prix s'affiche tout de suite.</p></li>
+            <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span><h3>3. Je peins, vous recevez</h3><p>Nous confirmons ensemble le prix et le délai sur WhatsApp, puis je réalise votre tableau à la main.</p></li>
+        </ol>
+        <p class="lien-bas"><a href="fonctionnement.html" class="lien-fleche">Tous les détails et les questions fréquentes</a></p>
+    </div>
+</section>
+
+<section class="zone">
+    <div class="bloc">
+        <h2>Les formats et les prix</h2>
+        <p class="intro-bloc">Chaque tableau est peint sur mesure. Le prix est annoncé d'avance et confirmé avec vous avant de commencer.</p>
+        <div class="formats">
+            <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:30;--h:40"></span></div><h3>30 × 40 cm</h3><p>Bureau, étagère</p><p class="format-prix">à partir de <strong data-prix="30x40"></strong></p></div>
+            <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:50;--h:70"></span></div><h3>50 × 70 cm</h3><p>Salon, chambre</p><p class="format-prix">à partir de <strong data-prix="50x70"></strong></p></div>
+            <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:70;--h:100"></span></div><h3>70 × 100 cm</h3><p>Grand format, pièce maîtresse</p><p class="format-prix">à partir de <strong data-prix="70x100"></strong></p></div>
+        </div>
+        <p class="note-poster" data-i18n="note-poster">Vous préférez une version plus abordable ? Chaque création existe aussi en <strong>poster imprimé</strong>, de <span data-poster="min"></span> à <span data-poster="max"></span>, avec un cadre en option (+<span data-poster="cadre"></span>).</p>
+    </div>
+</section>
+
+<section class="zone zone-douce" id="apropos">
+    <div class="bloc apropos">
+        <div class="apropos-texte">
+            <h2>À propos de moi</h2>
+            <p>Je m'appelle Ethan et ma passion est l'art. J'aime dessiner, peindre et donner vie à mes idées à travers des créations uniques. Au fil du temps, j'ai développé mon propre style et commencé à réaliser des portraits et des tableaux personnalisés.</p>
+            <p>À travers Ethan Gallery, je souhaite partager mon univers et créer des œuvres qui ont une vraie signification pour chaque personne.</p>
+            <p><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener" class="lien-fleche">Plus de créations sur Instagram @Ethan_bitan</a></p>
+        </div>
+        <figure class="apropos-img"><img src="./dark-angel.jpeg" alt="Tableau Dark Angel, peint à la main" loading="lazy"></figure>
+    </div>
+</section>
+
+<section class="appel" id="contact">
+    <div class="appel-in">
+        <h2>Votre prochaine œuvre commence par une photo.</h2>
+        <p>Envoyez-la moi avec votre idée. Je vous confirme le prix et le délai sur WhatsApp avant de commencer.</p>
         <div class="actions">
-            <a href="commande.html" class="bouton">Commander</a>
-            <a href="creations.html" class="bouton contour">Voir les créations</a>
+            <a href="commande.html" class="bouton">Commander mon tableau</a>
+            <a href="https://wa.me/972559955591" target="_blank" rel="noopener" class="bouton whatsapp">Écrire sur WhatsApp</a>
         </div>
-    </div>
-    <div class="carrousel" role="region" aria-roledescription="carrousel" aria-label="Quelques-unes de mes créations">
-        <div class="carrousel-piste">
-            <img class="diapo actif" src="./dark-angel.jpeg" alt="Tableau Dark Angel">
-            <img class="diapo" src="./sukuna.jpeg" alt="Tableau Sukuna" loading="lazy">
-            <img class="diapo" src="./spider team.jpeg" alt="Tableau Spider Team" loading="lazy">
-            <img class="diapo" src="./gohan.jpeg" alt="Tableau Gohan" loading="lazy">
-            <img class="diapo" src="./moon knight.jpeg" alt="Tableau Moon Knight" loading="lazy">
-            <img class="diapo" src="./michael-jackson.jpeg" alt="Tableau Michael Jackson" loading="lazy">
-            <img class="diapo" src="./street-fighter.jpeg" alt="Tableau Street Fighter" loading="lazy">
-            <img class="diapo" src="./tate langdon.jpeg" alt="Tableau Tate Langdon" loading="lazy">
-            <img class="diapo" src="./sukuna.jpeg" alt="Tableau Sukuna" loading="lazy">
-            <img class="diapo" src="./deadpool in love.jpeg" alt="Tableau Deadpool in Love" loading="lazy">
-            <img class="diapo" src="./pain naruto shippuden.jpeg" alt="Tableau Pain" loading="lazy">
-            <img class="diapo" src="./moon knight.jpeg" alt="Tableau Moon Knight" loading="lazy">
-            <img class="diapo" src="./spider team.jpeg" alt="Tableau Spider Team" loading="lazy">
-            <img class="diapo" src="./ken kaneki.jpeg" alt="Tableau Ken Kaneki" loading="lazy">
-            <img class="diapo" src="./eijiro kirishima.jpeg" alt="Tableau Eijiro Kirishima" loading="lazy">
-            <img class="diapo" src="./eddie stranger things.jpeg" alt="Tableau Eddie" loading="lazy">
-            <img class="diapo" src="./ichigo.jpeg" alt="Tableau Ichigo" loading="lazy">
-            <img class="diapo" src="./gohan.jpeg" alt="Tableau Gohan" loading="lazy">
-            <img class="diapo" src="./batman qui rit.jpeg" alt="Tableau Batman qui rit" loading="lazy">
-            <img class="diapo" src="./black goku.jpeg" alt="Tableau Black Goku" loading="lazy">
-            <img class="diapo" src="./deadpool.jpeg" alt="Tableau Deadpool" loading="lazy">
-            <img class="diapo" src="./ghost face.jpeg" alt="Tableau Ghost Face" loading="lazy">
-            <img class="diapo" src="./gohan beast.jpeg" alt="Tableau Gohan Beast" loading="lazy">
-        </div>
-        <button type="button" class="carrousel-fleche precedent" aria-label="Création précédente">‹</button>
-        <button type="button" class="carrousel-fleche suivant" aria-label="Création suivante">›</button>
-        <div class="carrousel-points"></div>
-    </div>
-</div>
-
-<section class="section fond-doux">
-    <h2>Des œuvres uniques, créées pour vous</h2>
-    <p>Je réalise des tableaux personnalisés, des peintures et des portraits à partir de vos photos, de vos idées et de vos inspirations. Chaque création est faite à la main, avec attention, pour transformer un souvenir, une personne ou une idée en une œuvre unique : pour décorer votre intérieur, offrir un cadeau original ou donner vie à une image qui compte pour vous.</p>
-    <div class="garanties">
-        <div><strong>Fait main</strong>Peint ou dessiné, jamais imprimé.</div>
-        <div><strong>Sur mesure</strong>Votre photo, votre format, votre style.</div>
-        <div><strong>Prix annoncé d'avance</strong>3 formats, tarifs clairs avant de commander.</div>
-    </div>
-</section>
-
-<section class="section">
-    <h2>Quelques-unes de mes créations</h2>
-    <div class="grille-dessins"></div>
-    <a href="creations.html" class="bouton-galerie">Voir toutes mes créations</a>
-</section>
-
-<section class="section fond-doux" id="apropos">
-    <h2>À propos de moi</h2>
-    <p>Je m'appelle Ethan et ma passion est l'art. J'aime dessiner, peindre et donner vie à mes idées à travers des créations uniques. Au fil du temps, j'ai développé mon propre style et commencé à réaliser des portraits et des tableaux personnalisés. À travers Ethan Gallery, je souhaite partager mon univers et créer des œuvres qui ont une vraie signification pour chaque personne.</p>
-    <p>Plus de tableaux, de portraits et de coulisses sur Instagram : <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">@Ethan_bitan</a>.</p>
-</section>
-
-<section class="section" id="contact">
-    <h2>Contact</h2>
-    <p>Une question ou une idée ? Écrivez-moi, c'est le plus rapide sur WhatsApp.</p>
-    <div class="reseaux">
-        <a class="bouton whatsapp" href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp +972 55 995 5591</a>
-        <a class="bouton contour" href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
-        <a class="bouton contour" href="contact.html">Formulaire de contact</a>
+        <p class="appel-contact" dir="ltr">+972 55 995 5591 &nbsp;·&nbsp; Instagram @Ethan_bitan</p>
     </div>
 </section>
 <dialog id="fenetre-produit" aria-labelledby="produit-titre">
@@ -113,11 +115,14 @@
 </dialog>
 </main>
 <footer>
-    <a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
-    <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
-    <a href="contact.html">Contact</a>
-    <p>© 2026 Ethan Gallery. Tableaux faits main, pièces uniques.</p>
+    <div class="pied">
+        <div class="pied-marque"><strong>Ethan Gallery</strong><p>Tableaux et portraits personnalisés, peints et dessinés à la main.</p></div>
+        <div class="pied-col"><span class="pied-titre">Découvrir</span><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="commande.html">Commander</a></div>
+        <div class="pied-col"><span class="pied-titre">Contact</span><a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a><a href="contact.html">Formulaire de contact</a></div>
+    </div>
+    <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=6"></script>
+<script src="script.js?v=14"></script>
+<script src="langues.js?v=14"></script>
 </body>
 </html>

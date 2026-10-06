@@ -4,13 +4,33 @@
 const NUMERO_WHATSAPP = "972559955591";
 const PRIX_TAILLES = { "30x40": 400, "50x70": 650, "70x100": 900 };
 
+// Poster imprimé : le prix va de 150 à 200 ₪ selon le prix du tableau original
+// (tableau à 400 ₪ ou moins = 150 ₪, tableau à 1000 ₪ ou plus = 200 ₪).
+// SUPPLEMENT_CADRE : supplément facturé quand le poster est livré avec cadre (en ₪).
+const POSTER = { min: 150, max: 200, baseMin: 400, baseMax: 1000, SUPPLEMENT_CADRE: 70 };
+function prixPoster(c, avecCadre) {
+    const base = Number((String(c.prix).match(/\d+/) || [0])[0]);
+    const t = Math.min(1, Math.max(0, (base - POSTER.baseMin) / (POSTER.baseMax - POSTER.baseMin)));
+    return Math.round((POSTER.min + t * (POSTER.max - POSTER.min)) / 10) * 10 + (avecCadre ? POSTER.SUPPLEMENT_CADRE : 0);
+}
+function articlePoster(c, avecCadre) {
+    return { id: "poster:" + c.fichier + ":" + (avecCadre ? "cadre" : "nu"), titre: "Poster " + c.titre, prix: prixPoster(c, avecCadre),
+        image: c.fichier, type: "Poster imprimé", detail: avecCadre ? "Avec cadre" : "Sans cadre" };
+}
+
+// Version choisie pour chaque création : « original fait main » ou « poster imprimé ».
+// Partagé entre les cartes de la page Créations et la fenêtre d'un tableau.
+const CHOIX = {};
+const choixDe = (c) => CHOIX[c.fichier] || (CHOIX[c.fichier] = { v: c.dispo ? "original" : "poster", cadre: false });
+const prixOriginal = (c) => Number((String(c.prix).match(/\d+/) || [0])[0]);
+
 // Pour ajouter une création : ajoutez UNE ligne dans cette liste.
 // [fichier image, titre, description, prix affiché, disponible ?, afficher sur l'accueil ?]
 // Prix vide ("") = œuvre non vendue (visible seulement sur l'accueil).
 const CREATIONS = [
-    ["michael-jackson.jpeg", "Michael Jackson", "Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique, idéale pour les passionnés de musique et de portraits artistiques.", "À partir de 1000 ₪", true, false],
-    ["street-fighter.jpeg", "Street Fighter", "Une création colorée inspirée de l'univers de Street Fighter, qui met en avant l'énergie et l'intensité du combat.", "À partir de 600 ₪", true, true],
-    ["dark-angel.jpeg", "Dark Angel", "Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale, pensée pour apporter une vraie présence à votre intérieur.", "À partir de 400 ₪", true, false],
+    ["michael-jackson.jpeg", "Michael Jackson", "Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique, idéale pour les passionnés de musique et de portraits artistiques.", "1000 ₪", true, false],
+    ["street-fighter.jpeg", "Street Fighter", "Une création colorée inspirée de l'univers de Street Fighter, qui met en avant l'énergie et l'intensité du combat.", "600 ₪", true, true],
+    ["dark-angel.jpeg", "Dark Angel", "Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale, pensée pour apporter une vraie présence à votre intérieur.", "400 ₪", true, false],
     ["tate langdon.jpeg", "Tate Langdon", "Portrait au crayon avec un travail détaillé sur le visage, les ombres et l'effet squelette. Une création sombre entièrement dessinée à la main.", "400 ₪", true, false],
     ["sukuna.jpeg", "Sukuna", "Création inspirée de Sukuna, aux couleurs intenses et aux forts contrastes. Le noir, le rouge et le rose donnent beaucoup de puissance au personnage.", "500 ₪", true, true],
     ["deadpool in love.jpeg", "Deadpool in Love", "Deadpool dans une ambiance plus légère. Les tons rouges, roses et violets donnent au dessin un style très reconnaissable.", "500 ₪", true, false],
@@ -30,10 +50,11 @@ const CREATIONS = [
     ["it.jpeg", "It", "Un portrait au crayon avec un travail particulier sur le visage, les ombres et les détails. Une atmosphère sombre et précise.", "400 ₪", true, true],
     ["joker.jpeg", "Joker", "Une interprétation artistique et colorée du Joker, qui garde l'ambiance sombre et reconnaissable du personnage.", "500 ₪", true, false],
     ["kid buu.jpeg", "Kid Buu", "Une création très colorée inspirée de Kid Buu et de Dragon Ball, aux nuances de rose et aux couleurs intenses.", "600 ₪", true, true],
-    ["dessin joker.jpg.jpeg", "Joker - Crayon", "Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "", true, true]
+    ["dessin joker.jpg.jpeg", "Joker - Crayon", "Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "400 ₪", true, true]
 ].map(([fichier, titre, description, prix, dispo, accueil]) => ({ fichier, titre, description, prix, dispo, accueil }));
 
 const $ = (id) => document.getElementById(id);
+const tr = (fr) => (window.trad ? window.trad(fr) : fr); // traduction (voir langues.js)
 const lienWhatsApp = (texte) => "https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(texte);
 
 // =====================================================
@@ -63,73 +84,54 @@ function ouvrirCreation(c) {
     $("produit-image").alt = c.titre;
     $("produit-titre").textContent = c.titre;
     $("produit-description").textContent = c.description;
-    $("produit-prix").textContent = c.prix;
-    $("produit-prix").hidden = !c.prix;
-
-    const stock = document.querySelector(".produit-stock");
-    const bouton = $("produit-commander");
-    const vendable = c.prix && c.dispo;
-    stock.hidden = !c.prix;
-    stock.className = "produit-stock " + (c.dispo ? "ok" : "rupture");
-    stock.textContent = c.dispo ? "● Pièce unique, disponible" : "● Rupture de stock";
-    bouton.disabled = !vendable;
-    bouton.textContent = vendable ? "Commander sur WhatsApp" : (c.prix ? "Indisponible" : "Ce tableau n'est pas à vendre");
-    bouton.hidden = !c.prix;
     $("produit-sur-mesure").hidden = c.dispo && !!c.prix;
+    if (window.majBoutonPanier) majBoutonPanier(c);
     fenetre.showModal();
 }
 
 if (fenetre) {
     $("produit-commander").addEventListener("click", () => {
-        window.open(lienWhatsApp("Bonjour, je suis intéressé par le tableau " + creationActive.titre + ". Est-il toujours disponible ?"), "_blank", "noopener");
+        const c = creationActive, ch = choixDe(c);
+        const texte = ch.v === "poster"
+            ? "Bonjour, je suis intéressé par le poster imprimé du tableau " + c.titre + " (" + (ch.cadre ? "avec cadre" : "sans cadre") + ", " + prixPoster(c, ch.cadre) + " ₪). Est-il disponible ?"
+            : "Bonjour, je suis intéressé par le tableau original " + c.titre + " (" + prixOriginal(c) + " ₪). Est-il toujours disponible ?";
+        window.open(lienWhatsApp(texte), "_blank", "noopener");
     });
     fenetre.querySelector(".popup-fermer").addEventListener("click", () => fenetre.close());
     // Clic sur le fond sombre = fermer
     fenetre.addEventListener("click", (e) => { if (e.target === fenetre) fenetre.close(); });
 }
 
-// Galerie de l'accueil
+// Galerie de l'accueil : créations disponibles, avec titre et prix
 const grille = document.querySelector(".grille-dessins");
 if (grille) {
-    CREATIONS.filter((c) => c.accueil).forEach((c) => {
+    CREATIONS.filter((c) => c.accueil && c.dispo).slice(0, 8).forEach((c) => {
         const b = document.createElement("button");
         b.type = "button";
         b.setAttribute("aria-label", "Voir " + c.titre);
-        b.innerHTML = '<img loading="lazy" alt="">';
-        b.firstChild.src = "./" + c.fichier;
-        b.firstChild.alt = c.titre;
+        b.innerHTML = '<span class="vignette"><img loading="lazy" alt=""></span><span class="legende"><strong></strong><span></span></span>';
+        const img = b.querySelector("img");
+        img.src = "./" + c.fichier; img.alt = c.titre;
+        b.querySelector("strong").textContent = c.titre;
+        b.querySelector(".legende > span").textContent = c.prix;
         b.addEventListener("click", () => ouvrirCreation(c));
         grille.appendChild(b);
     });
 }
-
-// Page Créations
-const cartes = document.querySelector(".cartes-projets");
-const filtre = $("filtre-dispo");
-function afficherCartes() {
-    cartes.replaceChildren();
-    CREATIONS.filter((c) => c.prix && (!filtre.checked || c.dispo)).forEach((c) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "projet" + (c.dispo ? "" : " rupture");
-        b.innerHTML = '<img loading="lazy" alt=""><h3></h3><p class="prix"></p>' + (c.dispo ? "" : '<span class="badge-rupture">Rupture de stock</span>');
-        b.querySelector("img").src = "./" + c.fichier;
-        b.querySelector("img").alt = "Tableau " + c.titre;
-        b.querySelector("h3").textContent = c.titre;
-        b.querySelector(".prix").textContent = c.prix;
-        b.addEventListener("click", () => ouvrirCreation(c));
-        cartes.appendChild(b);
+// Œuvres de l'en-tête de l'accueil : un clic ouvre la fiche du tableau
+document.querySelectorAll("[data-oeuvre]").forEach((el) => {
+    el.addEventListener("click", () => {
+        const c = CREATIONS.find((x) => x.fichier === el.dataset.oeuvre);
+        if (c) ouvrirCreation(c);
     });
-}
-if (cartes && filtre) {
-    filtre.addEventListener("change", afficherCartes);
-    afficherCartes();
-}
+});
 
 // =====================================================
 // PRIX (une seule source : PRIX_TAILLES)
 // =====================================================
 document.querySelectorAll("[data-prix]").forEach((el) => { el.textContent = PRIX_TAILLES[el.dataset.prix] + " ₪"; });
+const VALEURS_POSTER = { min: POSTER.min, max: POSTER.max + 0, cadre: POSTER.SUPPLEMENT_CADRE };
+document.querySelectorAll("[data-poster]").forEach((el) => { el.textContent = VALEURS_POSTER[el.dataset.poster] + " ₪"; });
 
 // =====================================================
 // PAGE COMMANDE
@@ -145,6 +147,8 @@ if (bouton) {
         if (apercu.src.startsWith("blob:")) URL.revokeObjectURL(apercu.src);
         apercu.src = URL.createObjectURL(f);
         apercu.style.display = "block";
+        const dt = document.getElementById("depot-texte");
+        if (dt) dt.textContent = f.name;
     });
     taille.addEventListener("change", () => {
         prix.textContent = PRIX_TAILLES[taille.value] ? "Prix estimé : " + PRIX_TAILLES[taille.value] + " ₪" : "";
@@ -166,7 +170,7 @@ if (bouton) {
             "🎨 NOUVELLE DEMANDE - ETHAN GALLERY\n\n" +
             "📐 Taille : " + taille.value + " cm\n" +
             "🎨 Style : " + style + "\n" +
-            "💰 " + prix.textContent + "\n\n" +
+            "💰 Prix estimé : " + PRIX_TAILLES[taille.value] + " ₪\n\n" +
             "✍️ Idée du tableau :\n" + idee + "\n\n" +
             "📸 Ma photo : " + f.name + "\nJe vous l'envoie juste après ce message dans cette conversation.";
         window.open(lienWhatsApp(message), "_blank", "noopener");
@@ -188,9 +192,9 @@ if (form) {
             const r = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
             if (!r.ok) throw new Error();
             form.reset();
-            montrerEtat(etat, "✅ Mail envoyé ! Je vous répondrai dès que possible.", "ok");
+            montrerEtat(etat, "Mail envoyé ! Je vous répondrai dès que possible.", "ok");
         } catch {
-            montrerEtat(etat, "❌ Le mail n'a pas pu être envoyé. Écrivez-moi directement sur WhatsApp : +972 55 995 5591.", "erreur");
+            montrerEtat(etat, "Le mail n'a pas pu être envoyé. Écrivez-moi directement sur WhatsApp : +972 55 995 5591.", "erreur");
         } finally {
             b.disabled = false;
             b.textContent = texte;
@@ -213,6 +217,9 @@ if (carrousel) {
     const peutDefiler = !matchMedia("(prefers-reduced-motion: reduce)").matches;
     let courant = 0, minuteur = null;
 
+    const compteur = document.createElement("span");
+    compteur.className = "carrousel-compteur"; compteur.setAttribute("aria-hidden", "true");
+    carrousel.appendChild(compteur);
     const points = diapos.map((d, i) => {
         const p = document.createElement("button");
         p.type = "button";
@@ -226,6 +233,7 @@ if (carrousel) {
         courant = (i + diapos.length) % diapos.length; // revient à la première après la dernière
         diapos.forEach((d, n) => d.classList.toggle("actif", n === courant));
         points.forEach((p, n) => p.setAttribute("aria-current", n === courant));
+        compteur.textContent = (courant + 1) + " / " + diapos.length;
     }
     function arreter() { clearInterval(minuteur); minuteur = null; }
     function relancer() {
@@ -256,3 +264,443 @@ if (carrousel) {
     aller(0);
     relancer();
 }
+
+// =====================================================
+// BOUTIQUE : COMPTE, PARAMÈTRES, PANIER (tout est stocké dans le navigateur)
+// =====================================================
+(() => {
+    const K = { panier: "eg_panier", users: "eg_users", session: "eg_session", theme: "eg_theme", prefs: "eg_prefs", favoris: "eg_favoris" };
+    const lire = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
+    const ecrire = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { } };
+    const prixNum = (p) => Number((String(p).match(/\d+/) || [0])[0]);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    const getPanier = () => lire(K.panier, []);
+    const setPanier = (p) => { ecrire(K.panier, p); majBadge(); };
+    const etat = (el, texte, type) => { el.textContent = texte; el.className = "message-etat visible " + type; };
+
+    // Thème (réglage)
+    const PREFS0 = { theme: "clair", texte: "normal", anim: true, transitions: true };
+    const getPrefs = () => ({ ...PREFS0, ...lire(K.prefs, {}) });
+    function appliquerPrefs() {
+        const p = getPrefs();
+        document.body.classList.toggle("sombre", p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches));
+        document.documentElement.classList.toggle("grand", p.texte === "grand");
+        document.body.classList.toggle("sans-anim", !p.anim);
+        document.documentElement.classList.toggle("sans-transition", !p.transitions || !p.anim);
+    }
+    const setPrefs = (n) => { ecrire(K.prefs, { ...getPrefs(), ...n }); appliquerPrefs(); };
+    appliquerPrefs();
+
+    // Petit message de confirmation
+    function toast(texte) {
+        let t = document.getElementById("toast");
+        if (!t) { t = document.createElement("div"); t.id = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+        t.textContent = texte; t.classList.add("visible");
+        clearTimeout(t._m); t._m = setTimeout(() => t.classList.remove("visible"), 2500);
+    }
+
+    // Icônes compte + panier dans la navigation
+    function majBadge() {
+        const b = document.getElementById("badge-panier");
+        if (!b) return;
+        const n = getPanier().length;
+        b.textContent = n; b.hidden = !n;
+        b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+    }
+    const nav = document.querySelector(".liens");
+    if (nav) {
+        const cmd = nav.querySelector(".bouton-nav-commander");
+        const page = location.pathname.split("/").pop();
+        [["compte.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', "Mon compte"], ["panier.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="badge-panier" id="badge-panier" hidden></span>', "Mon panier"]].forEach(([href, html, label]) => {
+            const a = document.createElement("a");
+            a.href = href; a.className = "icone-nav"; a.innerHTML = html; a.setAttribute("aria-label", label);
+            if (page === href) a.setAttribute("aria-current", "page");
+            nav.insertBefore(a, cmd);
+        });
+    }
+    majBadge();
+    // Retire du panier les tableaux désormais en rupture de stock
+    const gardes = getPanier().filter((i) => { const c = CREATIONS.find((x) => "creation:" + x.fichier === i.id); return !c || c.dispo; });
+    if (gardes.length !== getPanier().length) setPanier(gardes);
+
+    function ajouter(item) {
+        if (item.indispo) { toast("Ce tableau est en rupture de stock"); return false; }
+        const p = getPanier();
+        if (p.some((x) => x.id === item.id)) { toast("Déjà dans votre panier"); return false; }
+        p.push(item); setPanier(p); toast("✓ Ajouté au panier");
+        return true;
+    }
+
+    // Favoris
+    const getFavoris = () => lire(K.favoris, []);
+    function basculerFavori(f) {
+        const l = getFavoris(), i = l.indexOf(f);
+        if (i >= 0) l.splice(i, 1); else l.push(f);
+        ecrire(K.favoris, l);
+        toast(i >= 0 ? "Retiré des favoris" : "♥ Ajouté aux favoris");
+    }
+    function articleDe(c) {
+        const vendu = !c.dispo;
+        return { indispo: !c.dispo, id: "creation:" + c.fichier, titre: c.titre, prix: prixNum(c.prix), image: c.fichier,
+            type: vendu ? "Sur commande (pièce déjà vendue, refaite à la main)" : "Pièce unique",
+            detail: vendu ? "Délai et prix confirmés sur WhatsApp" : (/partir/i.test(c.prix) ? "Prix de départ, confirmé sur WhatsApp" : "") };
+    }
+
+    const articleChoix = (c, ch) => ch.v === "poster" ? articlePoster(c, ch.cadre) : articleDe(c);
+
+    // Fenêtre produit : choix original / poster (avec ou sans cadre), panier, favoris
+    function initFenetre() {
+        if (document.getElementById("produit-version")) return;
+        const bloc = document.createElement("div");
+        bloc.id = "produit-version"; bloc.className = "bloc-version";
+        bloc.innerHTML = '<p class="option-titre">Choisissez votre version</p>' +
+            '<div class="choix-version" role="radiogroup" aria-label="Version du tableau">' +
+            '<label><input type="radio" name="version-produit" value="original"><span><strong>Original fait main</strong><small id="v-prix-original"></small></span></label>' +
+            '<label><input type="radio" name="version-produit" value="poster"><span><strong>Poster imprimé</strong><small id="v-prix-poster"></small></span></label></div>' +
+            '<div class="choix-cadre" id="v-cadre" role="radiogroup" aria-label="Cadre du poster">' +
+            '<label><input type="radio" name="cadre-produit" value="sans"> Sans cadre</label><label><input type="radio" name="cadre-produit" value="avec"> Avec cadre (+' + POSTER.SUPPLEMENT_CADRE + ' ₪)</label></div>' +
+            '<small id="v-note"></small>';
+        document.getElementById("produit-description").after(bloc);
+        bloc.addEventListener("change", (e) => {
+            const ch = choixDe(creationActive);
+            if (e.target.name === "version-produit") ch.v = e.target.value;
+            if (e.target.name === "cadre-produit") ch.cadre = e.target.value === "avec";
+            window.majBoutonPanier(creationActive);
+        });
+
+        const b = document.createElement("button");
+        b.type = "button"; b.id = "produit-panier"; b.className = "bouton contour";
+        document.getElementById("produit-commander").after(b);
+        const f = document.createElement("button");
+        f.type = "button"; f.id = "produit-favori"; f.className = "bouton-favori";
+        b.after(f);
+        b.addEventListener("click", () => {
+            const c = creationActive, ch = choixDe(c);
+            if (!c || (ch.v === "original" && !c.dispo)) return;
+            ajouter(articleChoix(c, ch)); window.majBoutonPanier(c);
+        });
+        f.addEventListener("click", () => { basculerFavori(creationActive.fichier); window.majBoutonPanier(creationActive); });
+    }
+
+    window.majBoutonPanier = (c) => {
+        initFenetre();
+        const $i = (id) => document.getElementById(id);
+        const ch = choixDe(c), poster = ch.v === "poster", art = articleChoix(c, ch), ok = poster || c.dispo;
+        const dedans = getPanier().some((x) => x.id === art.id), fav = getFavoris().includes(c.fichier);
+
+        $i("produit-version").hidden = !c.prix;
+        const radio = (nom, val) => document.querySelector('input[name="' + nom + '"][value="' + val + '"]');
+        radio("version-produit", "original").checked = !poster;
+        radio("version-produit", "original").disabled = !c.dispo;
+        radio("version-produit", "poster").checked = poster;
+        radio("cadre-produit", "sans").checked = !ch.cadre;
+        radio("cadre-produit", "avec").checked = ch.cadre;
+        $i("v-cadre").hidden = !poster;
+        $i("v-prix-original").textContent = c.dispo ? c.prix : "Vendu (rupture de stock)";
+        $i("v-prix-poster").textContent = prixPoster(c, ch.cadre) + " ₪";
+        $i("v-note").textContent = poster
+            ? "Reproduction imprimée de ce tableau. Format et délai confirmés avec vous sur WhatsApp."
+            : "Pièce unique, peinte ou dessinée à la main.";
+
+        $i("produit-prix").textContent = art.prix + " ₪";
+        $i("produit-prix").hidden = !c.prix;
+        const stock = document.querySelector(".produit-stock");
+        stock.hidden = !c.prix;
+        stock.className = "produit-stock " + (ok ? "ok" : "rupture");
+        stock.textContent = poster ? "● Poster imprimé disponible" : c.dispo ? "● Pièce unique, disponible" : "● Rupture de stock";
+
+        const cmd = $i("produit-commander");
+        cmd.hidden = !c.prix;
+        cmd.disabled = !ok;
+        cmd.textContent = ok ? "Commander sur WhatsApp" : "Indisponible";
+
+        const b = $i("produit-panier"), f = $i("produit-favori");
+        b.hidden = !c.prix;
+        b.disabled = dedans || !ok;
+        b.textContent = dedans ? "✓ Dans le panier" : ok ? "Ajouter au panier · " + art.prix + " ₪" : "Indisponible (rupture de stock)";
+        f.hidden = !c.prix;
+        f.textContent = fav ? "♥ Dans mes favoris" : "♡ Ajouter aux favoris";
+        f.setAttribute("aria-pressed", fav);
+    };
+
+    window.EG = { ajouter, articleDe, articlePoster, basculerFavori, estFavori: (f) => getFavoris().includes(f), dansPanier: (f) => getPanier().some((x) => x.id === "creation:" + f), aDansPanier: (id) => getPanier().some((x) => x.id === id), articleChoix };
+
+    // Bouton retour en haut
+    const haut = document.createElement("button");
+    haut.type = "button"; haut.id = "haut"; haut.setAttribute("aria-label", "Retour en haut"); haut.textContent = "↑";
+    haut.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+    document.body.appendChild(haut);
+    addEventListener("scroll", () => haut.classList.toggle("visible", scrollY > 500), { passive: true });
+
+    // Page commande sur mesure : ajout au panier
+    const bc = document.getElementById("bouton-commande");
+    if (bc) {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "bouton contour"; b.textContent = "Ajouter au panier";
+        bc.before(b);
+        b.addEventListener("click", () => {
+            const f = document.getElementById("photo-client").files[0], taille = document.getElementById("taille").value;
+            const style = document.getElementById("style").value, idee = document.getElementById("message-commande").value.trim();
+            const err = document.getElementById("erreur-commande");
+            const manque = !f ? "Ajoutez une photo." : !taille ? "Choisissez une taille." : !style ? "Choisissez un style." : !idee ? "Décrivez votre idée." : "";
+            if (manque) return etat(err, manque, "erreur");
+            err.className = "message-etat";
+            ajouter({ id: "sur-mesure:" + Date.now(), titre: "Tableau sur mesure " + taille + " cm", prix: PRIX_TAILLES[taille], type: "Sur mesure", detail: "Style : " + style + " | Idée : " + idee, photo: f.name });
+            toast("✓ Ajouté au panier. Retrouvez-le dans votre panier.");
+        });
+    }
+
+    // Comptes
+    const getUsers = () => lire(K.users, {});
+    const userCourant = () => { const e = lire(K.session, null), u = e && getUsers()[e]; return u ? { email: e, ...u } : null; };
+    async function hacher(mdp, email) {
+        const t = email + ":" + mdp;
+        if (window.crypto && crypto.subtle) {
+            const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+            return [...new Uint8Array(h)].map((x) => x.toString(16).padStart(2, "0")).join("");
+        }
+        return btoa(unescape(encodeURIComponent(t)));
+    }
+    const sauverUser = (email, donnees) => { const u = getUsers(); u[email] = { ...u[email], ...donnees }; ecrire(K.users, u); };
+
+    // Page panier
+    const zp = document.getElementById("contenu-panier");
+    function rendrePanier() {
+        const p = getPanier(), u = userCourant();
+        if (!p.length) {
+            zp.innerHTML = '<p>Votre panier est vide.</p><a class="bouton" href="creations.html">Voir les créations</a>';
+            return;
+        }
+        const total = p.reduce((s, i) => s + i.prix, 0);
+        zp.innerHTML = '<ul class="lignes-panier">' + p.map((i, n) =>
+            '<li>' + (i.image ? '<img src="./' + esc(i.image) + '" alt="">' : '<span class="pastille" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span>') +
+            '<div><strong>' + esc(i.titre) + '</strong><small>' + esc(i.type) + (i.detail ? " · " + esc(i.detail) : "") + '</small></div>' +
+            '<span class="ligne-prix">' + i.prix + ' ₪</span>' +
+            '<button type="button" class="retirer" data-n="' + n + '" aria-label="Retirer ' + esc(i.titre) + '">✕</button></li>').join("") +
+            '</ul><p class="total-panier">Total : <strong>' + total + ' ₪</strong></p>' +
+            '<div class="formulaire"><div class="champ"><label for="c-nom">Votre nom</label><input id="c-nom" type="text" autocomplete="name" value="' + esc(u ? u.nom : "") + '"></div>' +
+            '<div class="champ"><label for="c-tel">Téléphone (facultatif)</label><input id="c-tel" type="tel" autocomplete="tel" value="' + esc(u ? u.tel || "" : "") + '"></div>' +
+            '<div class="champ"><label for="c-note">Message (facultatif)</label><textarea id="c-note" placeholder="Livraison, remise en main propre, questions..."></textarea></div>' +
+            '<p id="c-erreur" class="message-etat" role="alert"></p>' +
+            '<button type="button" class="bouton whatsapp" id="envoyer-commande">Commander sur WhatsApp</button>' +
+            '<button type="button" class="bouton contour" id="vider-panier">Vider le panier</button>' +
+            (u ? "" : '<p class="note">Astuce : <a href="compte.html">créez un compte</a> pour retrouver vos infos et votre historique.</p>') + '</div>';
+    }
+    if (zp) {
+        rendrePanier();
+        zp.addEventListener("click", (e) => {
+            const r = e.target.closest(".retirer");
+            if (r) { const p = getPanier(); p.splice(Number(r.dataset.n), 1); setPanier(p); rendrePanier(); return; }
+            if (e.target.id === "vider-panier") { setPanier([]); rendrePanier(); return; }
+            if (e.target.id !== "envoyer-commande") return;
+            const nom = document.getElementById("c-nom").value.trim(), tel = document.getElementById("c-tel").value.trim(), note = document.getElementById("c-note").value.trim();
+            if (!nom) return etat(document.getElementById("c-erreur"), "Indiquez votre nom pour la commande.", "erreur");
+            const p = getPanier(), total = p.reduce((s, i) => s + i.prix, 0), u = userCourant();
+            const photos = p.filter((i) => i.photo).map((i) => i.photo);
+            const msg = "🛒 NOUVELLE COMMANDE - ETHAN GALLERY\n\n" +
+                "👤 Nom : " + nom + "\n" + (tel ? "📞 Téléphone : " + tel + "\n" : "") + (u ? "📧 Compte : " + u.email + "\n🗣️ Contact préféré : " + (u.contact || "WhatsApp") + "\n📦 Réception : " + (u.reception || "À convenir") + "\n" + (u.adresse ? "📍 Adresse : " + u.adresse + (u.ville ? ", " + u.ville : "") + "\n" : "") : "") +
+                "\n🧾 ARTICLES (" + p.length + ")\n" +
+                p.map((i, n) => (n + 1) + ". " + i.titre + "\n   • Type : " + i.type + (i.detail ? "\n   • " + i.detail : "") + "\n   • Prix : " + i.prix + " ₪").join("\n") +
+                "\n\n💰 TOTAL : " + total + " ₪\n" + (note ? "\n📝 Message : " + note + "\n" : "") +
+                (photos.length ? "\n📸 Photos à envoyer juste après ce message : " + photos.join(", ") + "\n" : "") +
+                (p.some((i) => /^Sur commande/.test(i.type)) ? "\n⏳ Les articles « sur commande » sont des pièces déjà vendues : merci de m'indiquer le délai de réalisation." : "") + "\nMerci de me confirmer la disponibilité et le prix final.";
+            window.open(lienWhatsApp(msg), "_blank", "noopener");
+            if (u) sauverUser(u.email, { commandes: [{ date: new Date().toLocaleDateString("fr-FR"), total, articles: p.map((i) => i.titre) }, ...(u.commandes || [])].slice(0, 20) });
+            setPanier([]);
+            zp.innerHTML = '<p class="message-etat visible ok">WhatsApp vient de s\'ouvrir avec votre commande. Envoyez le message' + (photos.length ? ", puis vos photos" : "") + ' dans la conversation.</p><a class="bouton" href="creations.html">Continuer mes achats</a>';
+        });
+    }
+
+    // Page compte
+    const zc = document.getElementById("zone-compte");
+    function rendreCompte(mode = "connexion") {
+        const u = userCourant();
+        if (!u) {
+            const ins = mode === "inscription";
+            zc.innerHTML = '<div class="onglets"><button type="button" data-m="connexion"' + (ins ? "" : ' class="actif"') + '>Connexion</button><button type="button" data-m="inscription"' + (ins ? ' class="actif"' : "") + '>Créer un compte</button></div>' +
+                '<div class="formulaire">' + (ins ? '<div class="champ"><label for="a-nom">Nom</label><input id="a-nom" type="text" autocomplete="name"></div>' : "") +
+                '<div class="champ"><label for="a-email">E-mail</label><input id="a-email" type="email" autocomplete="email"></div>' +
+                '<div class="champ"><label for="a-mdp">Mot de passe' + (ins ? " (6 caractères minimum)" : "") + '</label><input id="a-mdp" type="password" autocomplete="' + (ins ? "new-password" : "current-password") + '"></div>' +
+                '<p id="a-msg" class="message-etat" role="alert"></p><button type="button" class="bouton" id="a-valider">' + (ins ? "Créer mon compte" : "Me connecter") + '</button></div>';
+            zc.querySelectorAll(".onglets button").forEach((b) => b.addEventListener("click", () => rendreCompte(b.dataset.m)));
+            document.getElementById("a-valider").addEventListener("click", async () => {
+                const msg = document.getElementById("a-msg"), email = document.getElementById("a-email").value.trim().toLowerCase(), mdp = document.getElementById("a-mdp").value;
+                const users = getUsers();
+                if (!/^\S+@\S+\.\S+$/.test(email)) return etat(msg, "Entrez une adresse e-mail valide.", "erreur");
+                if (ins) {
+                    const nom = document.getElementById("a-nom").value.trim();
+                    if (!nom) return etat(msg, "Indiquez votre nom.", "erreur");
+                    if (mdp.length < 6) return etat(msg, "Le mot de passe doit contenir au moins 6 caractères.", "erreur");
+                    if (users[email]) return etat(msg, "Un compte existe déjà avec cet e-mail. Connectez-vous.", "erreur");
+                    sauverUser(email, { nom, tel: "", adresse: "", hash: await hacher(mdp, email), commandes: [] });
+                } else if (!users[email] || users[email].hash !== await hacher(mdp, email)) {
+                    return etat(msg, "E-mail ou mot de passe incorrect.", "erreur");
+                }
+                ecrire(K.session, email);
+                rendreCompte();
+            });
+            return;
+        }
+        const cmds = u.commandes || [], pr = getPrefs(), favs = getFavoris().map((f) => CREATIONS.find((c) => c.fichier === f)).filter(Boolean);
+        const opt = (liste, val) => liste.map((o) => '<option value="' + o + '"' + (o === val ? " selected" : "") + '>' + o + '</option>').join("");
+        const champ = (id, lib, val, type, ac) => '<div class="champ"><label for="' + id + '">' + lib + '</label><input id="' + id + '" type="' + (type || "text") + '" value="' + esc(val || "") + '"' + (ac ? ' autocomplete="' + ac + '"' : "") + '></div>';
+        const carte = (titre, corps, large) => '<section class="carte-compte' + (large ? " large" : "") + '"><h2>' + titre + '</h2>' + corps + '</section>';
+        const msg = (id) => '<p id="' + id + '" class="message-etat" role="status"></p>';
+        zc.innerHTML = '<div class="profil-tete"><span class="avatar">' + esc(u.nom.trim().charAt(0).toUpperCase() || "?") + '</span><div><strong>' + esc(u.nom) + '</strong><small>' + esc(u.email) + '</small></div><button type="button" class="bouton contour" id="p-deco">Me déconnecter</button></div>' +
+            '<div class="grille-compte">' +
+            carte("Mes informations", champ("p-nom", "Nom", u.nom, "text", "name") + champ("p-tel", "Téléphone", u.tel, "tel", "tel") + champ("p-ville", "Ville", u.ville, "text", "address-level2") +
+                '<div class="champ"><label for="p-adr">Adresse de livraison</label><textarea id="p-adr">' + esc(u.adresse || "") + '</textarea></div>' +
+                '<div class="champ"><label for="p-contact">Contact préféré</label><select id="p-contact">' + opt(["WhatsApp", "Appel", "E-mail", "Instagram"], u.contact || "WhatsApp") + '</select></div>' +
+                '<div class="champ"><label for="p-recep">Mode de réception</label><select id="p-recep">' + opt(["À convenir", "Remise en main propre", "Livraison"], u.reception || "À convenir") + '</select></div>' +
+                msg("p-msg") + '<button type="button" class="bouton" id="p-sauver">Enregistrer</button>') +
+            carte("Affichage", '<div class="champ"><label for="p-theme">Thème</label><select id="p-theme"><option value="clair">Clair</option><option value="sombre">Sombre</option><option value="auto">Automatique (selon l\'appareil)</option></select></div>' +
+                '<div class="champ"><label for="p-texte">Taille du texte</label><select id="p-texte"><option value="normal">Normale</option><option value="grand">Grande</option></select></div>' +
+                '<div><label class="filtre"><input type="checkbox" id="p-anim"' + (pr.anim ? " checked" : "") + '> Animations activées</label></div>' +
+                '<div><label class="filtre"><input type="checkbox" id="p-trans"' + (pr.transitions ? " checked" : "") + '> Transition entre les pages</label></div>') +
+            carte("Mes favoris (" + favs.length + ")", favs.length ? '<ul class="lignes-panier compact">' + favs.map((c) => '<li><img src="./' + esc(c.fichier) + '" alt=""><div><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix || "") + (c.dispo ? "" : " · rupture") + '</small></div>' +
+                (c.prix && c.dispo ? '<button type="button" class="mini" data-add="' + esc(c.fichier) + '">Ajouter</button>' : "") + '<button type="button" class="retirer" data-rm="' + esc(c.fichier) + '" aria-label="Retirer ' + esc(c.titre) + ' des favoris">✕</button></li>').join("") + '</ul>' : '<p>Aucun favori. Ouvrez un tableau et cliquez sur ♡.</p>') +
+            carte("Sécurité", champ("s-ancien", "Mot de passe actuel", "", "password", "current-password") + champ("s-nouveau", "Nouveau mot de passe (6 caractères minimum)", "", "password", "new-password") + msg("s-msg") + '<button type="button" class="bouton contour" id="s-change">Changer le mot de passe</button>') +
+            carte("Mes commandes", cmds.length ? '<ul class="lignes-panier compact">' + cmds.map((c) => '<li><div><strong>' + esc(c.date) + '</strong><small>' + c.articles.map(esc).join(", ") + '</small></div><span class="ligne-prix">' + c.total + ' ₪</span></li>').join("") + '</ul><button type="button" class="lien-danger" id="d-histo">Vider l\'historique</button>' : "<p>Aucune commande envoyée pour le moment.</p>") +
+            carte("Mes données", '<p>Téléchargez une copie de vos informations ou supprimez votre compte.</p><button type="button" class="bouton contour" id="d-export">Télécharger mes données</button><button type="button" class="lien-danger" id="p-suppr">Supprimer mon compte</button>') +
+            '</div>';
+        const $$ = (id) => document.getElementById(id);
+        $$("p-theme").value = pr.theme; $$("p-texte").value = pr.texte;
+        $$("p-theme").addEventListener("change", (e) => setPrefs({ theme: e.target.value }));
+        $$("p-texte").addEventListener("change", (e) => setPrefs({ texte: e.target.value }));
+        $$("p-anim").addEventListener("change", (e) => setPrefs({ anim: e.target.checked }));
+        $$("p-trans").addEventListener("change", (e) => setPrefs({ transitions: e.target.checked }));
+        $$("p-sauver").addEventListener("click", () => {
+            const nom = $$("p-nom").value.trim();
+            if (!nom) return etat($$("p-msg"), "Le nom ne peut pas être vide.", "erreur");
+            sauverUser(u.email, { nom, tel: $$("p-tel").value.trim(), ville: $$("p-ville").value.trim(), adresse: $$("p-adr").value.trim(), contact: $$("p-contact").value, reception: $$("p-recep").value });
+            etat($$("p-msg"), "Informations enregistrées.", "ok");
+        });
+        $$("s-change").addEventListener("click", async () => {
+            const m = $$("s-msg"), nouveau = $$("s-nouveau").value;
+            if (u.hash !== await hacher($$("s-ancien").value, u.email)) return etat(m, "Le mot de passe actuel est incorrect.", "erreur");
+            if (nouveau.length < 6) return etat(m, "Le nouveau mot de passe doit contenir au moins 6 caractères.", "erreur");
+            sauverUser(u.email, { hash: await hacher(nouveau, u.email) });
+            $$("s-ancien").value = ""; $$("s-nouveau").value = "";
+            etat(m, "Mot de passe modifié.", "ok");
+        });
+        zc.querySelectorAll("[data-add]").forEach((b) => b.addEventListener("click", () => { ajouter(articleDe(CREATIONS.find((c) => c.fichier === b.dataset.add))); }));
+        zc.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { basculerFavori(b.dataset.rm); rendreCompte(); }));
+        if ($$("d-histo")) $$("d-histo").addEventListener("click", () => { if (confirm(tr("Vider l'historique de vos commandes ?"))) { sauverUser(u.email, { commandes: [] }); rendreCompte(); } });
+        $$("d-export").addEventListener("click", () => {
+            const { hash, ...donnees } = u;
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(new Blob([JSON.stringify(donnees, null, 2)], { type: "application/json" }));
+            a.download = "mes-donnees-ethan-gallery.json"; a.click();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        });
+        $$("p-deco").addEventListener("click", () => { localStorage.removeItem(K.session); rendreCompte(); });
+        $$("p-suppr").addEventListener("click", () => {
+            if (!confirm(tr("Supprimer définitivement votre compte et votre historique ?"))) return;
+            const users = getUsers(); delete users[u.email]; ecrire(K.users, users); localStorage.removeItem(K.session); rendreCompte();
+        });
+    }
+    if (zc) rendreCompte();
+})();
+
+// =====================================================
+// PAGE CRÉATIONS (façon boutique : recherche, filtres, tri, panier)
+// =====================================================
+(() => {
+    const zone = document.querySelector(".cartes-projets");
+    if (!zone) return;
+    const CRAYON = ["tate langdon.jpeg", "batman qui rit.jpeg", "it.jpeg", "dessin joker.jpg.jpeg"];
+    const UNIVERS = {
+        "Manga et anime": ["sukuna.jpeg", "pain naruto shippuden.jpeg", "ken kaneki.jpeg", "eijiro kirishima.jpeg", "ichigo.jpeg", "gohan.jpeg", "black goku.jpeg", "gohan beast.jpeg", "kid buu.jpeg"],
+        "Super-héros et comics": ["deadpool in love.jpeg", "moon knight.jpeg", "spider team.jpeg", "batman qui rit.jpeg", "deadpool.jpeg", "joker.jpeg", "dessin joker.jpg.jpeg"],
+        "Horreur et séries": ["tate langdon.jpeg", "eddie stranger things.jpeg", "ghost face.jpeg", "it.jpeg"]
+    };
+    const liste = CREATIONS.filter((c) => c.prix).map((c) => ({ ...c,
+        univers: Object.keys(UNIVERS).find((k) => UNIVERS[k].includes(c.fichier)) || "Musique, jeux et art",
+        tech: CRAYON.includes(c.fichier) ? "Crayon" : "Couleur", p: Number((c.prix.match(/\d+/) || [0])[0]) }));
+    const f = { q: "", univers: "", tech: "" };
+    const TRIS = { prix_asc: (a, b) => a.p - b.p, prix_desc: (a, b) => b.p - a.p, nom: (a, b) => a.titre.localeCompare(b.titre, "fr"), dispo: (a, b) => b.dispo - a.dispo };
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    function facette(id, cle, valeurs) {
+        const z = $(id); z.replaceChildren();
+        ["", ...valeurs].forEach((v) => {
+            const b = document.createElement("button");
+            b.type = "button"; b.setAttribute("aria-pressed", f[cle] === v);
+            b.textContent = (v || "Tout") + " (" + liste.filter((c) => !v || c[cle] === v).length + ")";
+            b.addEventListener("click", () => { f[cle] = v; afficher(); });
+            z.appendChild(b);
+        });
+    }
+    function carte(c) {
+        const fav = window.EG && EG.estFavori(c.fichier);
+        const el = document.createElement("article");
+        el.className = "projet" + (c.dispo ? "" : " rupture");
+        el.innerHTML = `<button type="button" class="projet-visuel" aria-label="Voir ${c.titre}"><img loading="lazy" src="./${c.fichier}" alt="Tableau ${c.titre}">${c.dispo ? "" : '<span class="badge-rupture">Original vendu</span>'}</button>` +
+            `<button type="button" class="coeur" aria-pressed="${!!fav}" aria-label="Favori : ${c.titre}">${fav ? "♥" : "♡"}</button>` +
+            `<div class="projet-corps"><small>${c.univers}, ${c.tech.toLowerCase()}</small><h3>${c.titre}</h3><p class="prix"></p><p class="stock"></p>` +
+            `<select class="version" aria-label="Version de ${c.titre}"><option value="original"${c.dispo ? "" : " disabled"}>Original · ${c.dispo ? c.prix : "vendu"}</option><option value="poster"></option></select>` +
+            `<select class="cadre-poster" aria-label="Cadre du poster ${c.titre}"><option value="sans">Sans cadre</option><option value="avec">Avec cadre (+${POSTER.SUPPLEMENT_CADRE} ₪)</option></select>` +
+            `<button type="button" class="bouton ajout"></button></div>`;
+        const vSel = el.querySelector(".version"), cSel = el.querySelector(".cadre-poster"), btn = el.querySelector(".ajout");
+        const prix = el.querySelector(".prix"), stock = el.querySelector(".stock");
+        const maj = () => {
+            const ch = choixDe(c), poster = ch.v === "poster", art = EG.articleChoix(c, ch), ok = poster || c.dispo, dedans = EG.aDansPanier(art.id);
+            vSel.value = ch.v; cSel.value = ch.cadre ? "avec" : "sans"; cSel.hidden = !poster;
+            vSel.options[1].textContent = "Poster · " + prixPoster(c, ch.cadre) + " ₪";
+            prix.textContent = art.prix + " ₪";
+            stock.className = "stock " + (ok ? "ok" : "non");
+            stock.textContent = poster ? "● Poster imprimé disponible" : c.dispo ? "● Pièce unique en stock" : "● Original vendu";
+            btn.disabled = !ok || dedans;
+            btn.textContent = !ok ? "Indisponible" : dedans ? "✓ Dans le panier" : "Ajouter au panier";
+        };
+        el.querySelector(".projet-visuel").addEventListener("click", () => ouvrirCreation(c));
+        el.querySelector("h3").addEventListener("click", () => ouvrirCreation(c));
+        el.querySelector(".coeur").addEventListener("click", () => { EG.basculerFavori(c.fichier); afficher(); });
+        vSel.addEventListener("change", () => { choixDe(c).v = vSel.value; maj(); });
+        cSel.addEventListener("change", () => { choixDe(c).cadre = cSel.value === "avec"; maj(); });
+        btn.addEventListener("click", () => { if (btn.disabled) return; EG.ajouter(EG.articleChoix(c, choixDe(c))); afficher(); });
+        maj();
+        return el;
+    }
+    function afficher() {
+        facette("f-univers", "univers", Object.keys(UNIVERS).concat("Musique, jeux et art"));
+        facette("f-tech", "tech", ["Couleur", "Crayon"]);
+        const [lo, hi] = ($("filtre-prix").value || "0-99999").split("-").map(Number);
+        const r = liste.filter((c) => (!f.q || norm(c.titre).includes(norm(f.q))) && (!f.univers || c.univers === f.univers) && (!f.tech || c.tech === f.tech) &&
+            (!$("filtre-dispo").checked || c.dispo) && c.p >= lo && c.p <= hi);
+        if (TRIS[$("tri").value]) r.sort(TRIS[$("tri").value]);
+        $("nb-resultats").textContent = r.length + (r.length > 1 ? " tableaux" : " tableau");
+        zone.replaceChildren(...r.map(carte));
+        if (!r.length) zone.innerHTML = '<p class="vide">Aucun tableau ne correspond à ces filtres. Utilisez « Réinitialiser les filtres » pour tout revoir.</p>';
+    }
+    $("recherche").addEventListener("input", (e) => { f.q = e.target.value.trim(); afficher(); });
+    ["tri", "filtre-prix", "filtre-dispo"].forEach((id) => $(id).addEventListener("change", afficher));
+    $("reinitialiser").addEventListener("click", () => { Object.assign(f, { q: "", univers: "", tech: "" }); $("recherche").value = ""; $("filtre-prix").value = ""; $("filtre-dispo").checked = false; $("tri").value = "pertinence"; afficher(); });
+    if ($("fenetre-produit")) $("fenetre-produit").addEventListener("close", afficher);
+    afficher();
+})();
+
+// =====================================================
+// PAGE COMMANDE : tuiles de choix + récapitulatif
+// =====================================================
+(() => {
+    if (!$("bouton-commande")) return;
+    const champs = { taille: $("taille"), style: $("style") }, photo = $("photo-client"), idee = $("message-commande");
+    document.querySelectorAll(".tuiles").forEach((g) => g.addEventListener("click", (e) => {
+        const t = e.target.closest("[data-val]");
+        if (!t) return;
+        const sel = champs[g.dataset.cible];
+        sel.value = t.dataset.val;
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
+        g.querySelectorAll("[data-val]").forEach((x) => x.setAttribute("aria-checked", x === t));
+    }));
+    const maj = () => {
+        const lib = (s) => s.value ? s.selectedOptions[0].textContent : "À choisir";
+        [["r-photo", photo.files[0] ? photo.files[0].name : "À ajouter", !!photo.files[0]], ["r-taille", lib(champs.taille), !!champs.taille.value],
+         ["r-style", lib(champs.style), !!champs.style.value], ["r-idee", idee.value.trim() ? "Renseignée" : "À décrire", !!idee.value.trim()]]
+            .forEach(([id, t, ok]) => { $(id).textContent = t; $(id).closest("li").classList.toggle("ok", ok); });
+        $("r-prix").textContent = PRIX_TAILLES[champs.taille.value] ? PRIX_TAILLES[champs.taille.value] + " ₪" : "—";
+    };
+    ["change", "input"].forEach((ev) => document.addEventListener(ev, (e) => { if (e.target.closest && e.target.closest(".formulaire")) maj(); }));
+    maj();
+})();

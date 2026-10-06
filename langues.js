@@ -1,0 +1,565 @@
+// =====================================================
+// LANGUES : français (par défaut), anglais, hébreu
+// -----------------------------------------------------
+// Le site est écrit en français. Ce fichier traduit les textes à l'affichage :
+//  - DICO : [français, anglais, hébreu]. Pour traduire une nouvelle phrase, ajoutez une ligne.
+//  - MOTIFS : phrases avec un nombre ou un nom qui change (prix, nombre de tableaux...).
+// Les messages envoyés sur WhatsApp restent TOUJOURS en français (c'est vous qui les lisez).
+// =====================================================
+(() => {
+    const LANGUES = {
+        fr: { court: "FR", nom: "Français", dir: "ltr" },
+        en: { court: "EN", nom: "English", dir: "ltr" },
+        he: { court: "עב", nom: "עברית", dir: "rtl" }
+    };
+    const CLE = "eg_lang";
+
+    // ---------- Traductions : [français, anglais, hébreu] ----------
+    const DICO = [
+
+        // Descriptions des créations
+        ["Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique, idéale pour les passionnés de musique et de portraits artistiques.", "Portrait of Michael Jackson painted entirely by hand. A unique piece, ideal for music lovers and fans of artistic portraits.", "פורטרט של מייקל ג׳קסון שצויר כולו ביד. יצירה ייחודית, מושלמת לחובבי מוזיקה ופורטרטים אמנותיים."],
+        ["Une création colorée inspirée de l'univers de Street Fighter, qui met en avant l'énergie et l'intensité du combat.", "A colourful creation inspired by the world of Street Fighter, highlighting the energy and intensity of combat.", "יצירה צבעונית בהשראת עולם Street Fighter, שמדגישה את האנרגיה והעוצמה של הקרב."],
+        ["Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale, pensée pour apporter une vraie présence à votre intérieur.", "An artistic creation made by hand on canvas. A dark, original piece designed to bring real presence to your home.", "יצירה אמנותית שנעשתה ביד על קנבס. יצירה כהה ומקורית, שנועדה להעניק לבית שלכם נוכחות אמיתית."],
+        ["Portrait au crayon avec un travail détaillé sur le visage, les ombres et l'effet squelette. Une création sombre entièrement dessinée à la main.", "Pencil portrait with detailed work on the face, the shadows and the skeleton effect. A dark creation drawn entirely by hand.", "פורטרט בעיפרון עם עבודה מפורטת על הפנים, הצללים ואפקט השלד. יצירה כהה שצוירה כולה ביד."],
+        ["Création inspirée de Sukuna, aux couleurs intenses et aux forts contrastes. Le noir, le rouge et le rose donnent beaucoup de puissance au personnage.", "Creation inspired by Sukuna, with intense colours and strong contrasts. Black, red and pink give the character a lot of power.", "יצירה בהשראת סוקונה, עם צבעים עזים וניגודיות חזקה. השחור, האדום והוורוד מעניקים לדמות עוצמה רבה."],
+        ["Deadpool dans une ambiance plus légère. Les tons rouges, roses et violets donnent au dessin un style très reconnaissable.", "Deadpool in a lighter mood. The red, pink and purple tones give the drawing a very recognisable style.", "דדפול באווירה קלילה יותר. גווני האדום, הוורוד והסגול נותנים לציור סגנון מאוד מזוהה."],
+        ["Création inspirée de Pain (Naruto Shippuden), dominée par le noir, le blanc et le rouge. Un dessin très contrasté.", "Creation inspired by Pain (Naruto Shippuden), dominated by black, white and red. A highly contrasted drawing.", "יצירה בהשראת פיין (נארוטו שיפודן), שבה שולטים השחור, הלבן והאדום. ציור עם ניגודיות גבוהה."],
+        ["Une composition mêlant plusieurs personnages de Moon Knight. Le contraste entre les costumes clairs et le fond violet apporte de la profondeur.", "A composition blending several Moon Knight characters. The contrast between the light costumes and the purple background adds depth.", "קומפוזיציה המשלבת כמה דמויות של Moon Knight. הניגוד בין התלבושות הבהירות לרקע הסגול מוסיף עומק."],
+        ["Une grande composition réunissant plusieurs héros araignées dans une scène dynamique, pleine de couleurs et de détails.", "A large composition bringing together several spider heroes in a dynamic scene, full of colours and details.", "קומפוזיציה גדולה המאגדת כמה גיבורי עכביש בסצנה דינמית, מלאת צבעים ופרטים."],
+        ["Portrait inspiré de Ken Kaneki, avec un travail sur le contraste entre le noir et le blanc et quelques touches de couleur.", "Portrait inspired by Ken Kaneki, working on the contrast between black and white with a few touches of colour.", "פורטרט בהשראת קן קנקי, עם עבודה על הניגוד בין שחור ללבן וכמה נגיעות של צבע."],
+        ["Une illustration très contrastée autour du noir, du blanc et du rouge. Les traits marqués donnent une impression de puissance et de mouvement.", "A highly contrasted illustration built around black, white and red. The bold lines give an impression of power and movement.", "איור בעל ניגודיות גבוהה סביב שחור, לבן ואדום. הקווים החדים יוצרים תחושה של עוצמה ותנועה."],
+        ["Un guitariste dans une ambiance électrique. Les tons bleus, violets et rouges donnent à la scène une atmosphère intense.", "A guitarist in an electric atmosphere. The blue, purple and red tones give the scene an intense mood.", "גיטריסט באווירה חשמלית. גווני הכחול, הסגול והאדום נותנים לסצנה אווירה עוצמתית."],
+        ["Création inspirée d'Ichigo, dominée par le bleu, le noir et le blanc. Le mouvement de la scène donne beaucoup d'énergie au personnage.", "Creation inspired by Ichigo, dominated by blue, black and white. The movement of the scene gives the character a lot of energy.", "יצירה בהשראת איצ׳יגו, שבה שולטים הכחול, השחור והלבן. התנועה בסצנה מעניקה לדמות המון אנרגיה."],
+        ["Gohan entouré d'effets d'énergie, avec des couleurs puissantes. Les tons jaunes et bleus renforcent le dynamisme de la scène.", "Gohan surrounded by energy effects, with powerful colours. The yellow and blue tones strengthen the dynamism of the scene.", "גוהאן מוקף באפקטים של אנרגיה, בצבעים עוצמתיים. גווני הצהוב והכחול מחזקים את הדינמיות של הסצנה."],
+        ["Un portrait sombre entièrement réalisé au crayon, avec un important travail sur les ombres, les contrastes et les détails. Une ambiance inquiétante.", "A dark portrait made entirely in pencil, with significant work on shadows, contrasts and details. A disturbing mood.", "פורטרט כהה שנעשה כולו בעיפרון, עם עבודה רבה על צללים, ניגודיות ופרטים. אווירה מטרידה."],
+        ["Une création très colorée, en nuances de rose, violet et rouge, qui met en avant la puissance du personnage avec beaucoup de mouvement.", "A very colourful creation in shades of pink, purple and red, highlighting the character's power with a lot of movement.", "יצירה צבעונית מאוד, בגווני ורוד, סגול ואדום, שמדגישה את עוצמת הדמות עם הרבה תנועה."],
+        ["Une création dynamique et très colorée. Les couleurs vives et les nombreux détails représentent le côté explosif du personnage.", "A dynamic and very colourful creation. The bright colours and the many details represent the explosive side of the character.", "יצירה דינמית וצבעונית מאוד. הצבעים החיים והפרטים הרבים מייצגים את הצד הנפיץ של הדמות."],
+        ["Une ambiance volontairement sombre. Le mélange du noir, du blanc et du rouge crée un contraste puissant.", "A deliberately dark mood. The mix of black, white and red creates a powerful contrast.", "אווירה כהה בכוונה. השילוב של שחור, לבן ואדום יוצר ניגודיות עוצמתית."],
+        ["Une création qui cherche à représenter toute la puissance de Gohan Beast : couleurs intenses, contrastes et détails.", "A creation that tries to capture all the power of Gohan Beast: intense colours, contrasts and details.", "יצירה שמנסה ללכוד את כל העוצמה של גוהאן ביסט: צבעים עזים, ניגודיות ופרטים."],
+        ["Un portrait au crayon avec un travail particulier sur le visage, les ombres et les détails. Une atmosphère sombre et précise.", "A pencil portrait with particular attention to the face, the shadows and the details. A dark, precise atmosphere.", "פורטרט בעיפרון עם תשומת לב מיוחדת לפנים, לצללים ולפרטים. אווירה כהה ומדויקת."],
+        ["Une interprétation artistique et colorée du Joker, qui garde l'ambiance sombre et reconnaissable du personnage.", "An artistic and colourful interpretation of the Joker, which keeps the character's dark, recognisable mood.", "פרשנות אמנותית וצבעונית של הג׳וקר, ששומרת על האווירה הכהה והמזוהה של הדמות."],
+        ["Une création très colorée inspirée de Kid Buu et de Dragon Ball, aux nuances de rose et aux couleurs intenses.", "A very colourful creation inspired by Kid Buu and Dragon Ball, with shades of pink and intense colours.", "יצירה צבעונית מאוד בהשראת קיד בו ודרגון בול, עם גווני ורוד וצבעים עזים."],
+        ["Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "A portrait of the Joker mainly in pencil, with particular attention to the face, the gaze and the shadows.", "פורטרט של הג׳וקר בעיקר בעיפרון, עם תשומת לב מיוחדת לפנים, למבט ולצללים."],
+
+        // Navigation et pied de page
+        ["Accueil", "Home", "בית"],
+        ["Créations", "Creations", "יצירות"],
+        ["Comment ça marche", "How it works", "איך זה עובד"],
+        ["Contact", "Contact", "יצירת קשר"],
+        ["Commander", "Order", "הזמנה"],
+        ["Mon compte", "My account", "החשבון שלי"],
+        ["Mon panier", "My cart", "העגלה שלי"],
+        ["Ouvrir le menu", "Open the menu", "פתיחת התפריט"],
+        ["Fermer", "Close", "סגירה"],
+        ["Tableau Dark Angel, peint à la main", "Dark Angel painting, handmade", "ציור Dark Angel, מצויר ביד"],
+        ["Langue", "Language", "שפה"],
+        ["Tableaux et portraits personnalisés, peints et dessinés à la main.", "Custom paintings and portraits, painted and drawn by hand.", "ציורים ופורטרטים בהתאמה אישית, מצוירים ומעוצבים ביד."],
+        ["Découvrir", "Discover", "גלו"],
+        ["Formulaire de contact", "Contact form", "טופס יצירת קשר"],
+        ["© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.", "© 2026 Ethan Gallery. Handmade originals, printed posters optional.", "© 2026 Ethan Gallery. מקוריים בעבודת יד, פוסטרים מודפסים כאפשרות."],
+        ["Retour en haut", "Back to top", "חזרה למעלה"],
+
+        // Méta et titres de page
+        ["Ethan Gallery - Tableaux personnalisés", "Ethan Gallery - Custom paintings", "Ethan Gallery - ציורים בהתאמה אישית"],
+        ["Ethan Gallery : transformez vos photos en tableaux personnalisés, peints et dessinés à la main. Envoyez votre photo et votre idée, je m'occupe du reste.", "Ethan Gallery: turn your photos into custom paintings, painted and drawn by hand. Send your photo and your idea, I take care of the rest.", "Ethan Gallery: הופכים את התמונות שלכם לציורים בהתאמה אישית, מצוירים ביד. שלחו תמונה ורעיון, ואני אדאג לשאר."],
+        ["Mes créations - Ethan Gallery", "My creations - Ethan Gallery", "היצירות שלי - Ethan Gallery"],
+        ["Découvrez les tableaux, portraits et peintures réalisés à la main par Ethan Gallery. Commandez une création disponible sur WhatsApp.", "Discover the paintings, portraits and artworks handmade by Ethan Gallery. Order an available creation on WhatsApp.", "גלו את הציורים והפורטרטים שנעשו ביד על ידי Ethan Gallery. הזמינו יצירה זמינה בוואטסאפ."],
+        ["Commander un tableau personnalisé - Ethan Gallery", "Order a custom painting - Ethan Gallery", "הזמנת ציור בהתאמה אישית - Ethan Gallery"],
+        ["Créez votre tableau personnalisé : ajoutez votre photo, choisissez le format et le style, puis envoyez votre demande sur WhatsApp.", "Create your custom painting: add your photo, choose the size and style, then send your request on WhatsApp.", "צרו ציור בהתאמה אישית: הוסיפו תמונה, בחרו גודל וסגנון ושלחו את הבקשה בוואטסאפ."],
+        ["Comment ça marche - Ethan Gallery", "How it works - Ethan Gallery", "איך זה עובד - Ethan Gallery"],
+        ["De votre photo à votre tableau en 4 étapes, avec les tarifs par format et les réponses aux questions fréquentes.", "From your photo to your painting in 4 steps, with prices by size and answers to frequently asked questions.", "מהתמונה שלכם לציור ב-4 שלבים, עם מחירים לפי גודל ותשובות לשאלות נפוצות."],
+        ["Contact - Ethan Gallery", "Contact - Ethan Gallery", "יצירת קשר - Ethan Gallery"],
+        ["Une question ou un projet de tableau personnalisé ? Contactez Ethan Gallery, réponse dès que possible.", "A question or a custom painting project? Contact Ethan Gallery, I reply as soon as possible.", "שאלה או פרויקט של ציור בהתאמה אישית? צרו קשר עם Ethan Gallery ואחזור אליכם בהקדם."],
+        ["Mon panier - Ethan Gallery", "My cart - Ethan Gallery", "העגלה שלי - Ethan Gallery"],
+        ["Vérifiez votre panier et envoyez votre commande sur WhatsApp.", "Check your cart and send your order on WhatsApp.", "בדקו את העגלה ושלחו את ההזמנה בוואטסאפ."],
+        ["Mon compte - Ethan Gallery", "My account - Ethan Gallery", "החשבון שלי - Ethan Gallery"],
+        ["Connectez-vous, gérez vos paramètres et retrouvez vos commandes.", "Log in, manage your settings and find your orders.", "התחברו, נהלו את ההגדרות ומצאו את ההזמנות שלכם."],
+
+        // Accueil
+        ["Votre photo devient une œuvre.", "Your photo becomes a work of art.", "התמונה שלכם הופכת ליצירת אמנות."],
+        ["Un tableau peint à la main à partir de votre photo : un portrait, un souvenir, votre personnage préféré. Envoyez votre image, choisissez le format, je m'occupe du reste.", "A painting made by hand from your photo: a portrait, a memory, your favourite character. Send your image, choose the size, I take care of the rest.", "ציור שנעשה ביד מהתמונה שלכם: פורטרט, זיכרון, הדמות האהובה עליכם. שלחו תמונה, בחרו גודל, ואני אדאג לשאר."],
+        ["Commander mon tableau", "Order my painting", "להזמנת הציור שלי"],
+        ["Voir les créations", "View the creations", "לצפייה ביצירות"],
+        ["Peint à la main", "Hand-painted", "מצויר ביד"],
+        ["Prix annoncé d'avance", "Price announced upfront", "המחיר ידוע מראש"],
+        ["Poster imprimé en option", "Printed poster optional", "פוסטר מודפס כאפשרות"],
+        ["Quelques-unes de mes créations", "A few of my creations", "כמה מהיצירות שלי"],
+        ["Mes dernières créations", "My latest creations", "היצירות האחרונות שלי"],
+        ["De votre photo à votre tableau", "From your photo to your painting", "מהתמונה שלכם אל הציור"],
+        ["1. Envoyez votre photo", "1. Send your photo", "1. שולחים תמונה"],
+        ["Une photo nette et bien éclairée donne le meilleur résultat. Ajoutez-la sur la page Commander.", "A sharp, well-lit photo gives the best result. Add it on the Order page.", "תמונה חדה ומוארת היטב נותנת את התוצאה הטובה ביותר. מוסיפים אותה בעמוד ההזמנה."],
+        ["2. Choisissez votre format", "2. Choose your size", "2. בוחרים גודל"],
+        ["Trois tailles, un style, et quelques mots sur vos couleurs et votre idée. Le prix s'affiche tout de suite.", "Three sizes, one style, and a few words about your colours and your idea. The price shows up right away.", "שלושה גדלים, סגנון, ומספר מילים על הצבעים והרעיון שלכם. המחיר מופיע מיד."],
+        ["3. Je peins, vous recevez", "3. I paint, you receive", "3. אני מצייר, אתם מקבלים"],
+        ["Nous confirmons ensemble le prix et le délai sur WhatsApp, puis je réalise votre tableau à la main.", "We confirm the price and the timing together on WhatsApp, then I make your painting by hand.", "מאשרים יחד את המחיר ואת זמן האספקה בוואטסאפ, ואז אני מצייר את הציור ביד."],
+        ["Tous les détails et les questions fréquentes", "All the details and frequently asked questions", "כל הפרטים ושאלות נפוצות"],
+        ["Les formats et les prix", "Sizes and prices", "גדלים ומחירים"],
+        ["Chaque tableau est peint sur mesure. Le prix est annoncé d'avance et confirmé avec vous avant de commencer.", "Every painting is made to measure. The price is announced upfront and confirmed with you before I start.", "כל ציור נעשה בהתאמה אישית. המחיר ידוע מראש ומאושר איתכם לפני שאתחיל."],
+        ["30 × 40 cm", "30 × 40 cm", "30 × 40 ס״מ"],
+        ["50 × 70 cm", "50 × 70 cm", "50 × 70 ס״מ"],
+        ["70 × 100 cm", "70 × 100 cm", "70 × 100 ס״מ"],
+        ["Bureau, étagère", "Desk, shelf", "שולחן עבודה, מדף"],
+        ["Salon, chambre", "Living room, bedroom", "סלון, חדר שינה"],
+        ["Grand format, pièce maîtresse", "Large size, statement piece", "גודל גדול, יצירת מרכז"],
+        ["à partir de", "from", "החל מ-"],
+        ["À propos de moi", "About me", "קצת עליי"],
+        ["Je m'appelle Ethan et ma passion est l'art. J'aime dessiner, peindre et donner vie à mes idées à travers des créations uniques. Au fil du temps, j'ai développé mon propre style et commencé à réaliser des portraits et des tableaux personnalisés.", "My name is Ethan and my passion is art. I love drawing, painting and bringing my ideas to life through unique creations. Over time I developed my own style and started making custom portraits and paintings.", "שמי איתן והאמנות היא התשוקה שלי. אני אוהב לצייר ולהפוך רעיונות ליצירות ייחודיות. עם הזמן פיתחתי סגנון משלי והתחלתי ליצור פורטרטים וציורים בהתאמה אישית."],
+        ["À travers Ethan Gallery, je souhaite partager mon univers et créer des œuvres qui ont une vraie signification pour chaque personne.", "Through Ethan Gallery, I want to share my world and create works that truly mean something to each person.", "דרך Ethan Gallery אני רוצה לשתף את העולם שלי וליצור יצירות שיש להן משמעות אמיתית לכל אדם."],
+        ["Plus de créations sur Instagram @Ethan_bitan", "More creations on Instagram @Ethan_bitan", "עוד יצירות באינסטגרם @Ethan_bitan"],
+        ["Votre prochaine œuvre commence par une photo.", "Your next artwork starts with a photo.", "היצירה הבאה שלכם מתחילה בתמונה."],
+        ["Envoyez-la moi avec votre idée. Je vous confirme le prix et le délai sur WhatsApp avant de commencer.", "Send it to me with your idea. I confirm the price and the timing with you on WhatsApp before I start.", "שלחו לי אותה יחד עם הרעיון שלכם. אאשר איתכם מחיר וזמן אספקה בוואטסאפ לפני שאתחיל."],
+        ["Écrire sur WhatsApp", "Write on WhatsApp", "כתיבה בוואטסאפ"],
+        ["Commander sur WhatsApp", "Order on WhatsApp", "הזמנה בוואטסאפ"],
+        ["Je veux un tableau dans le même style", "I want a painting in the same style", "אני רוצה ציור באותו סגנון"],
+
+        // Créations (page)
+        ["› Créations", "› Creations", "› יצירות"],
+        ["Mes créations", "My creations", "היצירות שלי"],
+        ["Chaque original est une pièce unique réalisée à la main, et chaque tableau existe aussi en poster imprimé, avec ou sans cadre. Choisissez votre version sur la carte, le prix s'adapte. Cliquez sur une création pour la voir en grand.", "Every original is a unique handmade piece, and every painting also exists as a printed poster, with or without a frame. Choose your version on the card and the price adapts. Click a creation to see it larger.", "כל מקור הוא יצירה ייחודית שנעשתה ביד, וכל ציור קיים גם כפוסטר מודפס, עם מסגרת או בלעדיה. בחרו גרסה בכרטיס והמחיר יתעדכן. לחצו על יצירה כדי לראות אותה בגדול."],
+        ["Originaux faits main, posters imprimés en option", "Handmade originals, printed posters optional", "מקוריים בעבודת יד, פוסטרים מודפסים כאפשרות"],
+        ["Pièces uniques", "Unique pieces", "יצירות ייחודיות"],
+        ["Paiement et livraison convenus sur WhatsApp", "Payment and delivery agreed on WhatsApp", "תשלום ומשלוח מתואמים בוואטסאפ"],
+        ["Filtres", "Filters", "סינון"],
+        ["Rechercher", "Search", "חיפוש"],
+        ["Ex : Joker, Goku...", "E.g. Joker, Goku...", "לדוגמה: Joker, Goku..."],
+        ["Univers", "Universe", "עולם תוכן"],
+        ["Technique", "Technique", "טכניקה"],
+        ["Prix", "Price", "מחיר"],
+        ["Tous les prix", "All prices", "כל המחירים"],
+        ["Jusqu'à 450 ₪", "Up to 450 ₪", "עד 450 ₪"],
+        ["451 à 600 ₪", "451 to 600 ₪", "451 עד 600 ₪"],
+        ["Plus de 600 ₪", "Over 600 ₪", "מעל 600 ₪"],
+        ["Disponibles seulement", "Available only", "זמינים בלבד"],
+        ["Réinitialiser les filtres", "Reset filters", "איפוס הסינון"],
+        ["Trier par", "Sort by", "מיון לפי"],
+        ["Sélection", "Featured", "מומלצים"],
+        ["Prix croissant", "Price: low to high", "מחיר: מהנמוך לגבוה"],
+        ["Prix décroissant", "Price: high to low", "מחיר: מהגבוה לנמוך"],
+        ["Nom (A à Z)", "Name (A to Z)", "שם (א׳ עד ת׳)"],
+        ["Disponibles d'abord", "Available first", "זמינים קודם"],
+        ["Tout", "All", "הכול"],
+        ["Manga et anime", "Manga and anime", "מנגה ואנימה"],
+        ["Super-héros et comics", "Superheroes and comics", "גיבורי על וקומיקס"],
+        ["Horreur et séries", "Horror and series", "אימה וסדרות"],
+        ["Musique, jeux et art", "Music, games and art", "מוזיקה, משחקים ואמנות"],
+        ["Couleur", "Colour", "צבע"],
+        ["Crayon", "Pencil", "עיפרון"],
+        ["couleur", "colour", "צבע"],
+        ["crayon", "pencil", "עיפרון"],
+        ["Original vendu", "Original sold", "המקור נמכר"],
+        ["vendu", "sold", "נמכר"],
+        ["Sans cadre", "No frame", "בלי מסגרת"],
+        ["Avec cadre", "With frame", "עם מסגרת"],
+        ["Original", "Original", "מקור"],
+        ["Poster imprimé", "Printed poster", "פוסטר מודפס"],
+        ["Poster", "Poster", "פוסטר"],
+        ["● Poster imprimé disponible", "● Printed poster available", "● פוסטר מודפס זמין"],
+        ["● Pièce unique en stock", "● Unique piece in stock", "● יצירה ייחודית במלאי"],
+        ["● Pièce unique, disponible", "● Unique piece, available", "● יצירה ייחודית, זמינה"],
+        ["● Original vendu", "● Original sold", "● המקור נמכר"],
+        ["● Rupture de stock", "● Out of stock", "● אזל מהמלאי"],
+        ["Indisponible", "Unavailable", "לא זמין"],
+        ["Indisponible (rupture de stock)", "Unavailable (out of stock)", "לא זמין (אזל מהמלאי)"],
+        ["Ajouter au panier", "Add to cart", "הוספה לעגלה"],
+        ["✓ Dans le panier", "✓ In the cart", "✓ בעגלה"],
+        ["♡ Ajouter aux favoris", "♡ Add to favourites", "♡ הוספה למועדפים"],
+        ["♥ Dans mes favoris", "♥ In my favourites", "♥ במועדפים שלי"],
+        ["Créez votre propre tableau", "Create your own painting", "צרו ציור משלכם"],
+        ["Une de mes créations vous inspire ? Transformez votre photo, votre idée ou votre souvenir en une œuvre créée spécialement pour vous.", "Does one of my creations inspire you? Turn your photo, your idea or your memory into a work created just for you.", "אחת היצירות שלי נותנת לכם השראה? הפכו את התמונה, הרעיון או הזיכרון שלכם ליצירה שנוצרה במיוחד בשבילכם."],
+        ["Créer mon tableau", "Create my painting", "ליצור את הציור שלי"],
+        ["Aucun tableau ne correspond à ces filtres. Utilisez « Réinitialiser les filtres » pour tout revoir.", "No painting matches these filters. Use “Reset filters” to see everything again.", "אין ציור שמתאים לסינון הזה. השתמשו ב״איפוס הסינון״ כדי לראות הכול שוב."],
+        ["Version du tableau", "Painting version", "גרסת הציור"],
+        ["Cadre du poster", "Poster frame", "מסגרת הפוסטר"],
+        ["Choisissez votre version", "Choose your version", "בחרו גרסה"],
+        ["Original fait main", "Handmade original", "מקור בעבודת יד"],
+        ["Poster imprimé", "Printed poster", "פוסטר מודפס"],
+        ["Vendu (rupture de stock)", "Sold (out of stock)", "נמכר (אזל מהמלאי)"],
+        ["Reproduction imprimée de ce tableau. Format et délai confirmés avec vous sur WhatsApp.", "Printed reproduction of this painting. Size and timing confirmed with you on WhatsApp.", "הדפסה של הציור הזה. הגודל וזמן האספקה מאושרים איתכם בוואטסאפ."],
+        ["Pièce unique, peinte ou dessinée à la main.", "Unique piece, painted or drawn by hand.", "יצירה ייחודית, מצוירת ביד."],
+        ["Pièce unique", "Unique piece", "יצירה ייחודית"],
+        ["Sur commande (pièce déjà vendue, refaite à la main)", "Made to order (piece already sold, redone by hand)", "לפי הזמנה (היצירה נמכרה, תיעשה מחדש ביד)"],
+        ["Délai et prix confirmés sur WhatsApp", "Timing and price confirmed on WhatsApp", "זמן ומחיר מאושרים בוואטסאפ"],
+        ["Prix de départ, confirmé sur WhatsApp", "Starting price, confirmed on WhatsApp", "מחיר התחלתי, מאושר בוואטסאפ"],
+        ["Ce tableau est en rupture de stock", "This painting is out of stock", "הציור הזה אזל מהמלאי"],
+        ["Déjà dans votre panier", "Already in your cart", "כבר בעגלה שלכם"],
+        ["✓ Ajouté au panier", "✓ Added to cart", "✓ נוסף לעגלה"],
+        ["Retiré des favoris", "Removed from favourites", "הוסר מהמועדפים"],
+        ["♥ Ajouté aux favoris", "♥ Added to favourites", "♥ נוסף למועדפים"],
+
+        // Commande
+        ["Créez votre tableau", "Create your painting", "צרו את הציור שלכם"],
+        ["Configurez votre œuvre personnalisée en quelques étapes, le récapitulatif se met à jour au fur et à mesure.", "Set up your custom artwork in a few steps, the summary updates as you go.", "הגדירו את היצירה האישית שלכם בכמה שלבים, והסיכום מתעדכן תוך כדי."],
+        ["Ajoutez votre photo", "Add your photo", "הוסיפו את התמונה שלכם"],
+        ["Plus elle est nette et lumineuse, plus le résultat sera fidèle.", "The sharper and brighter it is, the more faithful the result.", "ככל שהיא חדה ומוארת יותר, התוצאה תהיה נאמנה יותר."],
+        ["Choisir une photo", "Choose a photo", "בחירת תמונה"],
+        ["JPG ou PNG, la plus nette possible", "JPG or PNG, as sharp as possible", "JPG או PNG, החדה ביותר שאפשר"],
+        ["Aperçu de votre photo", "Preview of your photo", "תצוגה מקדימה של התמונה"],
+        ["Choisissez le format", "Choose the size", "בחרו גודל"],
+        ["Choisissez une taille", "Choose a size", "בחרו גודל"],
+        ["Choisissez votre style", "Choose your style", "בחרו סגנון"],
+        ["Choisissez un style", "Choose a style", "בחרו סגנון"],
+        ["Portrait", "Portrait", "פורטרט"],
+        ["Visage détaillé, rendu fidèle", "Detailed face, faithful result", "פנים מפורטות, תוצאה נאמנה"],
+        ["Pop Art", "Pop Art", "פופ ארט"],
+        ["Couleurs vives et contrastées", "Bright, contrasting colours", "צבעים חיים ומנוגדים"],
+        ["Carte blanche", "Free choice", "חופש יצירתי"],
+        ["Laissez l'artiste choisir", "Let the artist choose", "תנו לאמן לבחור"],
+        ["Décrivez votre idée", "Describe your idea", "תארו את הרעיון שלכם"],
+        ["Parlez-moi de votre idée, des couleurs, du rendu souhaité...", "Tell me about your idea, the colours, the look you want...", "ספרו לי על הרעיון, הצבעים והמראה שאתם רוצים..."],
+        ["Votre commande", "Your order", "ההזמנה שלכם"],
+        ["Récapitulatif de votre commande", "Summary of your order", "סיכום ההזמנה שלכם"],
+        ["Photo", "Photo", "תמונה"],
+        ["Format", "Size", "גודל"],
+        ["Style", "Style", "סגנון"],
+        ["Idée", "Idea", "רעיון"],
+        ["Prix estimé", "Estimated price", "מחיר משוער"],
+        ["À choisir", "To choose", "לבחירה"],
+        ["À ajouter", "To add", "להוספה"],
+        ["À décrire", "To describe", "לתיאור"],
+        ["Renseignée", "Filled in", "מולא"],
+        ["✓ Prix confirmé ensemble avant de commencer", "✓ Price confirmed together before starting", "✓ המחיר מאושר יחד לפני שמתחילים"],
+        ["✓ Fait main, pièce unique", "✓ Handmade, unique piece", "✓ עבודת יד, יצירה ייחודית"],
+        ["✓ WhatsApp s'ouvre avec votre demande déjà écrite : il ne reste qu'à envoyer votre photo", "✓ WhatsApp opens with your request already written: you only need to send your photo", "✓ וואטסאפ נפתח עם הבקשה שלכם כבר כתובה: נשאר רק לשלוח את התמונה"],
+        ["Ajoutez une photo.", "Add a photo.", "הוסיפו תמונה."],
+        ["Choisissez une taille.", "Choose a size.", "בחרו גודל."],
+        ["Choisissez un style.", "Choose a style.", "בחרו סגנון."],
+        ["Décrivez votre idée.", "Describe your idea.", "תארו את הרעיון שלכם."],
+        ["Dernière étape : WhatsApp vient de s'ouvrir avec votre demande. Envoyez le message, puis envoyez aussi votre photo dans la conversation pour que je puisse commencer.", "Last step: WhatsApp has just opened with your request. Send the message, then also send your photo in the conversation so I can get started.", "שלב אחרון: וואטסאפ נפתח עם הבקשה שלכם. שלחו את ההודעה ואז שלחו גם את התמונה בשיחה כדי שאוכל להתחיל."],
+        ["✓ Ajouté au panier. Retrouvez-le dans votre panier.", "✓ Added to cart. Find it in your cart.", "✓ נוסף לעגלה. תמצאו אותו בעגלה שלכם."],
+
+        // Comment ça marche
+        ["Comment ça marche ?", "How does it work?", "איך זה עובד?"],
+        ["De votre photo à votre tableau, découvrez comment votre idée prend vie en seulement quelques étapes.", "From your photo to your painting, see how your idea comes to life in just a few steps.", "מהתמונה שלכם אל הציור: כך הרעיון שלכם מתעורר לחיים בכמה שלבים בלבד."],
+        ["Envoyez votre photo", "Send your photo", "שלחו את התמונה שלכם"],
+        ["Choisissez la photo que vous souhaitez transformer en une œuvre personnalisée.", "Choose the photo you want to turn into a custom artwork.", "בחרו את התמונה שאתם רוצים להפוך ליצירה אישית."],
+        ["Personnalisez", "Customise", "התאימו אישית"],
+        ["Sélectionnez le format, le style et décrivez-moi le résultat que vous imaginez.", "Select the size, the style and describe the result you imagine.", "בחרו גודל וסגנון ותארו לי את התוצאה שאתם מדמיינים."],
+        ["Création", "Creation", "יצירה"],
+        ["Je réalise votre tableau à la main, avec attention, pour donner vie à votre projet.", "I make your painting by hand, with care, to bring your project to life.", "אני יוצר את הציור ביד, בקפידה, כדי להפיח חיים בפרויקט שלכם."],
+        ["Votre œuvre est prête", "Your artwork is ready", "היצירה שלכם מוכנה"],
+        ["Votre tableau personnalisé est terminé et prêt à devenir une pièce unique.", "Your custom painting is finished and ready to become a unique piece.", "הציור האישי שלכם הושלם ומוכן להפוך ליצירה ייחודית."],
+        ["Tarifs", "Prices", "מחירים"],
+        ["Prix estimés selon le format", "Estimated prices by size", "מחירים משוערים לפי גודל"],
+        ["Prix estimé", "Estimated price", "מחיר משוער"],
+        ["Prix indicatifs pour une création sur mesure, confirmés avec vous avant de commencer. Les tableaux déjà réalisés ont leur propre prix sur la page Créations.", "Indicative prices for a made-to-measure creation, confirmed with you before I start. Paintings already made have their own price on the Creations page.", "מחירים מנחים ליצירה בהתאמה אישית, מאושרים איתכם לפני שמתחילים. לציורים שכבר נעשו יש מחיר משלהם בעמוד היצירות."],
+        ["Questions fréquentes", "Frequently asked questions", "שאלות נפוצות"],
+        ["Quels formats et quels prix ?", "Which sizes and prices?", "אילו גדלים ומחירים?"],
+        ["Trois formats : 30 × 40 cm, 50 × 70 cm et 70 × 100 cm. Le prix est estimé à l'avance selon la taille, puis confirmé ensemble sur WhatsApp avant de commencer.", "Three sizes: 30 × 40 cm, 50 × 70 cm and 70 × 100 cm. The price is estimated in advance by size, then confirmed together on WhatsApp before I start.", "שלושה גדלים: 30 × 40 ס״מ, 50 × 70 ס״מ ו-70 × 100 ס״מ. המחיר משוער מראש לפי הגודל, ואז מאושר יחד בוואטסאפ לפני שמתחילים."],
+        ["Quelle photo choisir ?", "Which photo should I choose?", "איזו תמונה לבחור?"],
+        ["Une photo nette, bien éclairée et pas trop recadrée donne le meilleur résultat. Envoyez-la telle quelle depuis votre téléphone, sans la compresser.", "A sharp, well-lit photo that is not cropped too tightly gives the best result. Send it as it is from your phone, without compressing it.", "תמונה חדה, מוארת היטב ולא חתוכה יותר מדי נותנת את התוצאה הטובה ביותר. שלחו אותה כמו שהיא מהטלפון, בלי לדחוס אותה."],
+        ["Quels styles proposez-vous ?", "Which styles do you offer?", "אילו סגנונות יש?"],
+        ["Portrait, Pop Art, ou « laissez l'artiste choisir » si vous préférez me faire confiance. Vous pouvez aussi préciser couleurs et ambiance dans votre message.", "Portrait, Pop Art, or “let the artist choose” if you prefer to trust me. You can also specify colours and mood in your message.", "פורטרט, פופ ארט, או ״תנו לאמן לבחור״ אם אתם מעדיפים לתת בי אמון. אפשר גם לפרט צבעים ואווירה בהודעה."],
+        ["Combien de temps pour recevoir mon tableau ?", "How long until I receive my painting?", "כמה זמן עד שאקבל את הציור?"],
+        ["Cela dépend de la taille et du style choisis. Je vous donne un délai précis dès que j'ai vu votre photo, avant de commencer.", "It depends on the size and style chosen. I give you a precise timing as soon as I have seen your photo, before I start.", "זה תלוי בגודל ובסגנון שנבחרו. אתן לכם זמן מדויק ברגע שאראה את התמונה, לפני שאתחיל."],
+        ["Comment se passent le paiement et la livraison ?", "How do payment and delivery work?", "איך עובדים התשלום והמשלוח?"],
+        ["Tout se règle directement avec moi sur WhatsApp : on convient ensemble du paiement et de la remise ou de l'envoi de votre tableau.", "Everything is settled directly with me on WhatsApp: we agree together on the payment and on the handover or shipping of your painting.", "הכול מתואם ישירות איתי בוואטסאפ: מסכמים יחד את התשלום ואת מסירת הציור או שליחתו."],
+        ["Puis-je acheter un tableau déjà exposé ?", "Can I buy a painting that is already on display?", "אפשר לקנות ציור שכבר מוצג?"],
+        ["Oui, ceux marqués disponibles sur la page Créations. Chaque tableau est une pièce unique : une fois vendu, il passe en rupture de stock.", "Yes, the ones marked available on the Creations page. Each painting is a unique piece: once sold, it goes out of stock.", "כן, אלה שמסומנים כזמינים בעמוד היצירות. כל ציור הוא יצירה ייחודית: ברגע שהוא נמכר, הוא אוזל מהמלאי."],
+        ["Puis-je avoir un poster imprimé ?", "Can I get a printed poster?", "אפשר לקבל פוסטר מודפס?"],
+        ["Oui, chaque création de la page Créations existe en poster imprimé, avec ou sans cadre, de 150 à 200 ₪ selon le tableau, plus 70 ₪ avec cadre. Même quand l'original est vendu, le poster reste disponible. Format et délai sont confirmés avec vous sur WhatsApp.", "Yes, every creation on the Creations page exists as a printed poster, with or without a frame, from 150 to 200 ₪ depending on the painting, plus 70 ₪ with a frame. Even when the original is sold, the poster remains available. Size and timing are confirmed with you on WhatsApp.", "כן, כל יצירה בעמוד היצירות קיימת כפוסטר מודפס, עם מסגרת או בלעדיה, מ-150 עד 200 ₪ לפי הציור, ועוד 70 ₪ עם מסגרת. גם כשהמקור נמכר, הפוסטר נשאר זמין. הגודל וזמן האספקה מאושרים איתכם בוואטסאפ."],
+        ["Je veux le même style qu'un tableau déjà vendu.", "I want the same style as a painting that is already sold.", "אני רוצה את אותו סגנון של ציור שכבר נמכר."],
+        ["Pas de souci : commandez une création sur mesure et indiquez-moi dans votre message quel tableau vous a inspiré.", "No problem: order a made-to-measure creation and tell me in your message which painting inspired you.", "אין בעיה: הזמינו יצירה בהתאמה אישית וכתבו לי בהודעה איזה ציור נתן לכם השראה."],
+
+        // Contact
+        ["Parlons de votre projet.", "Let's talk about your project.", "בואו נדבר על הפרויקט שלכם."],
+        ["Une question, une idée ou envie de créer un tableau personnalisé ? Envoyez-moi un message et expliquez-moi votre projet. Je vous répondrai dès que possible.", "A question, an idea, or want to create a custom painting? Send me a message and tell me about your project. I will reply as soon as possible.", "שאלה, רעיון או רצון ליצור ציור בהתאמה אישית? שלחו לי הודעה וספרו לי על הפרויקט. אחזור אליכם בהקדם."],
+        ["WhatsApp", "WhatsApp", "וואטסאפ"],
+        ["Instagram @Ethan_bitan", "Instagram @Ethan_bitan", "אינסטגרם @Ethan_bitan"],
+        ["Votre nom", "Your name", "השם שלכם"],
+        ["Votre e-mail", "Your email", "האימייל שלכם"],
+        ["Sujet", "Subject", "נושא"],
+        ["Votre message", "Your message", "ההודעה שלכם"],
+        ["Ex : Question sur un tableau", "E.g. Question about a painting", "לדוגמה: שאלה על ציור"],
+        ["Écrivez votre message ici...", "Write your message here...", "כתבו כאן את ההודעה..."],
+        ["exemple@email.com", "example@email.com", "example@email.com"],
+        ["Envoyer mon message", "Send my message", "שליחת ההודעה"],
+        ["Envoi en cours...", "Sending...", "שולח..."],
+        ["Mail envoyé ! Je vous répondrai dès que possible.", "Message sent! I will reply as soon as possible.", "ההודעה נשלחה! אחזור אליכם בהקדם."],
+        ["Le mail n'a pas pu être envoyé. Écrivez-moi directement sur WhatsApp : +972 55 995 5591.", "The message could not be sent. Write to me directly on WhatsApp: +972 55 995 5591.", "לא ניתן היה לשלוח את ההודעה. כתבו לי ישירות בוואטסאפ: \u200E+972 55 995 5591."],
+
+        // Panier
+        ["Votre panier est vide.", "Your cart is empty.", "העגלה שלכם ריקה."],
+        ["Téléphone (facultatif)", "Phone (optional)", "טלפון (לא חובה)"],
+        ["Message (facultatif)", "Message (optional)", "הודעה (לא חובה)"],
+        ["Livraison, remise en main propre, questions...", "Delivery, hand delivery, questions...", "משלוח, מסירה אישית, שאלות..."],
+        ["Vider le panier", "Empty the cart", "ריקון העגלה"],
+        ["Indiquez votre nom pour la commande.", "Enter your name for the order.", "הזינו את שמכם להזמנה."],
+        ["Continuer mes achats", "Continue shopping", "המשך קניות"],
+        ["Sur mesure", "Made to measure", "בהתאמה אישית"],
+        ["WhatsApp vient de s'ouvrir avec votre commande. Envoyez le message dans la conversation.", "WhatsApp has just opened with your order. Send the message in the conversation.", "וואטסאפ נפתח עם ההזמנה שלכם. שלחו את ההודעה בשיחה."],
+        ["WhatsApp vient de s'ouvrir avec votre commande. Envoyez le message, puis vos photos dans la conversation.", "WhatsApp has just opened with your order. Send the message, then your photos in the conversation.", "וואטסאפ נפתח עם ההזמנה שלכם. שלחו את ההודעה ואז את התמונות בשיחה."],
+        ["Astuce :", "Tip:", "טיפ:"],
+        ["créez un compte", "create an account", "פתחו חשבון"],
+        [" pour retrouver vos infos et votre historique.", " to keep your details and your history.", " כדי לשמור את הפרטים וההיסטוריה שלכם."],
+
+        // Compte
+        ["Connexion", "Log in", "התחברות"],
+        ["Créer un compte", "Create an account", "יצירת חשבון"],
+        ["Nom", "Name", "שם"],
+        ["E-mail", "Email", "אימייל"],
+        ["Mot de passe", "Password", "סיסמה"],
+        ["Mot de passe (6 caractères minimum)", "Password (6 characters minimum)", "סיסמה (לפחות 6 תווים)"],
+        ["Total :", "Total:", "סה״כ:"],
+        [" (6 caractères minimum)", " (6 characters minimum)", " (לפחות 6 תווים)"],
+        ["Créer mon compte", "Create my account", "יצירת החשבון שלי"],
+        ["Me connecter", "Log in", "התחברות"],
+        ["Entrez une adresse e-mail valide.", "Enter a valid email address.", "הזינו כתובת אימייל תקינה."],
+        ["Indiquez votre nom.", "Enter your name.", "הזינו את שמכם."],
+        ["Le mot de passe doit contenir au moins 6 caractères.", "The password must contain at least 6 characters.", "הסיסמה חייבת להכיל לפחות 6 תווים."],
+        ["Un compte existe déjà avec cet e-mail. Connectez-vous.", "An account already exists with this email. Log in.", "כבר קיים חשבון עם האימייל הזה. התחברו."],
+        ["E-mail ou mot de passe incorrect.", "Incorrect email or password.", "אימייל או סיסמה שגויים."],
+        ["Me déconnecter", "Log out", "התנתקות"],
+        ["Mes informations", "My information", "הפרטים שלי"],
+        ["Téléphone", "Phone", "טלפון"],
+        ["Ville", "City", "עיר"],
+        ["Adresse de livraison", "Delivery address", "כתובת למשלוח"],
+        ["Contact préféré", "Preferred contact", "דרך יצירת קשר מועדפת"],
+        ["Mode de réception", "How to receive", "אופן קבלה"],
+        ["Appel", "Phone call", "שיחת טלפון"],
+        ["À convenir", "To be agreed", "בתיאום"],
+        ["Remise en main propre", "Hand delivery", "מסירה אישית"],
+        ["Livraison", "Delivery", "משלוח"],
+        ["Enregistrer", "Save", "שמירה"],
+        ["Le nom ne peut pas être vide.", "The name cannot be empty.", "השם לא יכול להיות ריק."],
+        ["Informations enregistrées.", "Information saved.", "הפרטים נשמרו."],
+        ["Affichage", "Display", "תצוגה"],
+        ["Thème", "Theme", "ערכת נושא"],
+        ["Clair", "Light", "בהיר"],
+        ["Sombre", "Dark", "כהה"],
+        ["Automatique (selon l'appareil)", "Automatic (follows the device)", "אוטומטי (לפי המכשיר)"],
+        ["Taille du texte", "Text size", "גודל הטקסט"],
+        ["Normale", "Normal", "רגיל"],
+        ["Grande", "Large", "גדול"],
+        ["Animations activées", "Animations on", "אנימציות פעילות"],
+        ["Transition entre les pages", "Transition between pages", "מעבר בין עמודים"],
+        ["Aucun favori. Ouvrez un tableau et cliquez sur « Ajouter aux favoris ».", "No favourites yet. Open a painting and click “Add to favourites”.", "אין מועדפים עדיין. פתחו ציור ולחצו על ״הוספה למועדפים״."],
+        ["Ajouter", "Add", "הוספה"],
+        [" · rupture", " · out of stock", " · אזל"],
+        ["Sécurité", "Security", "אבטחה"],
+        ["Mot de passe actuel", "Current password", "סיסמה נוכחית"],
+        ["Nouveau mot de passe (6 caractères minimum)", "New password (6 characters minimum)", "סיסמה חדשה (לפחות 6 תווים)"],
+        ["Changer le mot de passe", "Change password", "שינוי סיסמה"],
+        ["Le mot de passe actuel est incorrect.", "The current password is incorrect.", "הסיסמה הנוכחית שגויה."],
+        ["Le nouveau mot de passe doit contenir au moins 6 caractères.", "The new password must contain at least 6 characters.", "הסיסמה החדשה חייבת להכיל לפחות 6 תווים."],
+        ["Mot de passe modifié.", "Password changed.", "הסיסמה שונתה."],
+        ["Mes commandes", "My orders", "ההזמנות שלי"],
+        ["Aucune commande envoyée pour le moment.", "No order sent yet.", "עוד לא נשלחה אף הזמנה."],
+        ["Vider l'historique", "Clear history", "ניקוי ההיסטוריה"],
+        ["Vider l'historique de vos commandes ?", "Clear your order history?", "לנקות את היסטוריית ההזמנות?"],
+        ["Mes données", "My data", "הנתונים שלי"],
+        ["Téléchargez une copie de vos informations ou supprimez votre compte.", "Download a copy of your information or delete your account.", "הורידו עותק של הפרטים שלכם או מחקו את החשבון."],
+        ["Télécharger mes données", "Download my data", "הורדת הנתונים שלי"],
+        ["Supprimer mon compte", "Delete my account", "מחיקת החשבון שלי"],
+        ["Supprimer définitivement votre compte et votre historique ?", "Permanently delete your account and your history?", "למחוק לצמיתות את החשבון וההיסטוריה שלכם?"]
+    ];
+
+    // ---------- Phrases avec nombre ou nom variable ----------
+    // Chaque motif reçoit le texte français et renvoie [anglais, hébreu] (ou null).
+    const MOTIFS = [
+        [/^(.+) · (Avec cadre|Sans cadre)$/, (m) => [T(m[1], "en") + " · " + T(m[2], "en"), T(m[1], "he") + " · " + T(m[2], "he")]],
+        [/^Voir les (\d+) créations$/, (m) => ["View all " + m[1] + " creations", "לכל " + m[1] + " היצירות"]],
+        [/^(\d+) tableau(x?)$/, (m) => [m[1] + (m[1] === "1" ? " painting" : " paintings"), m[1] === "1" ? "ציור אחד" : m[1] + " ציורים"]],
+        [/^Prix estimé : (.+)$/, (m) => ["Estimated price: " + m[1], "מחיר משוער: " + m[1]]],
+        [/^Total : (.+)$/, (m) => ["Total: " + m[1], "סה״כ: " + m[1]]],
+        [/^Original · (.+)$/, (m) => ["Original · " + T(m[1], "en"), "מקור · " + T(m[1], "he")]],
+        [/^Poster · (.+)$/, (m) => ["Poster · " + m[1], "פוסטר · " + m[1]]],
+        [/^Avec cadre \(\+(\d+) ₪\)$/, (m) => ["With frame (+" + m[1] + " ₪)", "עם מסגרת (+" + m[1] + " ₪)"]],
+        [/^Ajouter au panier · (.+)$/, (m) => ["Add to cart · " + m[1], "הוספה לעגלה · " + m[1]]],
+        [/^Mes favoris \((\d+)\)$/, (m) => ["My favourites (" + m[1] + ")", "המועדפים שלי (" + m[1] + ")"]],
+        [/^(.+) \((\d+)\)$/, (m) => { const a = T(m[1], "en"), b = T(m[1], "he"); return a === m[1] && b === m[1] ? null : [a + " (" + m[2] + ")", b + " (" + m[2] + ")"]; }],
+        [/^Voir l'image (\d+)$/, (m) => ["View image " + m[1], "הצגת תמונה " + m[1]]],
+        [/^Voir (.+)$/, (m) => ["View " + m[1], "הצגת " + m[1]]],
+        [/^Retirer (.+) des favoris$/, (m) => ["Remove " + m[1] + " from favourites", "הסרת " + m[1] + " מהמועדפים"]],
+        [/^Retirer (.+)$/, (m) => ["Remove " + m[1], "הסרת " + m[1]]],
+        [/^Favori : (.+)$/, (m) => ["Favourite: " + m[1], "מועדף: " + m[1]]],
+        [/^Version de (.+)$/, (m) => ["Version of " + m[1], "גרסה של " + m[1]]],
+        [/^Cadre du poster (.+)$/, (m) => ["Poster frame " + m[1], "מסגרת הפוסטר " + m[1]]],
+        [/^Poster (.+)$/, (m) => ["Poster " + m[1], "פוסטר " + m[1]]],
+        [/^Tableau sur mesure (.+)$/, (m) => ["Made-to-measure painting " + m[1], "ציור בהתאמה אישית " + m[1]]],
+        [/^Tableau (.+)$/, (m) => ["Painting " + m[1], "ציור " + m[1]]],
+        [/^(.+) · rupture$/, (m) => [m[1] + " · out of stock", m[1] + " · אזל"]],
+        [/^(.+), (couleur|crayon)$/, (m) => { const a = T(m[1], "en"), b = T(m[1], "he"); return [a + ", " + T(m[2], "en"), b + ", " + T(m[2], "he")]; }],
+        [/^Style : (.+)$/, (m) => ["Style: " + T(m[1], "en"), "סגנון: " + T(m[1], "he")]],
+        [/^Sur mesure · Style : (.+?) \| Idée : ([\s\S]*)$/, (m) => ["Made to measure · Style: " + T(m[1], "en") + " | Idea: " + m[2], "בהתאמה אישית · סגנון: " + T(m[1], "he") + " | רעיון: " + m[2]]],
+    ];
+
+    // ---------- Moteur ----------
+    const norm = (s) => s.replace(/[  ]/g, " ").replace(/’/g, "'");
+    const INDEX = new Map(); // français normalisé -> {en, he}
+    DICO.forEach(([fr, en, he]) => { INDEX.set(norm(fr).trim(), { en, he }); });
+    const IDX_L = { en: "en", he: "he" };
+
+    // Traduit une chaîne française. Renvoie la chaîne d'origine si rien ne correspond.
+    function T(fr, lang) {
+        if (!fr || lang === "fr") return fr;
+        const cle = norm(fr).trim();
+        const direct = INDEX.get(cle);
+        if (direct) return direct[IDX_L[lang]];
+        for (const [re, f] of MOTIFS) {
+            const m = cle.match(re);
+            if (!m) continue;
+            const r = f(m);
+            if (r) return r[lang === "en" ? 0 : 1];
+        }
+        return fr;
+    }
+    function lang() { try { const l = localStorage.getItem(CLE); return LANGUES[l] ? l : "fr"; } catch { return "fr"; } }
+    let courante = lang();
+
+    // Texte traduit en conservant les espaces autour (début et fin).
+    function traduireTexte(brut, l) {
+        const m = brut.match(/^(\s*)([\s\S]*?)(\s*)$/);
+        if (!m[2]) return brut;
+        const t = T(m[2], l);
+        return t === m[2] ? brut : m[1] + t + m[3];
+    }
+
+    const noeuds = new WeakMap();   // noeud texte -> { fr, affiche }
+    const attrs = new WeakMap();    // élément -> { attribut: { fr, affiche } }
+    const ATTRS = ["placeholder", "aria-label", "title", "alt"];
+    const IGNORE = "script, style, noscript, textarea, [data-no-trad]";
+
+    function traiterTexte(n) {
+        if (n.parentElement && n.parentElement.closest(IGNORE)) return;
+        let r = noeuds.get(n);
+        if (!r || n.nodeValue !== r.affiche) { r = { fr: n.nodeValue, affiche: n.nodeValue }; noeuds.set(n, r); }
+        const v = courante === "fr" ? r.fr : traduireTexte(r.fr, courante);
+        if (n.nodeValue !== v) n.nodeValue = v;
+        r.affiche = n.nodeValue;
+    }
+    function traiterAttributs(el) {
+        let a = attrs.get(el);
+        for (const nom of ATTRS) {
+            if (!el.hasAttribute(nom)) continue;
+            if (!a) { a = {}; attrs.set(el, a); }
+            const val = el.getAttribute(nom);
+            let r = a[nom];
+            if (!r || val !== r.affiche) { r = { fr: val, affiche: val }; a[nom] = r; }
+            const v = courante === "fr" ? r.fr : traduireTexte(r.fr, courante);
+            if (val !== v) el.setAttribute(nom, v);
+            r.affiche = el.getAttribute(nom);
+        }
+    }
+    const blocsHtml = new WeakMap(); // éléments [data-i18n] : html français d'origine
+    const BLOCS = {
+        "note-poster": {
+            fr: null,
+            en: 'Prefer a more affordable version? Every creation also exists as a <strong>printed poster</strong>, from <span>{min} ₪</span> to <span>{max} ₪</span>, with an optional frame (+<span>{cadre} ₪</span>).',
+            he: 'מעדיפים גרסה זולה יותר? כל יצירה קיימת גם כ<strong>פוסטר מודפס</strong>, מ-<span>{min} ₪</span> עד <span>{max} ₪</span>, עם מסגרת כאפשרות (+<span>{cadre} ₪</span>).'
+        }
+    };
+    function traiterBlocs(racine) {
+        (racine.querySelectorAll ? racine.querySelectorAll("[data-i18n]") : []).forEach((el) => {
+            const b = BLOCS[el.dataset.i18n];
+            if (!b) return;
+            if (!blocsHtml.has(el)) blocsHtml.set(el, el.innerHTML);
+            if (courante === "fr") { el.innerHTML = blocsHtml.get(el); return; }
+            const p = (typeof POSTER !== "undefined") ? POSTER : { min: 150, max: 200, SUPPLEMENT_CADRE: 70 };
+            el.innerHTML = b[courante].replace("{min}", p.min).replace("{max}", p.max).replace("{cadre}", p.SUPPLEMENT_CADRE);
+        });
+    }
+    // Fond de page / méta
+    const metaOrig = {};
+    function traiterMeta() {
+        if (!("titre" in metaOrig)) metaOrig.titre = document.title;
+        document.title = courante === "fr" ? metaOrig.titre : T(metaOrig.titre, courante);
+        document.querySelectorAll('meta[name="description"], meta[property="og:title"], meta[property="og:description"]').forEach((m) => {
+            if (!m._fr) m._fr = m.getAttribute("content");
+            m.setAttribute("content", courante === "fr" ? m._fr : T(m._fr, courante));
+        });
+    }
+
+    function parcourir(racine) {
+        if (racine.nodeType === 3) { traiterTexte(racine); return; }
+        if (racine.nodeType !== 1) return;
+        if (racine.closest && racine.closest(IGNORE) && !racine.matches("[data-i18n]")) return;
+        traiterBlocs(racine.parentNode && racine.parentNode.nodeType === 1 ? racine.parentNode : racine);
+        const marcheur = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+        let n = racine;
+        do {
+            if (n.nodeType === 3) traiterTexte(n);
+            else if (n.nodeType === 1 && !n.closest("[data-no-trad]") && !n.matches("script, style")) traiterAttributs(n);
+        } while ((n = marcheur.nextNode()));
+    }
+
+    // Observateur : traduit ce que le script ajoute après coup (panier, cartes, messages...)
+    let occupe = false;
+    const obs = new MutationObserver((muts) => {
+        if (occupe) return;
+        occupe = true;
+        try {
+            for (const m of muts) {
+                if (m.type === "childList") m.addedNodes.forEach((x) => { if (!(x.nodeType === 1 && x.closest && x.closest("[data-i18n]") && x.closest("[data-i18n]") !== x)) parcourir(x); });
+                else if (m.type === "characterData") traiterTexte(m.target);
+                else if (m.type === "attributes") traiterAttributs(m.target);
+            }
+        } finally { occupe = false; obs.takeRecords(); }
+    });
+    const OPTIONS_OBS = { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS };
+
+    // ---------- Sélecteur de langue ----------
+    function construireSelecteur() {
+        if (document.querySelector(".langue")) return;
+        const liens = document.querySelector(".liens");
+        if (!liens) return;
+        const boite = document.createElement("div");
+        boite.className = "langue";
+        boite.setAttribute("role", "group");
+        boite.setAttribute("aria-label", "Langue");
+        boite.innerHTML = Object.keys(LANGUES).map((k) =>
+            '<button type="button" data-lang="' + k + '" lang="' + k + '" aria-label="' + LANGUES[k].nom + '" title="' + LANGUES[k].nom + '">' + LANGUES[k].court + "</button>").join("");
+        boite.addEventListener("click", (e) => {
+            const b = e.target.closest("[data-lang]");
+            if (b) definir(b.dataset.lang);
+        });
+        const premiereIcone = liens.querySelector(".icone-nav");
+        liens.insertBefore(boite, premiereIcone || liens.querySelector(".bouton-nav-commander"));
+        // ne pas traduire les libellés FR/EN/עב
+        boite.setAttribute("data-no-trad", "");
+    }
+    function marquerSelecteur() {
+        document.querySelectorAll(".langue [data-lang]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === courante));
+    }
+
+    function policeHebreu(actif) {
+        let l = document.getElementById("police-he");
+        if (actif && !l) {
+            l = document.createElement("link");
+            l.id = "police-he"; l.rel = "stylesheet";
+            l.href = "https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap";
+            document.head.appendChild(l);
+        }
+    }
+
+    function appliquer() {
+        const cfg = LANGUES[courante];
+        document.documentElement.lang = courante;
+        document.documentElement.dir = cfg.dir;
+        policeHebreu(courante === "he");
+        obs.disconnect();
+        occupe = true;
+        parcourir(document.body);
+        traiterMeta();
+        occupe = false;
+        marquerSelecteur();
+        obs.observe(document.body, OPTIONS_OBS);
+        // Les récapitulatifs lisent le texte des listes déroulantes : on les met à jour dans la nouvelle langue.
+        const idee = document.getElementById("message-commande");
+        if (idee && document.getElementById("r-photo")) idee.dispatchEvent(new Event("input", { bubbles: true }));
+        document.dispatchEvent(new CustomEvent("langue-changee", { detail: courante }));
+    }
+    function definir(l) {
+        if (!LANGUES[l] || l === courante) return;
+        courante = l;
+        try { localStorage.setItem(CLE, l); } catch { }
+        appliquer();
+    }
+
+    window.EG_LANGUE = { definir, lire: () => courante, T: (fr) => T(fr, courante) };
+    // Pour les alertes de confirmation (confirm) écrites en français dans script.js
+    window.trad = (fr) => T(fr, courante);
+
+    construireSelecteur();
+    appliquer();
+})();
