@@ -46,7 +46,7 @@ nav {
     background-color: white;
     z-index: 1000;
     display: flex;
-justify-content: space-between;
+justify-content: flex-start;
 align-items: center;
 box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
 border-bottom: 3px solid red;
@@ -2219,5 +2219,112 @@ nav .liens a {
         top: 50% !important;
         transform: translateY(-50%) !important;
         margin: 0 !important;
+    }
+}
+/* Centre le menu sur PC */
+@media (min-width: 701px) {
+    nav .liens {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 35px;
+    }
+}
+/* 4 créations par ligne sur téléphone */
+@media (max-width: 700px) {
+    .cartes-projets {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+        padding: 0 8px !important;
+    }
+
+    .projet {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 6px !important;
+        box-sizing: border-box !important;
+    }
+
+    .projet .image-tableau {
+        width: 100% !important;
+        height: 120px !important;
+        object-fit: cover !important;
+    }
+
+    .projet h3 {
+        font-size: 12px !important;
+    }
+
+    .projet p {
+        font-size: 10px !important;
+    }
+
+    .projet .prix {
+        font-size: 11px !important;
+        font-weight: bold !important;
+    }
+
+    .badge-rupture {
+        font-size: 9px !important;
+    }
+}
+/* Toutes les images des créations à la même taille */
+.cartes-projets .image-tableau {
+    width: 100% !important;
+    height: 350px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 15px !important;
+}
+@media (max-width: 700px) {
+
+    /* 4 créations par ligne */
+    .cartes-projets {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 6px !important;
+        padding: 0 6px !important;
+    }
+
+    .projet {
+        padding: 5px !important;
+        border-radius: 12px !important;
+    }
+
+    /* Photos moins hautes */
+    .cartes-projets .image-tableau {
+        width: 100% !important;
+        height: 150px !important;
+        object-fit: cover !important;
+        border-radius: 10px !important;
+    }
+
+    /* Nom */
+    .projet h3 {
+        font-size: 11px !important;
+        line-height: 1.1 !important;
+        margin: 7px 0 5px !important;
+    }
+
+    /* Cache la description sur téléphone */
+    .projet > p:not(.prix) {
+        display: none !important;
+    }
+
+    /* Prix */
+    .projet .prix {
+        display: block !important;
+        font-size: 10px !important;
+        margin: 5px 0 !important;
+    }
+
+    /* Rupture de stock */
+    .badge-rupture {
+        display: block !important;
+        font-size: 8px !important;
+        margin-top: 4px !important;
     }
 }

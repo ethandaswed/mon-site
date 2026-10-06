@@ -135,6 +135,13 @@ let produitActuel = "";
 
 function ouvrirProduit(image, titre, description, prix) {
     produitActuel = titre;
+    const stock = document.querySelector(".produit-stock");
+stock.textContent = "● Plus qu'1 exemplaire disponible";
+stock.style.color = "#169b45";
+
+const bouton = document.querySelector(".produit-whatsapp");
+bouton.textContent = "Commander sur WhatsApp";
+bouton.disabled = false;
 
     document.getElementById("produit-image").src = image;
     document.getElementById("produit-titre").textContent = titre;
@@ -161,5 +168,26 @@ function commanderProduit() {
         "https://wa.me/972559955591?text=" + message,
         "_blank"
     );
+}
+function ouvrirProduitRupture(image, titre, description, prix) {
+    produitActuel = titre;
+
+    document.getElementById("produit-image").src = image;
+    document.getElementById("produit-titre").textContent = titre;
+    document.getElementById("produit-description").textContent = description;
+    document.getElementById("produit-prix").textContent = prix;
+
+    // Affiche rupture de stock
+    const stock = document.querySelector(".produit-stock");
+    stock.textContent = "● Rupture de stock";
+    stock.style.color = "red";
+
+    // Désactive le bouton WhatsApp
+    const bouton = document.querySelector(".produit-whatsapp");
+    bouton.textContent = "Indisponible";
+    bouton.disabled = true;
+
+    document.getElementById("popup-produit").classList.add("active");
+    document.body.style.overflow = "hidden";
 }
 
