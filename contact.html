@@ -39,28 +39,28 @@
         </p>
     </div>
 
-    <form id="formulaire">
+    <form id="formulaire" action="https://formspree.io/f/xeaeoegv" method="POST">
 
        <p id="confirmation"></p>
 
 <div class="champ-contact">
     <label for="nom">Votre nom</label>
-    <input id="nom" type="text" placeholder="Ethan" required>
+    <input id="nom" name="nom" type="text" placeholder="Votre nom" required>
 </div>
 
 <div class="champ-contact">
     <label for="email">Votre e-mail</label>
-    <input id="email" type="email" placeholder="exemple@email.com" required>
+    <input id="email" name="email" type="email" placeholder="exemple@email.com" required>
 </div>
 
 <div class="champ-contact">
     <label for="sujet">Sujet</label>
-    <input id="sujet" type="text" placeholder="Ex : Question sur un tableau">
+    <input id="sujet" name="sujet" type="text" placeholder="Ex : Question sur un tableau">
 </div>
 
 <div class="champ-contact">
     <label for="message">Votre message</label>
-    <textarea id="message" placeholder="Écrivez votre message ici..." required></textarea>
+    <textarea id="message" name="message" placeholder="Écrivez votre message ici..." required></textarea>
 </div>
 
 <button type="submit" class="bouton-contact">
