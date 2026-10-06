@@ -1,93 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Ethan Gallery - Tableaux personnalisés</title>
-   <link rel="stylesheet" href="style.css?v=3">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment ça marche - Ethan Gallery</title>
+    <meta name="description" content="De votre photo à votre tableau en 4 étapes, avec les tarifs par format et les réponses aux questions fréquentes.">
+    <meta name="theme-color" content="#e00000">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Comment ça marche - Ethan Gallery">
+    <meta property="og:description" content="De votre photo à votre tableau en 4 étapes, avec les tarifs par format et les réponses aux questions fréquentes.">
+    <meta property="og:image" content="dark-angel.jpeg">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
-
 <body>
-
-  <nav>
+<nav>
     <a href="index.html" class="logo">Ethan Gallery</a>
-
-    <button class="menu-mobile" id="menu-mobile">☰</button>
-
+    <button class="menu-mobile" id="menu-mobile" aria-label="Ouvrir le menu" aria-expanded="false" type="button">☰</button>
     <div class="liens">
-        <a href="index.html">Accueil</a>
-        <a href="creations.html">Créations</a>
-        <a href="fonctionnement.html">Comment ça marche</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html">Accueil</a><a href="creations.html">Créations</a><a href="fonctionnement.html" aria-current="page">Comment ça marche</a><a href="contact.html">Contact</a>
         <a href="commande.html" class="bouton-nav-commander">Commander</a>
     </div>
-
-    
 </nav>
-
-<section class="fonctionnement-page" id="comment-ca-marche">
-
-    <div class="fonctionnement-entete">
-        <p class="petit-titre">ETHAN GALLERY</p>
-        <h1>Comment ça marche ?</h1>
-        <p>
-            De votre photo à votre tableau, découvrez comment votre idée
-            prend vie en seulement quelques étapes.
-        </p>
-    </div>
-
-    <div class="etapes-fonctionnement">
-
-        <div class="etape-fonctionnement">
-            <span class="numero-fonctionnement">01</span>
-            <div class="icone-fonctionnement">📸</div>
-            <h2>Envoyez votre photo</h2>
-            <p>
-                Choisissez la photo que vous souhaitez transformer
-                en une œuvre personnalisée.
-            </p>
-        </div>
-
-        <div class="etape-fonctionnement">
-            <span class="numero-fonctionnement">02</span>
-            <div class="icone-fonctionnement">🎨</div>
-            <h2>Personnalisez</h2>
-            <p>
-                Sélectionnez le format, le style et décrivez-moi
-                le résultat que vous imaginez.
-            </p>
-        </div>
-
-        <div class="etape-fonctionnement">
-            <span class="numero-fonctionnement">03</span>
-            <div class="icone-fonctionnement">✍️</div>
-            <h2>Création</h2>
-            <p>
-                Je réalise votre tableau à la main avec attention
-                pour donner vie à votre projet.
-            </p>
-        </div>
-
-        <div class="etape-fonctionnement">
-            <span class="numero-fonctionnement">04</span>
-            <div class="icone-fonctionnement">🖼️</div>
-            <h2>Votre œuvre est prête</h2>
-            <p>
-                Votre tableau personnalisé est terminé et prêt
-                à devenir une pièce unique.
-            </p>
-        </div>
-
-    </div>
-
-    <div class="fonctionnement-action">
-        <p>Prêt à transformer votre photo en œuvre ?</p>
-        <a href="commande.html" class="bouton-fonctionnement">
-            Créer mon tableau
-        </a>
-    </div>
-
+<main>
+<section class="section" id="comment-ca-marche">
+    <p class="petit-titre">ETHAN GALLERY</p>
+    <h1>Comment ça marche ?</h1>
+    <p>De votre photo à votre tableau, découvrez comment votre idée prend vie en seulement quelques étapes.</p>
+    <div class="etapes"><div class="etape"><span class="num">01</span><h3>📸 Envoyez votre photo</h3><p>Choisissez la photo que vous souhaitez transformer en une œuvre personnalisée.</p></div><div class="etape"><span class="num">02</span><h3>🎨 Personnalisez</h3><p>Sélectionnez le format, le style et décrivez-moi le résultat que vous imaginez.</p></div><div class="etape"><span class="num">03</span><h3>✍️ Création</h3><p>Je réalise votre tableau à la main, avec attention, pour donner vie à votre projet.</p></div><div class="etape"><span class="num">04</span><h3>🖼️ Votre œuvre est prête</h3><p>Votre tableau personnalisé est terminé et prêt à devenir une pièce unique.</p></div></div>
 </section>
-
-    <script src="script.js?v=3"></script>
+<section class="section fond-doux" id="tarifs">
+    <h2>Tarifs</h2>
+    <table class="tarifs">
+        <caption class="cache">Prix estimés selon le format</caption>
+        <thead><tr><th scope="col">Format</th><th scope="col">Prix estimé</th></tr></thead>
+        <tbody>
+            <tr><td>30 × 40 cm</td><td data-prix="30x40"></td></tr>
+            <tr><td>50 × 70 cm</td><td data-prix="50x70"></td></tr>
+            <tr><td>70 × 100 cm</td><td data-prix="70x100"></td></tr>
+        </tbody>
+    </table>
+    <p class="note">Prix indicatifs pour une création sur mesure, confirmés avec vous avant de commencer. Les tableaux déjà réalisés ont leur propre prix sur la page Créations.</p>
+</section>
+<section class="section" id="faq">
+    <h2>Questions fréquentes</h2>
+    <div class="faq"><details><summary>Quels formats et quels prix ?</summary><p>Trois formats : 30 × 40 cm, 50 × 70 cm et 70 × 100 cm. Le prix est estimé à l'avance selon la taille, puis confirmé ensemble sur WhatsApp avant de commencer.</p></details><details><summary>Quelle photo choisir ?</summary><p>Une photo nette, bien éclairée et pas trop recadrée donne le meilleur résultat. Envoyez-la telle quelle depuis votre téléphone, sans la compresser.</p></details><details><summary>Quels styles proposez-vous ?</summary><p>Portrait, Pop Art, ou « laissez l'artiste choisir » si vous préférez me faire confiance. Vous pouvez aussi préciser couleurs et ambiance dans votre message.</p></details><details><summary>Combien de temps pour recevoir mon tableau ?</summary><p>Cela dépend de la taille et du style choisis. Je vous donne un délai précis dès que j'ai vu votre photo, avant de commencer.</p></details><details><summary>Comment se passent le paiement et la livraison ?</summary><p>Tout se règle directement avec moi sur WhatsApp : on convient ensemble du paiement et de la remise ou de l'envoi de votre tableau.</p></details><details><summary>Puis-je acheter un tableau déjà exposé ?</summary><p>Oui, ceux marqués disponibles sur la page Créations. Chaque tableau est une pièce unique : une fois vendu, il passe en rupture de stock.</p></details><details><summary>Je veux le même style qu'un tableau déjà vendu.</summary><p>Pas de souci : commandez une création sur mesure et indiquez-moi dans votre message quel tableau vous a inspiré.</p></details></div>
+</section>
+<section class="creation-commande">
+    <p class="petit-titre">ETHAN GALLERY</p>
+    <h2>Créez votre propre tableau</h2>
+    <p>Une de mes créations vous inspire ? Transformez votre photo, votre idée ou votre souvenir en une œuvre créée spécialement pour vous.</p>
+    <a href="commande.html" class="bouton">Créer mon tableau</a>
+</section>
+</main>
+<footer>
+    <a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
+    <a href="contact.html">Contact</a>
+    <p>© 2026 Ethan Gallery. Tableaux faits main, pièces uniques.</p>
+</footer>
+<script src="script.js?v=6"></script>
 </body>
 </html>

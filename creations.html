@@ -1,381 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Ethan Gallery - Tableaux personnalisés</title>
-   <link rel="stylesheet" href="style.css?v=100">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes créations - Ethan Gallery</title>
+    <meta name="description" content="Découvrez les tableaux, portraits et peintures réalisés à la main par Ethan Gallery. Commandez une création disponible sur WhatsApp.">
+    <meta name="theme-color" content="#e00000">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mes créations - Ethan Gallery">
+    <meta property="og:description" content="Découvrez les tableaux, portraits et peintures réalisés à la main par Ethan Gallery. Commandez une création disponible sur WhatsApp.">
+    <meta property="og:image" content="dark-angel.jpeg">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
-
 <body>
-
-    <nav>
+<nav>
     <a href="index.html" class="logo">Ethan Gallery</a>
-
-    <button class="menu-mobile" id="menu-mobile">☰</button>
-
-  <div class="liens">
-    <a href="index.html">Accueil</a>
-<a href="creations.html">Créations</a>
-<a href="fonctionnement.html">Comment ça marche</a>
-<a href="contact.html">Contact</a>
-<a href="commande.html" class="bouton-nav-commander">Commander</a>
-</div>
-
-    
+    <button class="menu-mobile" id="menu-mobile" aria-label="Ouvrir le menu" aria-expanded="false" type="button">☰</button>
+    <div class="liens">
+        <a href="index.html">Accueil</a><a href="creations.html" aria-current="page">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="contact.html">Contact</a>
+        <a href="commande.html" class="bouton-nav-commander">Commander</a>
+    </div>
 </nav>
-
-
-<section class="projets" id="tableaux">
-    <h2>Mes créations</h2>
-
-    <p>Découvrez quelques tableaux réalisés à la main.</p>
-
-    <div class="cartes-projets">
-
-       <div class="projet" onclick="ouvrirProduit(
-    './michael-jackson.jpeg',
-    'Michael Jackson',
-    'Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique réalisée avec soin, idéale pour les passionnés de musique et de portraits artistiques.',
-    '1000 ₪'
-)">
-    <img src="./michael-jackson.jpeg" alt="Tableau Michael Jackson" class="image-tableau">
-    <h3>Michael Jackson</h3>
-    <p>Portrait peint à la main.</p>
-    <p class="prix">À partir de 1000 ₪</p>
-</div>
-
-<div class="projet" onclick="ouvrirProduit(
-    './street-fighter.jpeg',
-    'Street Fighter',
-    'Une création colorée inspirée de l’univers de Street Fighter. Ce tableau réalisé à la main met en avant l’énergie et l’intensité de l’univers du combat.',
-    '600 ₪'
-)">
-    <img src="./street-fighter.jpeg" alt="Tableau Street Fighter" class="image-tableau">
-    <h3>Street Fighter</h3>
-    <p>Tableau inspiré de l'univers du combat.</p>
-    <p class="prix">À partir de 600 ₪</p>
-</div>
-
-<div class="projet" onclick="ouvrirProduit(
-    './dark-angel.jpeg',
-    'Dark Angel',
-    'Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale pensée pour apporter une véritable présence à votre intérieur.',
-    '400 ₪'
-)">
-    <img src="./dark-angel.jpeg" alt="Tableau Dark Angel" class="image-tableau">
-    <h3>Dark Angel</h3>
-    <p>Création artistique sur toile.</p>
-    <p class="prix">À partir de 400 ₪</p>
-</div>
-
-<!-- TATE LANGDON -->
-<div class="projet" onclick="ouvrirProduit(
-    './tate langdon.jpeg',
-    'Tate Langdon',
-    'Portrait réalisé au crayon avec un travail détaillé sur le visage, les ombres et l’effet squelette. Une création sombre entièrement dessinée à la main.',
-    '400 ₪'
-)">
-    <img src="./tate langdon.jpeg" alt="Tate Langdon" class="image-tableau">
-    <h3>Tate Langdon</h3>
-    <p>Portrait au crayon réalisé à la main.</p>
-    <p class="prix">400 ₪</p>
-</div>
-
-<!-- SUKUNA -->
-<div class="projet" onclick="ouvrirProduit(
-    './sukuna.jpeg',
-    'Sukuna',
-    'Création inspirée de Sukuna avec des couleurs intenses et de forts contrastes. Le noir, le rouge et le rose donnent beaucoup de puissance au personnage.',
-    '500 ₪'
-)">
-    <img src="./sukuna.jpeg" alt="Sukuna" class="image-tableau">
-    <h3>Sukuna</h3>
-    <p>Création colorée réalisée à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- DEADPOOL IN LOVE -->
-<div class="projet" onclick="ouvrirProduit(
-    './deadpool in love.jpeg',
-    'Deadpool in Love',
-    'Une création colorée et originale représentant Deadpool dans une ambiance plus légère. Les tons rouges, roses et violets donnent au dessin un style très reconnaissable.',
-    '500 ₪'
-)">
-    <img src="./deadpool in love.jpeg" alt="Deadpool in Love" class="image-tableau">
-    <h3>Deadpool in Love</h3>
-    <p>Illustration colorée réalisée à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- PAIN -->
-<div class="projet" onclick="ouvrirProduit(
-    './pain naruto shippuden.jpeg',
-    'Pain',
-    'Création inspirée de Pain avec une composition dominée par le noir, le blanc et le rouge. Un dessin au style contrasté qui met particulièrement en valeur le personnage.',
-    '600 ₪'
-)">
-    <img src="./pain naruto shippuden.jpeg" alt="Pain" class="image-tableau">
-    <h3>Pain</h3>
-    <p>Création inspirée de Naruto Shippuden.</p>
-    <p class="prix">600 ₪</p>
-</div>
-
-<!-- MOON KNIGHT -->
-<div class="projet" onclick="ouvrirProduit(
-    './moon knight.jpeg',
-    'Moon Knight',
-    'Une composition inspirée de Moon Knight mêlant plusieurs personnages et une ambiance colorée. Le contraste entre les costumes clairs et le fond violet apporte beaucoup de profondeur.',
-    '600 ₪'
-)">
-    <img src="./moon knight.jpeg" alt="Moon Knight" class="image-tableau">
-    <h3>Moon Knight</h3>
-    <p>Illustration détaillée réalisée à la main.</p>
-    <p class="prix">600 ₪</p>
-</div>
-
-<!-- SPIDER TEAM -->
-<div class="projet" onclick="ouvrirProduit(
-    './spider team.jpeg',
-    'Spider Team',
-    'Une grande composition réunissant plusieurs héros araignées dans une scène dynamique. Les couleurs, les mouvements et les nombreux détails donnent beaucoup d’énergie au dessin.',
-    '400 ₪'
-)">
-    <img src="./spider team.jpeg" alt="Spider Team" class="image-tableau">
-    <h3>Spider Team</h3>
-    <p>Composition dynamique réalisée à la main.</p>
-    <p class="prix">400 ₪</p>
-</div>
-
-<!-- KEN KANEKI -->
-<div class="projet" onclick="ouvrirProduit(
-    './ken kaneki.jpeg',
-    'Ken Kaneki',
-    'Portrait inspiré de Ken Kaneki avec un travail particulier sur le contraste entre le noir et le blanc, accompagné de quelques touches de couleur.',
-    '500 ₪'
-)">
-    <img src="./ken kaneki.jpeg" alt="Ken Kaneki" class="image-tableau">
-    <h3>Ken Kaneki</h3>
-    <p>Portrait manga réalisé à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- EIJIRO KIRISHIMA -->
-<div class="projet" onclick="ouvrirProduit(
-    './eijiro kirishima.jpeg',
-    'Eijiro Kirishima',
-    'Une illustration très contrastée autour du noir, du blanc et du rouge. Les traits marqués et la composition donnent une impression de puissance et de mouvement.',
-    '500 ₪'
-)">
-    <img src="./eijiro kirishima.jpeg" alt="Eijiro Kirishima" class="image-tableau">
-    <h3>Eijiro Kirishima</h3>
-    <p>Illustration manga réalisée à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- EDDIE -->
-<div class="projet" onclick="ouvrirProduit(
-    './eddie stranger things.jpeg',
-    'Eddie',
-    'Une création sombre représentant un guitariste dans une ambiance électrique. Les tons bleus, violets et rouges donnent à la scène une atmosphère intense.',
-    '500 ₪'
-)">
-    <img src="./eddie stranger things.jpeg" alt="Eddie" class="image-tableau">
-    <h3>Eddie</h3>
-    <p>Création sombre et musicale réalisée à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- ICHIGO -->
-<div class="projet" onclick="ouvrirProduit(
-    './ichigo.jpeg',
-    'Ichigo',
-    'Création inspirée d’Ichigo avec une composition dominée par le bleu, le noir et le blanc. Le mouvement de la scène donne beaucoup d’énergie au personnage.',
-    '600 ₪'
-)">
-    <img src="./ichigo.jpeg" alt="Ichigo" class="image-tableau">
-    <h3>Ichigo</h3>
-    <p>Création manga réalisée à la main.</p>
-    <p class="prix">600 ₪</p>
-</div>
-
-<!-- GOHAN -->
-<div class="projet" onclick="ouvrirProduit(
-    './gohan.jpeg',
-    'Gohan',
-    'Une création inspirée de Gohan avec des couleurs puissantes et des effets d’énergie autour du personnage. Les tons jaunes et bleus renforcent le dynamisme de la scène.',
-    '600 ₪'
-)">
-    <img src="./gohan.jpeg" alt="Gohan" class="image-tableau">
-    <h3>Gohan</h3>
-    <p>Illustration dynamique réalisée à la main.</p>
-    <p class="prix">600 ₪</p>
-</div>
-<!-- BATMAN QUI RIT -->
-<div class="projet" onclick="ouvrirProduit(
-    './batman qui rit.jpeg',
-    'Batman qui rit',
-    'Un portrait sombre entièrement réalisé au crayon, avec un travail important sur les ombres, les contrastes et les nombreux détails du personnage. Une création pensée pour donner beaucoup de profondeur et une ambiance inquiétante.',
-    '500 ₪'
-)">
-    <img src="./batman qui rit.jpeg" alt="Batman qui rit" class="image-tableau">
-    <h3>Batman qui rit</h3>
-    <p>Portrait sombre réalisé au crayon.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- BLACK GOKU - RUPTURE DE STOCK -->
-<div class="projet rupture" onclick="ouvrirProduitRupture(
-    './black goku.jpeg',
-    'Black Goku',
-    'Une création très colorée inspirée de Black Goku, réalisée avec différentes nuances de rose, violet et rouge. Le tableau cherche à mettre en avant la puissance du personnage avec beaucoup d’énergie et de mouvement.',
-    '600 ₪'
-)">
-    <div class="image-produit-wrapper">
-        <img src="./black goku.jpeg" alt="Black Goku" class="image-tableau">
-    </div>
-
-    <h3>Black Goku</h3>
-    <p>Création colorée réalisée à la main.</p>
-    <p class="prix">600 ₪</p>
-    <span class="badge-rupture">Rupture de stock</span>
-</div>
-
-<!-- DEADPOOL -->
-<div class="projet" onclick="ouvrirProduit(
-    './deadpool.jpeg',
-    'Deadpool',
-    'Une création dynamique et très colorée mettant en scène Deadpool. Les couleurs vives et les nombreux détails donnent beaucoup d’énergie au tableau et représentent le côté explosif du personnage.',
-    '700 ₪'
-)">
-    <img src="./deadpool.jpeg" alt="Deadpool" class="image-tableau">
-    <h3>Deadpool</h3>
-    <p>Création dynamique réalisée à la main.</p>
-    <p class="prix">700 ₪</p>
-</div>
-
-
-<!-- GHOST FACE -->
-<div class="projet" onclick="ouvrirProduit(
-    './ghost face.jpeg',
-    'Ghost Face',
-    'Une création inspirée de Ghost Face avec une ambiance volontairement sombre. Le mélange du noir, du blanc et du rouge crée un contraste puissant qui place le personnage au centre du tableau.',
-    '500 ₪'
-)">
-    <img src="./ghost face.jpeg" alt="Ghost Face" class="image-tableau">
-    <h3>Ghost Face</h3>
-    <p>Création sombre réalisée à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- GOHAN BEAST - RUPTURE DE STOCK -->
-<div class="projet rupture" onclick="ouvrirProduitRupture(
-    './gohan beast.jpeg',
-    'Gohan Beast',
-    'Une création inspirée de Gohan Beast qui cherche à représenter toute la puissance du personnage. Les couleurs intenses, les contrastes et les différents détails donnent au tableau une apparence très dynamique.',
-    '600 ₪'
-)">
-    <img src="./gohan beast.jpeg" alt="Gohan Beast" class="image-tableau">
-
-    <h3>Gohan Beast</h3>
-    <p>Création inspirée de Dragon Ball.</p>
-    <p class="prix">600 ₪</p>
-    <span class="badge-rupture">Rupture de stock</span>
-</div>
-
-<!-- IT -->
-<div class="projet" onclick="ouvrirProduit(
-    './it.jpeg',
-    'It',
-    'Un portrait réalisé au crayon avec un travail particulier sur le visage, les ombres et les différents détails du personnage. Une création à l’atmosphère sombre et détaillée.',
-    '400 ₪'
-)">
-    <img src="./it.jpeg" alt="It" class="image-tableau">
-    <h3>It</h3>
-    <p>Portrait détaillé réalisé au crayon.</p>
-    <p class="prix">400 ₪</p>
-</div>
-
-<!-- JOKER COULEUR -->
-<div class="projet" onclick="ouvrirProduit(
-    './joker.jpeg',
-    'Joker - Couleur',
-    'Une interprétation artistique et colorée du Joker, avec un travail autour des couleurs, des contrastes et de son expression. Une création originale qui conserve l’ambiance reconnaissable du personnage.',
-    '500 ₪'
-)">
-    <img src="./joker.jpeg" alt="Joker" class="image-tableau">
-    <h3>Joker</h3>
-    <p>Portrait artistique réalisé à la main.</p>
-    <p class="prix">500 ₪</p>
-</div>
-
-<!-- KID BUU -->
-<div class="projet" onclick="ouvrirProduit(
-    './kid buu.jpeg',
-    'Kid Buu',
-    'Une création très colorée inspirée de Kid Buu et de l’univers de Dragon Ball. Les différentes nuances de rose et les couleurs intenses donnent beaucoup d’énergie au tableau.',
-    '600 ₪'
-)">
-    <img src="./kid buu.jpeg" alt="Kid Buu" class="image-tableau">
-    <h3>Kid Buu</h3>
-    <p>Création inspirée de Dragon Ball.</p>
-    <p class="prix">600 ₪</p>
-</div>
-    </div>
+<main>
+<section class="section" id="tableaux">
+    <h1>Mes créations</h1>
+    <p>Chaque tableau est une pièce unique réalisée à la main. Cliquez sur une création pour la voir en grand et la commander.</p>
+    <label class="filtre"><input type="checkbox" id="filtre-dispo"> Afficher seulement les tableaux disponibles</label>
+    <div class="cartes-projets"></div>
 </section>
 <section class="creation-commande">
-
     <p class="petit-titre">ETHAN GALLERY</p>
-
     <h2>Créez votre propre tableau</h2>
-
-    <p class="creation-commande-texte">
-        Une de mes créations vous inspire ?
-        Transformez votre photo, votre idée ou votre souvenir
-        en une œuvre personnalisée créée spécialement pour vous.
-    </p>
-
-    <a href="commande.html" class="creation-commande-bouton">
-        Créer mon tableau
-    </a>
-
+    <p>Une de mes créations vous inspire ? Transformez votre photo, votre idée ou votre souvenir en une œuvre créée spécialement pour vous.</p>
+    <a href="commande.html" class="bouton">Créer mon tableau</a>
 </section>
-<section id="apropos">
-    <h2>À propos de moi</h2>
-    <p>Bienvenue sur mon site. Ici, je peux me présenter.</p>
-</section>
-
-<section id="contact">
-    <h2>Contact</h2>
-    <p>Tu peux me contacter ici.</p>
-</section>
-<!-- ===== FENÊTRE PRODUIT ===== -->
-<div id="popup-produit" class="popup-produit">
-
-    <div class="popup-produit-contenu">
-
-        <button class="popup-produit-fermer" onclick="fermerProduit()">×</button>
-
-        <img id="produit-image" src="" alt="Tableau">
-
-        <div class="produit-infos">
-
-            <p class="produit-stock">● Plus qu'1 exemplaire disponible</p>
-
-            <h2 id="produit-titre"></h2>
-
-            <p id="produit-description"></p>
-
-            <p id="produit-prix"></p>
-
-            <button class="produit-whatsapp" onclick="commanderProduit()">
-                Commander sur WhatsApp
-            </button>
-
-        </div>
-
+<dialog id="fenetre-produit" aria-labelledby="produit-titre">
+    <button class="popup-fermer" aria-label="Fermer">×</button>
+    <img id="produit-image" src="" alt="">
+    <div class="produit-infos">
+        <p class="produit-stock"></p>
+        <h2 id="produit-titre"></h2>
+        <p id="produit-description"></p>
+        <p id="produit-prix"></p>
+        <button type="button" class="bouton whatsapp" id="produit-commander">Commander sur WhatsApp</button>
+        <p id="produit-sur-mesure" hidden><a href="commande.html">Je veux un tableau dans le même style</a></p>
     </div>
-
-</div>
-    <script src="script.js?v=3"></script>
+</dialog>
+</main>
+<footer>
+    <a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
+    <a href="contact.html">Contact</a>
+    <p>© 2026 Ethan Gallery. Tableaux faits main, pièces uniques.</p>
+</footer>
+<script src="script.js?v=6"></script>
 </body>
 </html>

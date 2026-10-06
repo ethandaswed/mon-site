@@ -1,102 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Commander - Ethan Gallery</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commander un tableau personnalisé - Ethan Gallery</title>
+    <meta name="description" content="Créez votre tableau personnalisé : ajoutez votre photo, choisissez le format et le style, puis envoyez votre demande sur WhatsApp.">
+    <meta name="theme-color" content="#e00000">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Commander un tableau personnalisé - Ethan Gallery">
+    <meta property="og:description" content="Créez votre tableau personnalisé : ajoutez votre photo, choisissez le format et le style, puis envoyez votre demande sur WhatsApp.">
+    <meta property="og:image" content="dark-angel.jpeg">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
-
 <body>
-
 <nav>
     <a href="index.html" class="logo">Ethan Gallery</a>
-
-    <button class="menu-mobile" id="menu-mobile">☰</button>
-
-   <div class="liens">
-    <a href="index.html">Accueil</a>
-    <a href="creations.html">Créations</a>
-    <a href="fonctionnement.html">Comment ça marche</a>
-    <a href="contact.html">Contact</a>
-    <a href="commande.html" class="bouton-nav-commander">Commander</a>
-</div>
-
-    
-</nav>
-
-
-<section id="commande" class="commande">
-
-    <div class="commande-entete">
-        <p class="petit-titre">ETHAN GALLERY</p>
-        <h2>Créez votre tableau</h2>
-        <p>Configurez votre œuvre personnalisée en quelques étapes.</p>
+    <button class="menu-mobile" id="menu-mobile" aria-label="Ouvrir le menu" aria-expanded="false" type="button">☰</button>
+    <div class="liens">
+        <a href="index.html">Accueil</a><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="contact.html">Contact</a>
+        <a href="commande.html" class="bouton-nav-commander" aria-current="page">Commander</a>
     </div>
-
-    <form class="formulaire-commande">
-
-        <div class="etape-commande">
-            <span class="numero-etape">01</span>
-            <div>
-                <h3>Ajoutez votre photo 📸</h3>
-                <p>Choisissez la photo que vous souhaitez transformer en tableau.</p>
-
-                <input type="file" id="photo-client" accept="image/*">
-                <img id="apercu-photo" src="" alt="Aperçu de votre photo">
-            </div>
-        </div>
-
-        <div class="etape-commande">
-            <span class="numero-etape">02</span>
-            <div>
-                <h3>Choisissez le format 📐</h3>
-
-                <select id="taille">
-                    <option value="">Choisissez une taille</option>
-                    <option value="30x40">30 × 40 cm</option>
-                    <option value="50x70">50 × 70 cm</option>
-                    <option value="70x100">70 × 100 cm</option>
-                </select>
-
-                <p id="prix-estime"></p>
-            </div>
-        </div>
-
-        <div class="etape-commande">
-            <span class="numero-etape">03</span>
-            <div>
-                <h3>Choisissez votre style 🎨</h3>
-
-                <select id="style">
-                    <option value="">Choisissez un style</option>
-                    <option value="portrait">Portrait</option>
-                    <option value="pop-art">Pop Art</option>
-                    <option value="libre">Laissez l'artiste choisir</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="etape-commande">
-            <span class="numero-etape">04</span>
-            <div>
-                <h3>Décrivez votre idée ✍️</h3>
-
-                <textarea
-                    id="message-commande"
-                    placeholder="Parlez-moi de votre idée, des couleurs, du rendu souhaité..."
-                ></textarea>
-            </div>
-        </div>
-
-        <button type="button" class="bouton" id="bouton-commande">
-            Commander sur WhatsApp
-        </button>
-
+</nav>
+<main>
+<section class="section" id="commande">
+    <p class="petit-titre">ETHAN GALLERY</p>
+    <h1>Créez votre tableau</h1>
+    <p>Configurez votre œuvre personnalisée en quelques étapes.</p>
+    <form class="formulaire" onsubmit="return false">
+        <div class="etape-commande"><span>01</span><div>
+            <h3><label for="photo-client">Ajoutez votre photo 📸</label></h3>
+            <p>Choisissez la photo à transformer. Plus elle est nette et lumineuse, plus le résultat sera fidèle.</p>
+            <input type="file" id="photo-client" accept="image/*">
+            <img id="apercu-photo" src="" alt="Aperçu de votre photo">
+        </div></div>
+        <div class="etape-commande"><span>02</span><div>
+            <h3><label for="taille">Choisissez le format 📐</label></h3>
+            <select id="taille">
+                <option value="">Choisissez une taille</option>
+                <option value="30x40">30 × 40 cm</option>
+                <option value="50x70">50 × 70 cm</option>
+                <option value="70x100">70 × 100 cm</option>
+            </select>
+            <p id="prix-estime" aria-live="polite"></p>
+        </div></div>
+        <div class="etape-commande"><span>03</span><div>
+            <h3><label for="style">Choisissez votre style 🎨</label></h3>
+            <select id="style">
+                <option value="">Choisissez un style</option>
+                <option value="portrait">Portrait</option>
+                <option value="pop-art">Pop Art</option>
+                <option value="libre">Laissez l'artiste choisir</option>
+            </select>
+        </div></div>
+        <div class="etape-commande"><span>04</span><div>
+            <h3><label for="message-commande">Décrivez votre idée ✍️</label></h3>
+            <textarea id="message-commande" placeholder="Parlez-moi de votre idée, des couleurs, du rendu souhaité..."></textarea>
+        </div></div>
+        <p>Un clic ouvre WhatsApp avec votre demande déjà écrite. Il ne vous restera qu'à envoyer votre photo dans la conversation. Le prix affiché est une estimation, confirmée ensemble avant de commencer.</p>
+        <p id="erreur-commande" class="message-etat" role="alert"></p>
+        <button type="button" class="bouton whatsapp" id="bouton-commande">Commander sur WhatsApp</button>
+        <p id="info-whatsapp" class="message-etat" role="status"></p>
     </form>
-
 </section>
-
-<script src="script.js?v=3"></script>
-
+</main>
+<footer>
+    <a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a>
+    <a href="contact.html">Contact</a>
+    <p>© 2026 Ethan Gallery. Tableaux faits main, pièces uniques.</p>
+</footer>
+<script src="script.js?v=6"></script>
 </body>
 </html>
