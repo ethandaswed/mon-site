@@ -6,23 +6,7 @@ function direBonjour() {
 
 
 
-const boutonTheme = document.getElementById("theme-bouton");
-if (localStorage.getItem("theme") === "sombre") {
-    document.body.classList.add("mode-sombre");
-    boutonTheme.textContent = "☀️";
-}
 
-boutonTheme.addEventListener("click", function() {
-    document.body.classList.toggle("mode-sombre");
-
-    if (document.body.classList.contains("mode-sombre")) {
-    boutonTheme.textContent = "☀️";
-    localStorage.setItem("theme", "sombre");
-} else {
-    boutonTheme.textContent = "🌙";
-    localStorage.setItem("theme", "clair");
-}
-});
 const photoClient = document.getElementById("photo-client");
 const apercuPhoto = document.getElementById("apercu-photo");
 
