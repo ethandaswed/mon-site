@@ -10,12 +10,15 @@
     <meta property="og:title" content="Comment ça marche - Ethan Gallery">
     <meta property="og:description" content="De votre photo à votre tableau en 4 étapes, avec les tarifs par format et les réponses aux questions fréquentes.">
     <meta property="og:image" content="dark-angel.jpeg">
+    <meta property="og:site_name" content="Ethan Gallery">
+    <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
-    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
-    <link rel="stylesheet" href="style.css?v=14">
+    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");if(p.theme==="sombre"||(p.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("sombre");if(p.texte==="grand")document.documentElement.classList.add("grand");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 <nav>
@@ -30,7 +33,7 @@
 <section class="section" id="comment-ca-marche">
     <h1>Comment ça marche ?</h1>
     <p>De votre photo à votre tableau, découvrez comment votre idée prend vie en seulement quelques étapes.</p>
-    <div class="etapes"><div class="etape"><span class="num">01</span><h3>Envoyez votre photo</h3><p>Choisissez la photo que vous souhaitez transformer en une œuvre personnalisée.</p></div><div class="etape"><span class="num">02</span><h3>Personnalisez</h3><p>Sélectionnez le format, le style et décrivez-moi le résultat que vous imaginez.</p></div><div class="etape"><span class="num">03</span><h3>Création</h3><p>Je réalise votre tableau à la main, avec attention, pour donner vie à votre projet.</p></div><div class="etape"><span class="num">04</span><h3>Votre œuvre est prête</h3><p>Votre tableau personnalisé est terminé et prêt à devenir une pièce unique.</p></div></div>
+    <div class="etapes"><div class="etape"><span class="etape-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><span class="num">01</span><h3>Envoyez votre photo</h3><p>Choisissez la photo que vous souhaitez transformer en une œuvre personnalisée.</p></div><div class="etape"><span class="etape-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span><span class="num">02</span><h3>Personnalisez</h3><p>Sélectionnez le format, le style et décrivez-moi le résultat que vous imaginez.</p></div><div class="etape"><span class="etape-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span><span class="num">03</span><h3>Création</h3><p>Je réalise votre tableau à la main, avec attention, pour donner vie à votre projet.</p></div><div class="etape"><span class="etape-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span class="num">04</span><h3>Votre œuvre est prête</h3><p>Votre tableau personnalisé est terminé et prêt à devenir une pièce unique.</p></div></div>
 </section>
 <section class="section fond-doux" id="tarifs">
     <h2>Tarifs</h2>
@@ -63,7 +66,8 @@
     </div>
     <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=14"></script>
-<script src="langues.js?v=14"></script>
+<script src="script.js?v=16"></script>
+<script src="extras.js?v=16"></script>
+<script src="langues.js?v=16"></script>
 </body>
 </html>

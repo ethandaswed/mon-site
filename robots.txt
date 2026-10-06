@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /panier.html
+Disallow: /compte.html
+Disallow: /parametres.html
+
+# Remplacez VOTRE-DOMAINE.com par l'adresse de votre site
+Sitemap: https://VOTRE-DOMAINE.com/sitemap.xml

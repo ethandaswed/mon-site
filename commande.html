@@ -10,12 +10,15 @@
     <meta property="og:title" content="Commander un tableau personnalisé - Ethan Gallery">
     <meta property="og:description" content="Créez votre tableau personnalisé : ajoutez votre photo, choisissez le format et le style, puis envoyez votre demande sur WhatsApp.">
     <meta property="og:image" content="dark-angel.jpeg">
+    <meta property="og:site_name" content="Ethan Gallery">
+    <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
-    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
-    <link rel="stylesheet" href="style.css?v=14">
+    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");if(p.theme==="sombre"||(p.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("sombre");if(p.texte==="grand")document.documentElement.classList.add("grand");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 <nav>
@@ -30,33 +33,44 @@
 <section class="section" id="commande">
     <h1>Créez votre tableau</h1>
     <p>Configurez votre œuvre personnalisée en quelques étapes, le récapitulatif se met à jour au fur et à mesure.</p>
+    <ol class="progres" id="progres" aria-label="Progression de votre commande"><li><button type="button" data-etape="0"><b>1</b><span>Photo</span></button></li><li><button type="button" data-etape="1"><b>2</b><span>Format</span></button></li><li><button type="button" data-etape="2"><b>3</b><span>Style</span></button></li><li><button type="button" data-etape="3"><b>4</b><span>Idée</span></button></li></ol>
     <div class="commande-grille">
     <form class="formulaire" onsubmit="return false">
-        <div class="etape-commande"><span>01</span><div>
+        <div class="etape-commande" id="etape-1"><span>01</span><div>
             <h3><label for="photo-client">Ajoutez votre photo</label></h3>
             <p>Plus elle est nette et lumineuse, plus le résultat sera fidèle.</p>
             <input type="file" id="photo-client" class="entree-fichier" accept="image/*"><label class="depot" for="photo-client"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span id="depot-texte">Choisir une photo</span><small>JPG ou PNG, la plus nette possible</small></label>
             <img id="apercu-photo" src="" alt="Aperçu de votre photo">
         </div></div>
-        <div class="etape-commande"><span>02</span><div>
+        <div class="etape-commande" id="etape-2"><span>02</span><div>
             <h3 id="t-taille">Choisissez le format</h3>
             <div class="tuiles" role="radiogroup" aria-labelledby="t-taille" data-cible="taille"><button type="button" class="tuile" role="radio" aria-checked="false" data-val="30x40"><i class="cadre" style="--w:30;--h:40"></i><strong>30 × 40 cm</strong><small>Bureau, étagère</small><span class="tp" data-prix="30x40"></span></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="50x70"><i class="cadre" style="--w:50;--h:70"></i><strong>50 × 70 cm</strong><small>Salon, chambre</small><span class="tp" data-prix="50x70"></span></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="70x100"><i class="cadre" style="--w:70;--h:100"></i><strong>70 × 100 cm</strong><small>Grand format, pièce maîtresse</small><span class="tp" data-prix="70x100"></span></button></div>
             <select id="taille" hidden><option value="">Choisissez une taille</option><option value="30x40">30 × 40 cm</option><option value="50x70">50 × 70 cm</option><option value="70x100">70 × 100 cm</option></select>
             <p id="prix-estime" aria-live="polite"></p>
         </div></div>
-        <div class="etape-commande"><span>03</span><div>
+        <div class="etape-commande" id="etape-3"><span>03</span><div>
             <h3 id="t-style">Choisissez votre style</h3>
             <div class="tuiles" role="radiogroup" aria-labelledby="t-style" data-cible="style"><button type="button" class="tuile" role="radio" aria-checked="false" data-val="portrait"><strong>Portrait</strong><small>Visage détaillé, rendu fidèle</small></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="pop-art"><strong>Pop Art</strong><small>Couleurs vives et contrastées</small></button><button type="button" class="tuile" role="radio" aria-checked="false" data-val="libre"><strong>Carte blanche</strong><small>Laissez l'artiste choisir</small></button></div>
             <select id="style" hidden><option value="">Choisissez un style</option><option value="portrait">Portrait</option><option value="pop-art">Pop Art</option><option value="libre">Laissez l'artiste choisir</option></select>
         </div></div>
-        <div class="etape-commande"><span>04</span><div>
+        <div class="etape-commande" id="etape-4"><span>04</span><div>
             <h3><label for="message-commande">Décrivez votre idée</label></h3>
             <textarea id="message-commande" placeholder="Parlez-moi de votre idée, des couleurs, du rendu souhaité..."></textarea>
+            <div class="cadeau-option">
+                <label class="cadeau-case" for="cadeau"><input type="checkbox" id="cadeau"><span class="cadeau-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span><span>C'est un cadeau</span></label>
+                <div class="cadeau-champs" id="cadeau-champs" hidden>
+                    <div class="champ"><label for="cadeau-nom">Pour qui ?</label><input id="cadeau-nom" type="text" placeholder="Prénom de la personne"></div>
+                    <div class="champ"><label for="cadeau-date">À recevoir avant le (facultatif)</label><input id="cadeau-date" type="date"></div>
+                    <div class="champ"><label for="cadeau-mot">Petit mot à joindre (facultatif)</label><textarea id="cadeau-mot" placeholder="Joyeux anniversaire..."></textarea></div>
+                    <p class="note-cadeau">Je vous confirme sur WhatsApp les possibilités (emballage, remise, livraison).</p>
+                </div>
+            </div>
+            <button type="button" class="bouton contour etape-suite" id="etape-suite" hidden>Valider et voir le récapitulatif</button>
         </div></div>
     </form>
     <aside class="recap" aria-label="Récapitulatif de votre commande">
         <h2>Votre commande</h2>
-        <ul class="recap-liste"><li><span>Photo</span><strong id="r-photo"></strong></li><li><span>Format</span><strong id="r-taille"></strong></li><li><span>Style</span><strong id="r-style"></strong></li><li><span>Idée</span><strong id="r-idee"></strong></li></ul>
+        <ul class="recap-liste"><li><span>Photo</span><strong id="r-photo"></strong></li><li><span>Format</span><strong id="r-taille"></strong></li><li><span>Style</span><strong id="r-style"></strong></li><li><span>Idée</span><strong id="r-idee"></strong></li><li id="r-cadeau-li" hidden><span>Cadeau</span><strong id="r-cadeau"></strong></li></ul>
         <p class="recap-prix">Prix estimé <strong id="r-prix">—</strong></p>
         <p id="erreur-commande" class="message-etat" role="alert"></p>
         <div class="recap-actions"><button type="button" class="bouton whatsapp" id="bouton-commande">Commander sur WhatsApp</button></div>
@@ -74,7 +88,8 @@
     </div>
     <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=14"></script>
-<script src="langues.js?v=14"></script>
+<script src="script.js?v=16"></script>
+<script src="extras.js?v=16"></script>
+<script src="langues.js?v=16"></script>
 </body>
 </html>

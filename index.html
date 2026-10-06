@@ -10,12 +10,17 @@
     <meta property="og:title" content="Ethan Gallery - Tableaux personnalisés">
     <meta property="og:description" content="Ethan Gallery : transformez vos photos en tableaux personnalisés, peints et dessinés à la main. Envoyez votre photo et votre idée, je m'occupe du reste.">
     <meta property="og:image" content="dark-angel.jpeg">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
+    <meta property="og:site_name" content="Ethan Gallery">
+    <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
-    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
-    <link rel="stylesheet" href="style.css?v=14">
+    <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");if(p.theme==="sombre"||(p.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("sombre");if(p.texte==="grand")document.documentElement.classList.add("grand");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=19">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ethan Gallery", "description": "Tableaux et portraits personnalisés, peints et dessinés à la main.", "telephone": "+972559955591", "sameAs": ["https://instagram.com/Ethan_bitan"]}</script>
 </head>
 <body>
 <nav>
@@ -65,6 +70,14 @@
     </div>
 </section>
 
+<section class="zone" id="avant-apres" hidden>
+    <div class="bloc">
+        <h2>De la photo au tableau</h2>
+        <p class="intro-bloc">Faites glisser le curseur pour comparer la photo envoyée et le tableau terminé.</p>
+        <div class="ba-grille"></div>
+    </div>
+</section>
+
 <section class="zone">
     <div class="bloc">
         <h2>Les formats et les prix</h2>
@@ -75,6 +88,21 @@
             <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:70;--h:100"></span></div><h3>70 × 100 cm</h3><p>Grand format, pièce maîtresse</p><p class="format-prix">à partir de <strong data-prix="70x100"></strong></p></div>
         </div>
         <p class="note-poster" data-i18n="note-poster">Vous préférez une version plus abordable ? Chaque création existe aussi en <strong>poster imprimé</strong>, de <span data-poster="min"></span> à <span data-poster="max"></span>, avec un cadre en option (+<span data-poster="cadre"></span>).</p>
+        <div class="piece-bloc" id="piece-accueil"></div>
+        <div class="cadeau-carte">
+            <span class="cadeau-ico" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>
+            <div class="cadeau-texte"><h3>Offrez un tableau unique</h3><p>Anniversaire, mariage, naissance, fête : un portrait peint à la main à partir d'une photo, c'est un cadeau dont on se souvient. Indiquez simplement pour qui il est et la date souhaitée.</p></div>
+            <a href="commande.html?cadeau=1" class="bouton">Offrir un tableau</a>
+        </div>
+    </div>
+</section>
+
+<section class="zone" id="avis" hidden>
+    <div class="bloc">
+        <h2>Ils ont reçu leur tableau</h2>
+        <p class="intro-bloc">Les mots de celles et ceux qui m'ont fait confiance.</p>
+        <div class="avis-grille"></div>
+        <p class="lien-bas"><a href="https://wa.me/972559955591?text=Bonjour%2C%20voici%20mon%20avis%20sur%20mon%20tableau%20%3A%20" target="_blank" rel="noopener" class="lien-fleche">Laisser mon avis</a></p>
     </div>
 </section>
 
@@ -98,7 +126,7 @@
             <a href="commande.html" class="bouton">Commander mon tableau</a>
             <a href="https://wa.me/972559955591" target="_blank" rel="noopener" class="bouton whatsapp">Écrire sur WhatsApp</a>
         </div>
-        <p class="appel-contact" dir="ltr">+972 55 995 5591 &nbsp;·&nbsp; Instagram @Ethan_bitan</p>
+        <p class="appel-contact" dir="ltr"><a href="https://wa.me/972559955591" target="_blank" rel="noopener">+972 55 995 5591</a><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a></p>
     </div>
 </section>
 <dialog id="fenetre-produit" aria-labelledby="produit-titre">
@@ -122,7 +150,8 @@
     </div>
     <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=14"></script>
-<script src="langues.js?v=14"></script>
+<script src="script.js?v=19"></script>
+<script src="extras.js?v=19"></script>
+<script src="langues.js?v=19"></script>
 </body>
 </html>

@@ -171,6 +171,7 @@ if (bouton) {
             "📐 Taille : " + taille.value + " cm\n" +
             "🎨 Style : " + style + "\n" +
             "💰 Prix estimé : " + PRIX_TAILLES[taille.value] + " ₪\n\n" +
+            (window.EG_CADEAU ? window.EG_CADEAU() : "") +
             "✍️ Idée du tableau :\n" + idee + "\n\n" +
             "📸 Ma photo : " + f.name + "\nJe vous l'envoie juste après ce message dans cette conversation.";
         window.open(lienWhatsApp(message), "_blank", "noopener");
@@ -283,7 +284,9 @@ if (carrousel) {
     const getPrefs = () => ({ ...PREFS0, ...lire(K.prefs, {}) });
     function appliquerPrefs() {
         const p = getPrefs();
-        document.body.classList.toggle("sombre", p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches));
+        const sombre = p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.body.classList.toggle("sombre", sombre);
+        document.documentElement.classList.toggle("sombre", sombre);
         document.documentElement.classList.toggle("grand", p.texte === "grand");
         document.body.classList.toggle("sans-anim", !p.anim);
         document.documentElement.classList.toggle("sans-transition", !p.transitions || !p.anim);
@@ -311,7 +314,7 @@ if (carrousel) {
     if (nav) {
         const cmd = nav.querySelector(".bouton-nav-commander");
         const page = location.pathname.split("/").pop();
-        [["compte.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', "Mon compte"], ["panier.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="badge-panier" id="badge-panier" hidden></span>', "Mon panier"]].forEach(([href, html, label]) => {
+        [["parametres.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>', "Paramètres"], ["compte.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', "Mon compte"], ["panier.html", '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="badge-panier" id="badge-panier" hidden></span>', "Mon panier"]].forEach(([href, html, label]) => {
             const a = document.createElement("a");
             a.href = href; a.className = "icone-nav"; a.innerHTML = html; a.setAttribute("aria-label", label);
             if (page === href) a.setAttribute("aria-current", "page");
@@ -430,7 +433,13 @@ if (carrousel) {
     haut.type = "button"; haut.id = "haut"; haut.setAttribute("aria-label", "Retour en haut"); haut.textContent = "↑";
     haut.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
     document.body.appendChild(haut);
-    addEventListener("scroll", () => haut.classList.toggle("visible", scrollY > 500), { passive: true });
+    const majHaut = () => {
+        const enBas = innerHeight + scrollY >= document.documentElement.scrollHeight - 140; // tout en bas : la flèche se cache
+        haut.classList.toggle("visible", scrollY > 500 && !enBas);
+    };
+    addEventListener("scroll", majHaut, { passive: true });
+    addEventListener("resize", majHaut);
+    majHaut();
 
     // Page commande sur mesure : ajout au panier
     const bc = document.getElementById("bouton-commande");
@@ -445,7 +454,7 @@ if (carrousel) {
             const manque = !f ? "Ajoutez une photo." : !taille ? "Choisissez une taille." : !style ? "Choisissez un style." : !idee ? "Décrivez votre idée." : "";
             if (manque) return etat(err, manque, "erreur");
             err.className = "message-etat";
-            ajouter({ id: "sur-mesure:" + Date.now(), titre: "Tableau sur mesure " + taille + " cm", prix: PRIX_TAILLES[taille], type: "Sur mesure", detail: "Style : " + style + " | Idée : " + idee, photo: f.name });
+            ajouter({ id: "sur-mesure:" + Date.now(), titre: "Tableau sur mesure " + taille + " cm", prix: PRIX_TAILLES[taille], type: "Sur mesure", detail: "Style : " + style + " | Idée : " + idee + (window.EG_CADEAU ? window.EG_CADEAU(true) : ""), photo: f.name });
             toast("✓ Ajouté au panier. Retrouvez-le dans votre panier.");
         });
     }
@@ -541,7 +550,7 @@ if (carrousel) {
             });
             return;
         }
-        const cmds = u.commandes || [], pr = getPrefs(), favs = getFavoris().map((f) => CREATIONS.find((c) => c.fichier === f)).filter(Boolean);
+        const cmds = u.commandes || [], favs = getFavoris().map((f) => CREATIONS.find((c) => c.fichier === f)).filter(Boolean);
         const opt = (liste, val) => liste.map((o) => '<option value="' + o + '"' + (o === val ? " selected" : "") + '>' + o + '</option>').join("");
         const champ = (id, lib, val, type, ac) => '<div class="champ"><label for="' + id + '">' + lib + '</label><input id="' + id + '" type="' + (type || "text") + '" value="' + esc(val || "") + '"' + (ac ? ' autocomplete="' + ac + '"' : "") + '></div>';
         const carte = (titre, corps, large) => '<section class="carte-compte' + (large ? " large" : "") + '"><h2>' + titre + '</h2>' + corps + '</section>';
@@ -553,10 +562,6 @@ if (carrousel) {
                 '<div class="champ"><label for="p-contact">Contact préféré</label><select id="p-contact">' + opt(["WhatsApp", "Appel", "E-mail", "Instagram"], u.contact || "WhatsApp") + '</select></div>' +
                 '<div class="champ"><label for="p-recep">Mode de réception</label><select id="p-recep">' + opt(["À convenir", "Remise en main propre", "Livraison"], u.reception || "À convenir") + '</select></div>' +
                 msg("p-msg") + '<button type="button" class="bouton" id="p-sauver">Enregistrer</button>') +
-            carte("Affichage", '<div class="champ"><label for="p-theme">Thème</label><select id="p-theme"><option value="clair">Clair</option><option value="sombre">Sombre</option><option value="auto">Automatique (selon l\'appareil)</option></select></div>' +
-                '<div class="champ"><label for="p-texte">Taille du texte</label><select id="p-texte"><option value="normal">Normale</option><option value="grand">Grande</option></select></div>' +
-                '<div><label class="filtre"><input type="checkbox" id="p-anim"' + (pr.anim ? " checked" : "") + '> Animations activées</label></div>' +
-                '<div><label class="filtre"><input type="checkbox" id="p-trans"' + (pr.transitions ? " checked" : "") + '> Transition entre les pages</label></div>') +
             carte("Mes favoris (" + favs.length + ")", favs.length ? '<ul class="lignes-panier compact">' + favs.map((c) => '<li><img src="./' + esc(c.fichier) + '" alt=""><div><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix || "") + (c.dispo ? "" : " · rupture") + '</small></div>' +
                 (c.prix && c.dispo ? '<button type="button" class="mini" data-add="' + esc(c.fichier) + '">Ajouter</button>' : "") + '<button type="button" class="retirer" data-rm="' + esc(c.fichier) + '" aria-label="Retirer ' + esc(c.titre) + ' des favoris">✕</button></li>').join("") + '</ul>' : '<p>Aucun favori. Ouvrez un tableau et cliquez sur ♡.</p>') +
             carte("Sécurité", champ("s-ancien", "Mot de passe actuel", "", "password", "current-password") + champ("s-nouveau", "Nouveau mot de passe (6 caractères minimum)", "", "password", "new-password") + msg("s-msg") + '<button type="button" class="bouton contour" id="s-change">Changer le mot de passe</button>') +
@@ -564,11 +569,6 @@ if (carrousel) {
             carte("Mes données", '<p>Téléchargez une copie de vos informations ou supprimez votre compte.</p><button type="button" class="bouton contour" id="d-export">Télécharger mes données</button><button type="button" class="lien-danger" id="p-suppr">Supprimer mon compte</button>') +
             '</div>';
         const $$ = (id) => document.getElementById(id);
-        $$("p-theme").value = pr.theme; $$("p-texte").value = pr.texte;
-        $$("p-theme").addEventListener("change", (e) => setPrefs({ theme: e.target.value }));
-        $$("p-texte").addEventListener("change", (e) => setPrefs({ texte: e.target.value }));
-        $$("p-anim").addEventListener("change", (e) => setPrefs({ anim: e.target.checked }));
-        $$("p-trans").addEventListener("change", (e) => setPrefs({ transitions: e.target.checked }));
         $$("p-sauver").addEventListener("click", () => {
             const nom = $$("p-nom").value.trim();
             if (!nom) return etat($$("p-msg"), "Le nom ne peut pas être vide.", "erreur");
@@ -600,6 +600,47 @@ if (carrousel) {
         });
     }
     if (zc) rendreCompte();
+
+    // Page Paramètres (sans compte : tout est gardé sur l'appareil)
+    const zr = document.getElementById("zone-parametres");
+    function rendreParametres() {
+        const pr = getPrefs(), lg = window.EG_LANGUE ? window.EG_LANGUE.lire() : "fr";
+        const seg = (nom, liste, val) => '<div class="seg" role="group" data-pref="' + nom + '">' + liste.map(([v, lib, ico]) =>
+            '<button type="button" data-val="' + v + '" aria-pressed="' + (String(val) === v) + '">' + (ico || "") + '<span>' + lib + '</span></button>').join("") + '</div>';
+        const ligne = (titre, aide, ctrl) => '<div class="reglage"><div class="reglage-txt"><strong>' + titre + '</strong>' + (aide ? '<small>' + aide + '</small>' : "") + '</div>' + ctrl + '</div>';
+        const inter = (id, titre, aide, on) => '<label class="reglage" for="' + id + '"><span class="reglage-txt"><strong>' + titre + '</strong><small>' + aide + '</small></span><input type="checkbox" role="switch" class="interrupteur" id="' + id + '"' + (on ? " checked" : "") + '></label>';
+        zr.innerHTML =
+            '<section class="carte-reglages"><h2>Apparence</h2>' +
+            ligne("Thème", "Automatique suit le réglage de votre téléphone ou de votre ordinateur.", seg("theme", [["clair", "Clair", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'], ["sombre", "Sombre", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'], ["auto", "Automatique", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>']], pr.theme)) +
+            ligne("Taille du texte", "", seg("texte", [["normal", "Normale"], ["grand", "Grande"]], pr.texte)) + '</section>' +
+            '<section class="carte-reglages"><h2>Mouvement</h2>' +
+            inter("r-anim", "Animations activées", "Effets d\'apparition et survols animés.", pr.anim) +
+            inter("r-trans", "Transition entre les pages", "Fondu rapide quand vous changez de page.", pr.transitions) + '</section>' +
+            '<section class="carte-reglages"><h2>Langue</h2>' +
+            ligne("Langue du site", "", '<div class="seg" role="group" data-langue data-no-trad>' + [["fr", "Français"], ["en", "English"], ["he", "עברית"]].map(([v, n]) =>
+                '<button type="button" data-val="' + v + '" lang="' + v + '" aria-pressed="' + (lg === v) + '"><span>' + n + '</span></button>').join("") + '</div>') + '</section>' +
+            '<p class="reglages-bas"><button type="button" class="lien-danger" id="r-reset">Réinitialiser les réglages</button></p>';
+    }
+    if (zr) {
+        rendreParametres();
+        zr.addEventListener("click", (e) => {
+            const b = e.target.closest(".seg button");
+            if (b) {
+                const g = b.parentElement;
+                if (g.hasAttribute("data-langue")) { if (window.EG_LANGUE) window.EG_LANGUE.definir(b.dataset.val); }
+                else setPrefs({ [g.dataset.pref]: b.dataset.val });
+                g.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+                return;
+            }
+            if (e.target.id === "r-reset") { ecrire(K.prefs, PREFS0); appliquerPrefs(); rendreParametres(); }
+        });
+        zr.addEventListener("change", (e) => {
+            if (e.target.id === "r-anim") setPrefs({ anim: e.target.checked });
+            if (e.target.id === "r-trans") setPrefs({ transitions: e.target.checked });
+        });
+        // si la langue change ailleurs, on garde les boutons à jour
+        document.addEventListener("langue-changee", (ev) => zr.querySelectorAll("[data-langue] button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.val === ev.detail)));
+    }
 })();
 
 // =====================================================
@@ -703,4 +744,49 @@ if (carrousel) {
     };
     ["change", "input"].forEach((ev) => document.addEventListener(ev, (e) => { if (e.target.closest && e.target.closest(".formulaire")) maj(); }));
     maj();
+
+    // ---- Étapes : validation claire + passage automatique à la suivante ----
+    const etapes = [...document.querySelectorAll(".etape-commande")];
+    const pastilles = [...document.querySelectorAll("#progres button")];
+    const suite = $("etape-suite");
+    const faits = () => [!!photo.files[0], !!champs.taille.value, !!champs.style.value, !!idee.value.trim()];
+    etapes.forEach((e) => { const ok = document.createElement("span"); ok.className = "etape-ok"; ok.textContent = "✓ Validé"; e.querySelector(":scope > div").prepend(ok); });
+    function colorer() {
+        const f = faits(), cur = f.indexOf(false);
+        etapes.forEach((e, i) => { e.classList.toggle("fait", f[i]); e.classList.toggle("actuelle", i === cur); });
+        pastilles.forEach((b, i) => {
+            b.parentElement.classList.toggle("fait", f[i]); b.parentElement.classList.toggle("actuelle", i === cur);
+            b.querySelector("b").textContent = f[i] ? "✓" : String(i + 1);
+            if (i === cur) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+        });
+        if (suite) suite.hidden = !f[3];
+    }
+    const doux = () => (document.body.classList.contains("sans-anim") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
+    function aller(i, delai) {
+        const e = etapes[i];
+        if (!e) return;
+        setTimeout(() => {
+            e.scrollIntoView({ behavior: doux(), block: "start" });
+            const champ = e.querySelector("textarea");
+            if (champ) setTimeout(() => champ.focus({ preventScroll: true }), 350);
+        }, delai);
+    }
+    function versRecap() {
+        const r = document.querySelector(".recap");
+        if (r && matchMedia("(max-width: 900px)").matches) r.scrollIntoView({ behavior: doux(), block: "start" });
+        $("bouton-commande").focus({ preventScroll: true });
+        r && r.classList.add("pulse"); setTimeout(() => r && r.classList.remove("pulse"), 1200);
+    }
+    function suivante(i) {
+        const f = faits(), n = f.findIndex((v, k) => k > i && !v);
+        if (n >= 0) aller(n, 450); else if (f.every(Boolean)) setTimeout(versRecap, 450);
+    }
+    photo.addEventListener("change", () => { if (photo.files[0]) suivante(0); });
+    document.querySelectorAll(".tuiles").forEach((g) => g.addEventListener("click", (e) => { if (e.target.closest("[data-val]")) suivante(g.dataset.cible === "taille" ? 1 : 2); }));
+    if (suite) suite.addEventListener("click", versRecap);
+    pastilles.forEach((b) => b.addEventListener("click", () => aller(Number(b.dataset.etape), 0)));
+    $("bouton-commande").addEventListener("click", () => { const i = faits().indexOf(false); if (i >= 0) { aller(i, 0); etapes[i].classList.add("manque"); setTimeout(() => etapes[i].classList.remove("manque"), 1400); } });
+    ["change", "input"].forEach((ev) => document.addEventListener(ev, (e) => { if (e.target.closest && e.target.closest(".formulaire")) colorer(); }));
+    document.addEventListener("langue-changee", colorer);
+    colorer();
 })();

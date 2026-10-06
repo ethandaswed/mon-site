@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Remplacez VOTRE-DOMAINE.com par l'adresse de votre site (Ctrl+H dans VS Code) -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://VOTRE-DOMAINE.com/</loc></url>
+  <url><loc>https://VOTRE-DOMAINE.com/creations.html</loc></url>
+  <url><loc>https://VOTRE-DOMAINE.com/commande.html</loc></url>
+  <url><loc>https://VOTRE-DOMAINE.com/fonctionnement.html</loc></url>
+  <url><loc>https://VOTRE-DOMAINE.com/contact.html</loc></url>
+</urlset>
