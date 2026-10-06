@@ -2369,3 +2369,25 @@ nav .liens a {
         margin-top: 5px !important;
     }
 }
+/* ===== CENTRAGE PAGE COMMANDER SUR MOBILE ===== */
+@media (max-width: 700px) {
+
+    .commande-page {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    .commande-etape {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
+    }
+}
