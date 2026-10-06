@@ -28,7 +28,7 @@ const CREATIONS = [
     ["ghost face.jpeg", "Ghost Face", "Une ambiance volontairement sombre. Le mélange du noir, du blanc et du rouge crée un contraste puissant.", "500 ₪", true, true],
     ["gohan beast.jpeg", "Gohan Beast", "Une création qui cherche à représenter toute la puissance de Gohan Beast : couleurs intenses, contrastes et détails.", "600 ₪", false, true],
     ["it.jpeg", "It", "Un portrait au crayon avec un travail particulier sur le visage, les ombres et les détails. Une atmosphère sombre et précise.", "400 ₪", true, true],
-    ["joker.jpeg", "Joker - Couleur", "Une interprétation artistique et colorée du Joker, qui garde l'ambiance sombre et reconnaissable du personnage.", "500 ₪", true, false],
+    ["joker.jpeg", "Joker", "Une interprétation artistique et colorée du Joker, qui garde l'ambiance sombre et reconnaissable du personnage.", "500 ₪", true, false],
     ["kid buu.jpeg", "Kid Buu", "Une création très colorée inspirée de Kid Buu et de Dragon Ball, aux nuances de rose et aux couleurs intenses.", "600 ₪", true, true],
     ["dessin joker.jpg.jpeg", "Joker - Crayon", "Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "", true, true]
 ].map(([fichier, titre, description, prix, dispo, accueil]) => ({ fichier, titre, description, prix, dispo, accueil }));
