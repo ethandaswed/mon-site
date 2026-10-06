@@ -2328,3 +2328,44 @@ nav .liens a {
         margin-top: 4px !important;
     }
 }
+/* ===== VERSION MOBILE FINALE : 2 CRÉATIONS PAR LIGNE ===== */
+@media (max-width: 700px) {
+
+    .cartes-projets {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        padding: 0 12px !important;
+    }
+
+    .projet {
+        width: 100% !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        border-radius: 15px !important;
+    }
+
+    .cartes-projets .image-tableau {
+        width: 100% !important;
+        height: 230px !important;
+        object-fit: cover !important;
+        border-radius: 12px !important;
+    }
+
+    .projet h3 {
+        font-size: 16px !important;
+        line-height: 1.2 !important;
+        margin: 10px 0 6px !important;
+    }
+
+    .projet .prix {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        margin: 7px 0 !important;
+    }
+
+    .badge-rupture {
+        font-size: 12px !important;
+        margin-top: 5px !important;
+    }
+}
