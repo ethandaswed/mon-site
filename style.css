@@ -279,6 +279,9 @@ img {
     background: none;
     border: none;
     cursor: pointer;
+    position: absolute;
+right: 20px;
+top: 20px;
 }
 nav .liens {
     display: none !important;
@@ -1626,15 +1629,11 @@ nav .liens a {
     }
 
     nav .menu-mobile {
-        right: 62px !important;
+        right: 15px !important;
         font-size: 29px !important;
     }
 
-    nav #theme-bouton {
-        right: 9px !important;
-        width: 38px !important;
-        height: 38px !important;
-    }
+    
 
     .cartes-projets {
         grid-template-columns: 1fr !important;
@@ -2209,5 +2208,16 @@ nav .liens a {
     .popup-produit-fermer {
         top: 10px;
         right: 10px;
+    }
+}
+/* Position finale du menu hamburger sur téléphone */
+@media (max-width: 700px) {
+    nav .menu-mobile {
+        position: absolute !important;
+        right: 10px !important;
+        left: auto !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        margin: 0 !important;
     }
 }
