@@ -8,9 +8,9 @@ const PRIX_TAILLES = { "30x40": 400, "50x70": 650, "70x100": 900 };
 // [fichier image, titre, description, prix affiché, disponible ?, afficher sur l'accueil ?]
 // Prix vide ("") = œuvre non vendue (visible seulement sur l'accueil).
 const CREATIONS = [
-    ["michael-jackson.jpeg", "Michael Jackson", "Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique, idéale pour les passionnés de musique et de portraits artistiques.", "1000 ₪", true, false],
-    ["street-fighter.jpeg", "Street Fighter", "Une création colorée inspirée de l'univers de Street Fighter, qui met en avant l'énergie et l'intensité du combat.", "600 ₪", true, true],
-    ["dark-angel.jpeg", "Dark Angel", "Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale, pensée pour apporter une vraie présence à votre intérieur.", "400 ₪", true, false],
+    ["michael-jackson.jpeg", "Michael Jackson", "Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique, idéale pour les passionnés de musique et de portraits artistiques.", "À partir de 1000 ₪", true, false],
+    ["street-fighter.jpeg", "Street Fighter", "Une création colorée inspirée de l'univers de Street Fighter, qui met en avant l'énergie et l'intensité du combat.", "À partir de 600 ₪", true, true],
+    ["dark-angel.jpeg", "Dark Angel", "Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale, pensée pour apporter une vraie présence à votre intérieur.", "À partir de 400 ₪", true, false],
     ["tate langdon.jpeg", "Tate Langdon", "Portrait au crayon avec un travail détaillé sur le visage, les ombres et l'effet squelette. Une création sombre entièrement dessinée à la main.", "400 ₪", true, false],
     ["sukuna.jpeg", "Sukuna", "Création inspirée de Sukuna, aux couleurs intenses et aux forts contrastes. Le noir, le rouge et le rose donnent beaucoup de puissance au personnage.", "500 ₪", true, true],
     ["deadpool in love.jpeg", "Deadpool in Love", "Deadpool dans une ambiance plus légère. Les tons rouges, roses et violets donnent au dessin un style très reconnaissable.", "500 ₪", true, false],
@@ -200,4 +200,59 @@ if (form) {
 function montrerEtat(el, texte, type) {
     el.textContent = texte;
     el.className = "message-etat visible " + type;
+}
+
+// =====================================================
+// CARROUSEL DE L'ACCUEIL
+// =====================================================
+const carrousel = document.querySelector(".carrousel");
+if (carrousel) {
+    const diapos = [...carrousel.querySelectorAll(".diapo")];
+    const zonePoints = carrousel.querySelector(".carrousel-points");
+    const DELAI = 4500; // millisecondes entre deux images
+    const peutDefiler = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let courant = 0, minuteur = null;
+
+    const points = diapos.map((d, i) => {
+        const p = document.createElement("button");
+        p.type = "button";
+        p.setAttribute("aria-label", "Voir l'image " + (i + 1));
+        p.addEventListener("click", () => { aller(i); relancer(); });
+        zonePoints.appendChild(p);
+        return p;
+    });
+
+    function aller(i) {
+        courant = (i + diapos.length) % diapos.length; // revient à la première après la dernière
+        diapos.forEach((d, n) => d.classList.toggle("actif", n === courant));
+        points.forEach((p, n) => p.setAttribute("aria-current", n === courant));
+    }
+    function arreter() { clearInterval(minuteur); minuteur = null; }
+    function relancer() {
+        arreter();
+        if (peutDefiler && !document.hidden) minuteur = setInterval(() => aller(courant + 1), DELAI);
+    }
+
+    carrousel.querySelector(".precedent").addEventListener("click", () => { aller(courant - 1); relancer(); });
+    carrousel.querySelector(".suivant").addEventListener("click", () => { aller(courant + 1); relancer(); });
+
+    // Pause quand on survole ou qu'on navigue au clavier dans le carrousel
+    carrousel.addEventListener("mouseenter", arreter);
+    carrousel.addEventListener("mouseleave", relancer);
+    carrousel.addEventListener("focusin", arreter);
+    carrousel.addEventListener("focusout", relancer);
+    document.addEventListener("visibilitychange", relancer);
+
+    // Glisser le doigt sur téléphone
+    let departX = null;
+    carrousel.addEventListener("touchstart", (e) => { departX = e.touches[0].clientX; }, { passive: true });
+    carrousel.addEventListener("touchend", (e) => {
+        if (departX === null) return;
+        const ecart = e.changedTouches[0].clientX - departX;
+        if (Math.abs(ecart) > 40) { aller(courant + (ecart < 0 ? 1 : -1)); relancer(); }
+        departX = null;
+    });
+
+    aller(0);
+    relancer();
 }
