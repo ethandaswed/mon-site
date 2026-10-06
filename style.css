@@ -135,7 +135,7 @@ textarea { min-height: 130px; resize: vertical; }
 .etape-commande > div { flex: 1; min-width: 0; }
 .etape-commande p { margin: 0 0 10px; color: var(--gris); }
 #apercu-photo { display: none; max-width: 220px; margin-top: 12px; border-radius: 14px; }
-#prix-estime { margin-top: 10px; font-weight: 800; color: var(--rouge); }
+#prix-estime { margin-top: 10px; font-weight: 800; color: var(--black); }
 .message-etat { display: none; padding: 14px 18px; border-radius: 10px; font-weight: 600; }
 .message-etat.visible { display: block; }
 .message-etat.erreur { background: #fde8e8; color: #9b0000; }

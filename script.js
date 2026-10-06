@@ -188,9 +188,9 @@ if (form) {
             const r = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
             if (!r.ok) throw new Error();
             form.reset();
-            montrerEtat(etat, "✅ Message envoyé ! Je vous répondrai dès que possible.", "ok");
+            montrerEtat(etat, "✅ Mail envoyé ! Je vous répondrai dès que possible.", "ok");
         } catch {
-            montrerEtat(etat, "❌ Le message n'a pas pu être envoyé. Écrivez-moi directement sur WhatsApp : +972 55 995 5591.", "erreur");
+            montrerEtat(etat, "❌ Le mail n'a pas pu être envoyé. Écrivez-moi directement sur WhatsApp : +972 55 995 5591.", "erreur");
         } finally {
             b.disabled = false;
             b.textContent = texte;
