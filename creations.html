@@ -32,26 +32,41 @@
 
     <div class="cartes-projets">
 
-        <div class="projet">
-           <img src="./michael-jackson.jpeg" alt="Tableau Michael Jackson" class="image-tableau">
-            <h3>Michael Jackson</h3>
-            <p>Portrait peint à la main.</p>
-            <p class="prix">À partir de 1000 ₪</p>
-        </div>
+       <div class="projet" onclick="ouvrirProduit(
+    './michael-jackson.jpeg',
+    'Michael Jackson',
+    'Portrait de Michael Jackson peint entièrement à la main. Une œuvre unique réalisée avec soin, idéale pour les passionnés de musique et de portraits artistiques.',
+    '1000 ₪'
+)">
+    <img src="./michael-jackson.jpeg" alt="Tableau Michael Jackson" class="image-tableau">
+    <h3>Michael Jackson</h3>
+    <p>Portrait peint à la main.</p>
+    <p class="prix">À partir de 1000 ₪</p>
+</div>
 
-        <div class="projet">
-            <img src="./street-fighter.jpeg" alt="Tableau Street Fighter" class="image-tableau">
-            <h3>Street Fighter</h3>
-            <p>Tableau inspiré de l'univers du combat.</p>
-            <p class="prix">À partir de 600 ₪</p>
-        </div>
+<div class="projet" onclick="ouvrirProduit(
+    './street-fighter.jpeg',
+    'Street Fighter',
+    'Une création colorée inspirée de l’univers de Street Fighter. Ce tableau réalisé à la main met en avant l’énergie et l’intensité de l’univers du combat.',
+    '600 ₪'
+)">
+    <img src="./street-fighter.jpeg" alt="Tableau Street Fighter" class="image-tableau">
+    <h3>Street Fighter</h3>
+    <p>Tableau inspiré de l'univers du combat.</p>
+    <p class="prix">À partir de 600 ₪</p>
+</div>
 
-        <div class="projet">
-            <img src="./dark-angel.jpeg" alt="Tableau Dark Angel" class="image-tableau">
-            <h3>Dark Angel</h3>
-            <p>Création artistique sur toile.</p>
-            <p class="prix">À partir de 400 ₪</p>
-        </div>
+<div class="projet" onclick="ouvrirProduit(
+    './dark-angel.jpeg',
+    'Dark Angel',
+    'Une création artistique réalisée à la main sur toile. Une œuvre sombre et originale pensée pour apporter une véritable présence à votre intérieur.',
+    '400 ₪'
+)">
+    <img src="./dark-angel.jpeg" alt="Tableau Dark Angel" class="image-tableau">
+    <h3>Dark Angel</h3>
+    <p>Création artistique sur toile.</p>
+    <p class="prix">À partir de 400 ₪</p>
+</div>
 
     </div>
 </section>
@@ -81,6 +96,34 @@
     <h2>Contact</h2>
     <p>Tu peux me contacter ici.</p>
 </section>
+<!-- ===== FENÊTRE PRODUIT ===== -->
+<div id="popup-produit" class="popup-produit">
+
+    <div class="popup-produit-contenu">
+
+        <button class="popup-produit-fermer" onclick="fermerProduit()">×</button>
+
+        <img id="produit-image" src="" alt="Tableau">
+
+        <div class="produit-infos">
+
+            <p class="produit-stock">● Plus qu'1 exemplaire disponible</p>
+
+            <h2 id="produit-titre"></h2>
+
+            <p id="produit-description"></p>
+
+            <p id="produit-prix"></p>
+
+            <button class="produit-whatsapp" onclick="commanderProduit()">
+                Commander sur WhatsApp
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
     <script src="script.js?v=3"></script>
 </body>
 </html>

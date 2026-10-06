@@ -162,4 +162,37 @@ document.getElementById("popup-creation")?.addEventListener("click", function(ev
         fermerImage();
     }
 });
+// ===== FENÊTRE PRODUIT - CRÉATIONS =====
+
+let produitActuel = "";
+
+function ouvrirProduit(image, titre, description, prix) {
+    produitActuel = titre;
+
+    document.getElementById("produit-image").src = image;
+    document.getElementById("produit-titre").textContent = titre;
+    document.getElementById("produit-description").textContent = description;
+    document.getElementById("produit-prix").textContent = prix;
+
+    document.getElementById("popup-produit").classList.add("active");
+
+    document.body.style.overflow = "hidden";
+}
+
+function fermerProduit() {
+    document.getElementById("popup-produit").classList.remove("active");
+
+    document.body.style.overflow = "";
+}
+
+function commanderProduit() {
+    const message = encodeURIComponent(
+        "Bonjour, je suis intéressé par le tableau " + produitActuel + ". Est-il toujours disponible ?"
+    );
+
+    window.open(
+        "https://wa.me/972559955591?text=" + message,
+        "_blank"
+    );
+}
 
