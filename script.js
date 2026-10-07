@@ -52,6 +52,33 @@ const CREATIONS = [
     ["dessin joker.jpg.jpeg", "Joker", "Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "400 ₪", true, true]
 ].map(([fichier, titre, description, prix, dispo, accueil]) => ({ fichier, titre, description, prix, dispo, accueil }));
 
+// Mots-clés de chaque œuvre : affichés sur la fiche et utilisés par la recherche (modifiez-les librement).
+const MOTS_CLES = {
+    "Michael Jackson": ["musique", "chanteur", "roi de la pop", "portrait", "pop", "star"],
+    "Street Fighter": ["jeu vidéo", "combat", "arcade", "capcom", "ryu", "ken", "gaming"],
+    "Dark Angel": ["ange", "sombre", "gothique", "fantasy", "noir", "toile"],
+    "Tate Langdon": ["american horror story", "ahs", "série", "horreur", "squelette", "crayon", "dessin"],
+    "Sukuna": ["jujutsu kaisen", "manga", "anime", "démon", "malédiction", "roi des fléaux"],
+    "Deadpool in Love": ["deadpool", "marvel", "super-héros", "comics", "amour", "rouge"],
+    "Pain": ["naruto", "shippuden", "manga", "anime", "akatsuki", "ninja"],
+    "Moon Knight": ["marvel", "super-héros", "comics", "série", "blanc", "lune"],
+    "Spider Team": ["spider-man", "araignée", "marvel", "super-héros", "comics", "spider-verse"],
+    "Ken Kaneki": ["tokyo ghoul", "manga", "anime", "ghoul", "masque", "noir et blanc"],
+    "Eijiro Kirishima": ["my hero academia", "mha", "manga", "anime", "durcissement", "noir et blanc"],
+    "Eddie": ["stranger things", "série", "netflix", "guitare", "metal", "eddie munson"],
+    "Ichigo": ["bleach", "manga", "anime", "shinigami", "bleu", "épée"],
+    "Gohan": ["dragon ball", "dbz", "manga", "anime", "saiyan", "énergie", "jaune"],
+    "Batman qui rit": ["batman", "dc comics", "joker", "super-héros", "sombre", "crayon", "dessin"],
+    "Black Goku": ["dragon ball", "dragon ball super", "goku", "manga", "anime", "rose", "violet"],
+    "Deadpool": ["marvel", "super-héros", "comics", "wade wilson", "rouge", "anti-héros"],
+    "Ghost Face": ["scream", "horreur", "film", "masque", "slasher", "noir et blanc"],
+    "Gohan Beast": ["dragon ball", "dragon ball super", "super hero", "manga", "anime", "puissance"],
+    "It": ["ça", "pennywise", "stephen king", "clown", "horreur", "film", "crayon", "dessin"],
+    "Kid Buu": ["dragon ball", "dbz", "manga", "anime", "majin buu", "rose", "méchant"],
+    "Joker": ["batman", "dc comics", "clown", "super-vilain", "comics", "crayon", "dessin"]
+};
+CREATIONS.forEach((c) => { c.mots = MOTS_CLES[c.titre] || []; });
+
 const $ = (id) => document.getElementById(id);
 const tr = (fr) => (window.trad ? window.trad(fr) : fr); // traduction (voir langues.js)
 // Commander demande un compte : sinon on envoie la personne le créer, puis on la ramène là où elle était
@@ -89,10 +116,10 @@ if (menu && liens) {
         let b = navEl.querySelector(".barre-icones");
         if (burger) {
             if (!b) { b = document.createElement("div"); b.className = "barre-icones"; navEl.insertBefore(b, menu); }
-            [rech, notif, cpt, pan].forEach((e) => e && b.appendChild(e));
+            [rech, notif, param, cpt, pan].forEach((e) => e && b.appendChild(e));
         } else if (b) {
+            [param, cpt, pan].forEach((e) => e && cmd && liens.insertBefore(e, cmd));
             [rech, notif].forEach((e) => e && param && liens.insertBefore(e, param));
-            [cpt, pan].forEach((e) => e && cmd && liens.insertBefore(e, cmd));
             b.remove();
         }
     };
@@ -155,6 +182,10 @@ function ouvrirCreation(c) {
     $("produit-image").alt = c.titre;
     $("produit-titre").textContent = c.titre;
     $("produit-description").textContent = c.description;
+    let mots = $("produit-mots");
+    if (!mots) { mots = document.createElement("p"); mots.id = "produit-mots"; mots.className = "mots-cles"; $("produit-description").after(mots); }
+    mots.innerHTML = c.mots.map((m) => '<span data-no-trad>#' + m.replace(/[&<>"]/g, "") + '</span>').join("");
+    mots.hidden = !c.mots.length;
     $("produit-sur-mesure").hidden = c.dispo && !!c.prix;
     if (window.majBoutonPanier) majBoutonPanier(c);
     fenetre.showModal();
@@ -366,14 +397,12 @@ if (carrousel) {
 
     // Thème (réglage)
     const PREFS0 = { theme: "clair", texte: "normal", anim: true, transitions: true, contraste: false, police: "normal", liens: false, flottants: true };
-    const getPrefs = () => ({ ...PREFS0, ...lire(K.prefs, {}) });
+    const getPrefs = () => { const p = { ...PREFS0, ...lire(K.prefs, {}) }; if (p.theme === "terminal") p.theme = "clair"; return p; };
     function appliquerPrefs() {
         const p = getPrefs();
-        const terminal = p.theme === "terminal";
-        const sombre = terminal || p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+        const sombre = p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.body.classList.toggle("sombre", sombre);
         document.documentElement.classList.toggle("sombre", sombre);
-        document.documentElement.classList.toggle("terminal", terminal);
         document.documentElement.classList.toggle("grand", p.texte === "grand");
         document.documentElement.classList.toggle("tres-grand", p.texte === "tres-grand");
         document.documentElement.classList.toggle("contraste", !!p.contraste);
@@ -745,7 +774,7 @@ if (carrousel) {
         const inter = (id, titre, aide, on) => '<label class="reglage" for="' + id + '"><span class="reglage-txt"><strong>' + titre + '</strong><small>' + aide + '</small></span><input type="checkbox" role="switch" class="interrupteur" id="' + id + '"' + (on ? " checked" : "") + '></label>';
         zr.innerHTML =
             '<section class="carte-reglages"><h2>Apparence</h2>' +
-            ligne("Thème", "Automatique suit le réglage de votre téléphone ou de votre ordinateur.", seg("theme", [["clair", "Clair", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'], ["sombre", "Sombre", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'], ["auto", "Automatique", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>'], ["terminal", "Terminal", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg>']], pr.theme)) +
+            ligne("Thème", "Automatique suit le réglage de votre téléphone ou de votre ordinateur.", seg("theme", [["clair", "Clair", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'], ["sombre", "Sombre", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'], ["auto", "Automatique", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>']], pr.theme)) +
             ligne("Taille du texte", "", seg("texte", [["normal", "Normale"], ["grand", "Grande"], ["tres-grand", "Très grande"]], pr.texte)) + '</section>' +
             '<section class="carte-reglages"><h2>Mouvement</h2>' +
             inter("r-anim", "Animations activées", "Effets d\'apparition et survols animés.", pr.anim) +
@@ -882,7 +911,7 @@ if (carrousel) {
         facette("f-univers", "univers", Object.keys(UNIVERS).concat("Musique, jeux et art"));
         facette("f-tech", "tech", ["Couleur", "Crayon"]);
         const [lo, hi] = ($("filtre-prix").value || "0-99999").split("-").map(Number);
-        const r = liste.filter((c) => (!f.q || norm(c.titre).includes(norm(f.q))) && (!f.univers || c.univers === f.univers) && (!f.tech || c.tech === f.tech) &&
+        const r = liste.filter((c) => (!f.q || norm(c.titre + " " + c.mots.join(" ")).includes(norm(f.q))) && (!f.univers || c.univers === f.univers) && (!f.tech || c.tech === f.tech) &&
             (!$("filtre-dispo").checked || c.dispo) && c.p >= lo && c.p <= hi);
         if (TRIS[$("tri").value]) r.sort(TRIS[$("tri").value]);
         $("nb-resultats").textContent = r.length + (r.length > 1 ? " tableaux" : " tableau");

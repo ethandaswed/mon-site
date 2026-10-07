@@ -219,9 +219,9 @@ const NOTIFICATIONS = [];
                 grille.innerHTML = sugg.map((c) => '<li><a href="creations.html#' + slugDe(c) + '"><span class="rg-vignette"><img src="./' + esc(c.fichier) + '" alt="" loading="lazy"></span><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix) + '</small></a></li>').join("");
                 grille.hidden = false; liste.hidden = true; vide.hidden = true; return;
             }
-            const trouves = tous.filter((c) => normaliser(c.titre).includes(q)).slice(0, 8);
+            const trouves = tous.map((c) => ({ c, t: normaliser(c.titre).includes(q) ? 0 : (c.mots || []).some((m) => normaliser(m).includes(q)) ? 1 : 2 })).filter((x) => x.t < 2).sort((a, b) => a.t - b.t).map((x) => x.c).slice(0, 8);
             etiq.textContent = trouves.length ? (trouves.length === 1 ? "1 tableau" : trouves.length + " tableaux") : "";
-            liste.innerHTML = trouves.map((c) => '<li role="option"><a href="creations.html#' + slugDe(c) + '"><img src="./' + esc(c.fichier) + '" alt="" loading="lazy"><span class="rg-txt"><strong>' + surligne(c.titre, q) + '</strong><small>' + esc(c.prix) + (c.dispo ? "" : " · indisponible") + '</small></span></a></li>').join("");
+            liste.innerHTML = trouves.map((c) => '<li role="option"><a href="creations.html#' + slugDe(c) + '"><img src="./' + esc(c.fichier) + '" alt="" loading="lazy"><span class="rg-txt"><strong>' + surligne(c.titre, q) + '</strong><small>' + esc(c.prix) + (c.dispo ? "" : " · indisponible") + (normaliser(c.titre).includes(q) ? "" : " · #" + esc((c.mots || []).find((m) => normaliser(m).includes(q)) || "")) + '</small></span></a></li>').join("");
             grille.hidden = true; liste.hidden = !trouves.length; vide.hidden = !!trouves.length;
         };
         // le panneau se place juste sous la loupe, avec une petite flèche qui la désigne
@@ -514,6 +514,17 @@ const NOTIFICATIONS = [];
         addEventListener("hashchange", depuisLien);
         depuisLien();
     }
+})();
+// Panneaux recherche / notifications : sur mobile, la page derrière ne défile plus
+(() => {
+    const racine = document.documentElement;
+    const panneaux = () => ["recherche-globale", "panneau-notif"].map((i) => document.getElementById(i)).filter(Boolean);
+    const maj = () => racine.classList.toggle("verrou", panneaux().some((p) => !p.hidden));
+    panneaux().forEach((p) => new MutationObserver(maj).observe(p, { attributes: true, attributeFilter: ["hidden"] }));
+    document.addEventListener("touchmove", (e) => {
+        if (!racine.classList.contains("verrou") || window.innerWidth > 800) return;
+        if (!e.target.closest(".rg-corps, #panneau-notif")) e.preventDefault();
+    }, { passive: false });
 })();
 window.EG_EXTRAS_FAIT = true;
 if (window.EG_MENU_PRET) window.EG_MENU_PRET("extras");
