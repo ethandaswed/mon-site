@@ -559,7 +559,20 @@
     const IDX_L = { en: "en", he: "he" };
 
     // Traduit une chaîne française. Renvoie la chaîne d'origine si rien ne correspond.
+    // Noms des tableaux en hébreu (évite les phrases mélangées hébreu + lettres latines, dont le sens de lecture s'inverse)
+    const NOMS_HE = [["Michael Jackson", "מייקל ג'קסון"], ["Street Fighter", "סטריט פייטר"], ["Dark Angel", "דארק אנג'ל"], ["Tate Langdon", "טייט לנגדון"], ["Sukuna", "סוקונה"], ["Deadpool in Love", "דדפול מאוהב"], ["Pain", "פיין"], ["Moon Knight", "מון נייט"], ["Spider Team", "ספיידר טים"], ["Ken Kaneki", "קן קנקי"], ["Eijiro Kirishima", "איג'ירו קירישימה"], ["Eddie", "אדי"], ["Ichigo", "איצ'יגו"], ["Gohan Beast", "גוהאן ביסט"], ["Gohan", "גוהאן"], ["Batman qui rit", "באטמן שצוחק"], ["Black Goku", "בלאק גוקו"], ["Deadpool", "דדפול"], ["Ghost Face", "גוסט פייס"], ["It", "איט"], ["Kid Buu", "קיד בו"], ["Joker", "ג'וקר"], ["Goku", "גוקו"]];
+    const RE_NOMS_HE = NOMS_HE.slice().sort((a, b) => b[0].length - a[0].length).map(([f, h]) => [new RegExp("(?<![A-Za-z])" + f + "(?![A-Za-z])", "g"), h]);
+    const nomsHe = (t) => { let r = t; for (const [re, h] of RE_NOMS_HE) r = r.replace(re, h); return r; };
     function T(fr, lang) {
+        const r = T0(fr, lang);
+        if (lang !== "he" || typeof r !== "string") return r;
+        let h = nomsHe(r);
+        if (h === "Ethan Gallery" || !/[\u0590-\u05FF]/.test(h)) return h;
+        h = h.replace(/Ethan Gallery/g, "גלריית איתן");
+        // les derniers mots latins (WhatsApp, @pseudo, e-mail) sont isolés pour que le sens de lecture ne s'inverse pas
+        return h.replace(/[@A-Za-z][A-Za-z0-9_.@\-]*/g, "\u2066$&\u2069");
+    }
+    function T0(fr, lang) {
         if (!fr || lang === "fr") return fr;
         const cle = norm(fr).trim();
         const direct = INDEX.get(cle);

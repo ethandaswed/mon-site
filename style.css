@@ -1331,3 +1331,25 @@ html.menu-burger .liens > a:not(.icone-nav):not(.bouton-nav-commander) { padding
 .langue-accueil button { color: #e6e6e6; padding: 8px 14px; font-size: .88rem; }
 .langue-accueil button:hover { color: #fff; }
 html.menu-burger .langue-accueil { display: inline-flex !important; }
+[hidden] { display: none !important; }
+
+/* ===== v38 : détails ===== */
+/* prix en couleur neutre (le rouge pouvait faire croire que c'est cher) */
+.format-prix strong, .recap-prix strong, .ligne-prix, .tuile .tp, .tarifs td:last-child { color: var(--encre); }
+.sombre .format-prix strong, .sombre .legende span, .sombre .ligne-prix, .sombre .tuile .tp, .sombre .recap-prix strong { color: #f2f2f2; }
+/* mode sombre : la page / catégorie choisie ressort en rouge comme en mode clair */
+.sombre .liens a[aria-current="page"], .sombre .liens .icone-nav[aria-current="page"], .sombre .barre-icones .icone-nav[aria-current="page"] { color: var(--rouge); }
+.sombre .legal-onglets a[aria-current="true"], .sombre .legal-onglets a.actif { background: var(--rouge); color: #fff; }
+html.menu-burger .sombre .liens > a[aria-current="page"]:not(.icone-nav) { color: #ff4d4d; background: rgba(255,60,60,.16); }
+.sombre .facette button[aria-pressed="true"] { color: #ff4d4d; }
+.sombre .onglets button.actif, .sombre .seg button[aria-pressed="true"], .sombre .langue button[aria-pressed="true"] { background: var(--rouge); color: #fff; }
+/* contact : Instagram aux couleurs d'Instagram */
+.bouton[href*="instagram.com"] { background: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 45%, #6228d7 100%); color: #fff !important; border-color: transparent; }
+.bouton[href*="instagram.com"]:hover { filter: brightness(1.08); }
+/* panier vide */
+.panier-vide { display: grid; justify-items: center; gap: 6px; padding: 28px 0 12px; text-align: center; }
+.panier-vide-ico { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: var(--fond-doux); color: var(--gris); margin-bottom: 8px; }
+.panier-vide p { margin: 0 0 12px; color: var(--gris); font-size: 1.05rem; }
+/* mentions légales : les onglets ne suivent plus le défilement */
+.legal-onglets { position: static; top: auto; padding: 0; background: none; }
+.bouton[href*="instagram.com"], .sombre .bouton[href*="instagram.com"], .bouton.contour[href*="instagram.com"] { background: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 45%, #6228d7 100%) !important; color: #fff !important; border-color: transparent !important; }
