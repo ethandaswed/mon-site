@@ -1312,3 +1312,22 @@ html.menu-burger .liens > a:not(.icone-nav):not(.bouton-nav-commander) { padding
 html.menu-burger .menu-mobile { padding: 6px 8px; margin-inline-start: 2px; }
 @media (max-width: 400px) { .barre-icones .icone-nav, .barre-icones .icone-btn { width: 30px; height: 34px; } .barre-icones .icone-nav svg { width: 20px; height: 20px; } }
 @media (max-width: 350px) { .barre-icones .icone-nav, .barre-icones .icone-btn { width: 27px; } .barre-icones .icone-nav svg { width: 18px; height: 18px; } }
+
+/* ===== v36 : iPhone : ☰ propre (plus de bleu), onglets compacts, réglages iOS ===== */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+a, button { -webkit-tap-highlight-color: transparent; }
+button { color: inherit; }
+.menu-mobile { -webkit-appearance: none; appearance: none; color: #1f2937; line-height: 0; width: 42px; height: 42px; padding: 0 !important; place-items: center; border-radius: 12px; }
+html.menu-burger .menu-mobile { display: grid; }
+.menu-mobile svg { display: block; }
+.menu-mobile:active { background: var(--fond-doux); }
+.sombre .menu-mobile { color: #eee; }
+html.menu-burger .liens { padding: 6px 8px 10px; }
+html.menu-burger .liens > a:not(.icone-nav):not(.bouton-nav-commander) { padding: 11px 14px; min-height: 44px; display: flex; align-items: center; font-size: 1.02rem; }
+@media (max-width: 400px) { html.menu-burger .menu-mobile { width: 38px; height: 38px; } }
+
+/* ===== v37 : sélecteur de langue en haut de l'accueil (mobile) ===== */
+.langue-accueil { display: none !important; margin: 0 0 18px; background: rgba(255,255,255,.14); }
+.langue-accueil button { color: #e6e6e6; padding: 8px 14px; font-size: .88rem; }
+.langue-accueil button:hover { color: #fff; }
+html.menu-burger .langue-accueil { display: inline-flex !important; }

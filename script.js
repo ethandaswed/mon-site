@@ -104,11 +104,14 @@ const lienWhatsApp = (texte) => "https://wa.me/" + NUMERO_WHATSAPP + "?text=" + 
 const menu = $("menu-mobile");
 const liens = document.querySelector(".liens");
 if (menu && liens) {
+    // Icône dessinée (SVG) : sur iPhone le caractère ☰ s'affichait en bleu
+    const svgMenu = (d) => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="' + d + '"/></svg>';
     const basculer = (ouvert) => {
         liens.classList.toggle("ouvert", ouvert);
         menu.setAttribute("aria-expanded", ouvert);
-        menu.textContent = ouvert ? "✕" : "☰";
+        menu.innerHTML = svgMenu(ouvert ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16");
     };
+    menu.innerHTML = svgMenu("M4 7h16M4 12h16M4 17h16");
     menu.addEventListener("click", () => basculer(!liens.classList.contains("ouvert")));
     liens.addEventListener("click", (e) => { if (e.target.closest("a")) basculer(false); });
 

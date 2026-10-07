@@ -685,6 +685,15 @@
         liens.insertBefore(boite, premiereIcone || liens.querySelector(".bouton-nav-commander"));
         // ne pas traduire les libellés FR/EN/עב
         boite.setAttribute("data-no-trad", "");
+        // Sur l'accueil (mobile) : le sélecteur de langue est aussi visible en haut de la page
+        const texteHeros = document.querySelector(".heros-texte");
+        if (texteHeros && !document.querySelector(".langue-accueil")) {
+            const copie = boite.cloneNode(true);
+            copie.classList.add("langue-accueil");
+            copie.addEventListener("click", (e) => { const b = e.target.closest("[data-lang]"); if (b) definir(b.dataset.lang); });
+            texteHeros.insertBefore(copie, texteHeros.firstChild);
+            marquerSelecteur();
+        }
     }
     function marquerSelecteur() {
         document.querySelectorAll(".langue [data-lang]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === courante));
