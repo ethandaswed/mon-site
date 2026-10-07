@@ -1380,13 +1380,26 @@ nav { background: #fff !important; -webkit-backdrop-filter: none !important; bac
 .vue-liste .projet-visuel img { height: 100%; aspect-ratio: auto; min-height: 190px; object-fit: cover; }
 .vue-liste .projet-corps { justify-content: center; padding: 16px 20px; }
 @media (max-width: 600px) {
-    .vues button[data-vue="compact"] { display: none; }
-    .cartes-projets.vue-compact { grid-template-columns: repeat(2, 1fr); }
-    .vue-compact .projet-corps small, .vue-compact .projet-corps .stock, .vue-compact .version, .vue-compact .cadre-poster { display: revert; }
-    .cartes-projets.vue-grande { grid-template-columns: 1fr; }
-    .vue-liste .projet { grid-template-columns: 120px 1fr; }
-    .vue-liste .projet-visuel img { min-height: 140px; }
-    .vue-liste .projet-corps { padding: 12px 14px; }
+    .barre-tri { display: grid; grid-template-columns: 1fr auto; row-gap: 10px; }
+    .barre-tri .vues { grid-column: 1 / -1; display: flex; width: 100%; justify-content: space-between; }
+    .vues button { flex: 1; height: 40px; }
+    .cartes-projets.vue-grande { grid-template-columns: 1fr; gap: 18px; }
+    .cartes-projets.vue-compact { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .vue-compact .projet-corps { padding: 6px 7px 8px; }
+    .vue-compact .projet-corps small, .vue-compact .stock, .vue-compact .version, .vue-compact .cadre-poster, .vue-compact .ajout { display: none; }
+    .vue-compact .projet:hover { transform: none; }
+    .vue-compact .projet-corps h3 { font-size: .78rem; line-height: 1.2; }
+    .vue-compact .projet-corps .prix { font-size: .8rem; }
+    .vue-compact .coeur { transform: scale(.7); transform-origin: top right; top: 4px; right: 4px; }
+    .vue-compact .badge-rupture { font-size: .6rem; padding: 3px 6px; top: 5px; left: 5px; }
+    .vue-liste .projet { grid-template-columns: 112px 1fr; }
+    .vue-liste .projet-visuel img { min-height: 150px; }
+    .vue-liste .projet-corps { padding: 10px 12px; padding-inline-end: 46px; gap: 3px; }
+    .vue-liste .projet-corps small { display: none; }
+    .vue-liste .projet-corps h3 { font-size: 1rem; }
+    .vue-liste .coeur { transform: scale(.75); transform-origin: top right; top: 6px; right: 6px; }
+    .vue-liste .version, .vue-liste .cadre-poster { padding: 7px 8px; font-size: .85rem; }
+    .vue-liste .ajout { padding: 9px 10px; font-size: .92rem; }
 }
 
 /* v41 panier vide enrichi */
