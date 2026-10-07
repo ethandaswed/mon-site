@@ -54,6 +54,14 @@ const CREATIONS = [
 
 const $ = (id) => document.getElementById(id);
 const tr = (fr) => (window.trad ? window.trad(fr) : fr); // traduction (voir langues.js)
+// Commander demande un compte : sinon on envoie la personne le créer, puis on la ramène là où elle était
+const compteConnecte = () => { try { const e = JSON.parse(localStorage.getItem("eg_session")), u = JSON.parse(localStorage.getItem("eg_users") || "{}"); return !!(e && u[e]); } catch { return false; } };
+const exigerCompte = () => {
+    if (compteConnecte()) return false;
+    try { sessionStorage.setItem("eg_retour", location.pathname.split("/").pop() + location.search); } catch { }
+    location.href = "compte.html?commande=1#inscription";
+    return true;
+};
 const lienWhatsApp = (texte) => "https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(texte);
 
 // =====================================================
@@ -154,6 +162,7 @@ function ouvrirCreation(c) {
 
 if (fenetre) {
     $("produit-commander").addEventListener("click", () => {
+        if (exigerCompte()) return;
         const c = creationActive, ch = choixDe(c);
         const texte = ch.v === "poster"
             ? "Bonjour, je suis intéressé par le poster imprimé du tableau " + c.titre + " (" + (ch.cadre ? "avec cadre" : "sans cadre") + ", " + prixPoster(c, ch.cadre) + " ₪). Est-il disponible ?"
@@ -222,7 +231,20 @@ if (bouton) {
         el.className = "message-etat visible " + type;
     };
 
+    if (!compteConnecte()) {
+        const grille = document.querySelector(".commande-grille");
+        if (grille) {
+            grille.hidden = true; if ($("progres")) $("progres").hidden = true;
+            const g = document.createElement("section");
+            g.className = "porte-compte";
+            g.innerHTML = '<h2>Un compte est nécessaire pour commander</h2><p>Créez votre compte gratuit en 30 secondes : vos informations seront enregistrées et vous retrouverez votre historique de commandes.</p><div class="porte-actions"><a class="bouton" href="compte.html?commande=1#inscription" id="porte-creer">Créer un compte</a><a class="bouton contour" href="compte.html?commande=1" id="porte-connexion">J\'ai déjà un compte</a></div>';
+            grille.parentNode.insertBefore(g, grille);
+            const retour = () => { try { sessionStorage.setItem("eg_retour", "commande.html"); } catch { } };
+            g.addEventListener("click", (e) => { if (e.target.closest("a")) retour(); });
+        }
+    }
     bouton.addEventListener("click", () => {
+        if (exigerCompte()) return;
         const f = photo.files[0], style = $("style").value, idee = $("message-commande").value.trim();
         const manque = !f ? "Ajoutez une photo." : !taille.value ? "Choisissez une taille." : !style ? "Choisissez un style." : !idee ? "Décrivez votre idée." : "";
         if (manque) return montrer(erreur, manque, "erreur");
@@ -347,9 +369,11 @@ if (carrousel) {
     const getPrefs = () => ({ ...PREFS0, ...lire(K.prefs, {}) });
     function appliquerPrefs() {
         const p = getPrefs();
-        const sombre = p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+        const terminal = p.theme === "terminal";
+        const sombre = terminal || p.theme === "sombre" || (p.theme === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.body.classList.toggle("sombre", sombre);
         document.documentElement.classList.toggle("sombre", sombre);
+        document.documentElement.classList.toggle("terminal", terminal);
         document.documentElement.classList.toggle("grand", p.texte === "grand");
         document.documentElement.classList.toggle("tres-grand", p.texte === "tres-grand");
         document.documentElement.classList.toggle("contraste", !!p.contraste);
@@ -570,9 +594,8 @@ if (carrousel) {
             '<div class="champ"><label for="c-tel">Téléphone (facultatif)</label><input id="c-tel" type="tel" autocomplete="tel" value="' + esc(u ? u.tel || "" : "") + '"></div>' +
             '<div class="champ"><label for="c-note">Message (facultatif)</label><textarea id="c-note" placeholder="Livraison, remise en main propre, questions..."></textarea></div>' +
             '<p id="c-erreur" class="message-etat" role="alert"></p>' +
-            '<button type="button" class="bouton whatsapp" id="envoyer-commande">Commander sur WhatsApp</button>' +
-            '<button type="button" class="bouton contour" id="vider-panier">Vider le panier</button>' +
-            (u ? "" : '<p class="note">Astuce : <a href="compte.html">créez un compte</a> pour retrouver vos infos et votre historique.</p>') + '</div>';
+            (u ? '<button type="button" class="bouton whatsapp" id="envoyer-commande">Commander sur WhatsApp</button>' : '<div class="porte-compte petite"><strong>Un compte est nécessaire pour commander</strong><p>Créez-le en 30 secondes : votre panier est conservé.</p><div class="porte-actions"><a class="bouton" href="compte.html?commande=1#inscription" data-retour="panier.html">Créer un compte</a><a class="bouton contour" href="compte.html?commande=1" data-retour="panier.html">J\'ai déjà un compte</a></div></div>') +
+            '<button type="button" class="bouton contour" id="vider-panier">Vider le panier</button></div>';
     }
     if (zp) {
         rendrePanier();
@@ -580,6 +603,8 @@ if (carrousel) {
             const r = e.target.closest(".retirer");
             if (r) { const p = getPanier(); p.splice(Number(r.dataset.n), 1); setPanier(p); rendrePanier(); return; }
             if (e.target.id === "vider-panier") { setPanier([]); rendrePanier(); return; }
+            const lc = e.target.closest("[data-retour]"); if (lc) { try { sessionStorage.setItem("eg_retour", lc.dataset.retour); } catch { } return; }
+            if (e.target.id === "envoyer-commande" && exigerCompte()) return;
             if (e.target.id !== "envoyer-commande") return;
             const nom = document.getElementById("c-nom").value.trim(), tel = document.getElementById("c-tel").value.trim(), note = document.getElementById("c-note").value.trim();
             if (!nom) return etat(document.getElementById("c-erreur"), "Indiquez votre nom pour la commande.", "erreur");
@@ -605,7 +630,8 @@ if (carrousel) {
         const u = userCourant();
         if (!u) {
             const ins = mode === "inscription";
-            zc.innerHTML = '<div class="onglets"><button type="button" data-m="connexion"' + (ins ? "" : ' class="actif"') + '>Connexion</button><button type="button" data-m="inscription"' + (ins ? ' class="actif"' : "") + '>Créer un compte</button></div>' +
+            const pourCommander = /[?&]commande=1/.test(location.search);
+            zc.innerHTML = (pourCommander ? '<p class="message-etat visible info-commande">Pour passer commande, connectez-vous ou créez un compte gratuit. Vous reviendrez ensuite directement à votre commande.</p>' : "") + '<div class="onglets"><button type="button" data-m="connexion"' + (ins ? "" : ' class="actif"') + '>Connexion</button><button type="button" data-m="inscription"' + (ins ? ' class="actif"' : "") + '>Créer un compte</button></div>' +
                 '<div class="formulaire">' + (ins ? '<div class="champ"><label for="a-nom">Nom</label><input id="a-nom" type="text" autocomplete="name"></div>' : "") +
                 '<div class="champ"><label for="a-email">E-mail</label><input id="a-email" type="email" autocomplete="email"></div>' +
                 '<div class="champ"><label for="a-mdp">Mot de passe' + (ins ? " (6 caractères minimum)" : "") + '</label><input id="a-mdp" type="password" autocomplete="' + (ins ? "new-password" : "current-password") + '"></div>' +
@@ -625,6 +651,8 @@ if (carrousel) {
                     return etat(msg, "E-mail ou mot de passe incorrect.", "erreur");
                 }
                 ecrire(K.session, email);
+                let retour = null; try { retour = sessionStorage.getItem("eg_retour"); sessionStorage.removeItem("eg_retour"); } catch { }
+                if (retour && /^[a-z0-9_-]+\.html(\?[^#]*)?$/i.test(retour)) { location.href = retour; return; }
                 rendreCompte();
             });
             return;
@@ -705,7 +733,7 @@ if (carrousel) {
             const users = getUsers(); delete users[u.email]; ecrire(K.users, users); localStorage.removeItem(K.session); rendreCompte();
         });
     }
-    if (zc) rendreCompte();
+    if (zc) rendreCompte(location.hash === "#inscription" ? "inscription" : "connexion");
 
     // Page Paramètres (sans compte : tout est gardé sur l'appareil)
     const zr = document.getElementById("zone-parametres");
@@ -717,7 +745,7 @@ if (carrousel) {
         const inter = (id, titre, aide, on) => '<label class="reglage" for="' + id + '"><span class="reglage-txt"><strong>' + titre + '</strong><small>' + aide + '</small></span><input type="checkbox" role="switch" class="interrupteur" id="' + id + '"' + (on ? " checked" : "") + '></label>';
         zr.innerHTML =
             '<section class="carte-reglages"><h2>Apparence</h2>' +
-            ligne("Thème", "Automatique suit le réglage de votre téléphone ou de votre ordinateur.", seg("theme", [["clair", "Clair", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'], ["sombre", "Sombre", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'], ["auto", "Automatique", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>']], pr.theme)) +
+            ligne("Thème", "Automatique suit le réglage de votre téléphone ou de votre ordinateur.", seg("theme", [["clair", "Clair", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'], ["sombre", "Sombre", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'], ["auto", "Automatique", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>'], ["terminal", "Terminal", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg>']], pr.theme)) +
             ligne("Taille du texte", "", seg("texte", [["normal", "Normale"], ["grand", "Grande"], ["tres-grand", "Très grande"]], pr.texte)) + '</section>' +
             '<section class="carte-reglages"><h2>Mouvement</h2>' +
             inter("r-anim", "Animations activées", "Effets d\'apparition et survols animés.", pr.anim) +

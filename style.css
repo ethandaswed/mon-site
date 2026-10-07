@@ -1278,3 +1278,32 @@ html.menu-burger .menu-mobile { margin-left: 0; margin-right: 0; }
 html:not(.menu-pret) nav .liens, html:not(.menu-pret) .barre-icones, html:not(.menu-pret) .menu-mobile { visibility: hidden; animation: eg-montre 0s 1.6s forwards; }
 @media (max-width: 350px) { .barre-icones { gap: 0; } .barre-icones .icone-nav { width: 30px; height: 30px; } .barre-icones .icone-nav svg { width: 18px; height: 18px; } html.menu-burger .logo { font-size: 1.02rem; } html.menu-burger nav { padding-left: 10px; padding-right: 4px; } }
 html.menu-burger .liens.ouvert { align-items: stretch; justify-content: flex-start; } html.menu-burger .liens.ouvert > a:not(.icone-nav) { text-align: start; }
+
+/* ===== v31 : thème « Terminal » (écran noir, texte vert, police à chasse fixe) ===== */
+html.terminal { --rouge: #39ff7a; --rouge-fonce: #22c75a; --encre: #b6ffcf; --gris: #5fd88a; --ligne: #164a2a; --fond-doux: #07140c; --police: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+html.terminal body, html.terminal body * { font-family: var(--police) !important; }
+html.terminal body { background: #020a05; color: #b6ffcf; }
+html.terminal nav, html.terminal .liens, html.terminal .fond-doux, html.terminal .section, html.terminal .pied { background-color: #020a05; }
+html.terminal nav { border-bottom: 1px solid #164a2a; backdrop-filter: none; }
+html.terminal .liens a, html.terminal .barre-icones .icone-nav, html.terminal .logo { color: #b6ffcf; }
+html.terminal .logo::before { content: "> "; color: #39ff7a; }
+html.terminal .logo::after { content: "_"; color: #39ff7a; animation: eg-curseur 1s steps(1) infinite; }
+@keyframes eg-curseur { 50% { opacity: 0; } }
+html.terminal h1, html.terminal h2, html.terminal h3 { color: #39ff7a; text-shadow: 0 0 12px rgba(57,255,122,.35); }
+html.terminal .bouton, html.terminal .bouton-nav-commander, html.terminal .tn-voir { background: #39ff7a; color: #021a0a !important; border-radius: 4px; }
+html.terminal .bouton.contour { background: transparent; color: #39ff7a !important; border: 1px solid #39ff7a; }
+html.terminal [class*="carte"], html.terminal .creation, html.terminal .reglage, html.terminal dialog, html.terminal #panneau-notif, html.terminal #recherche-globale, html.terminal #toast-notif { background: #04110a; border-color: #164a2a; border-radius: 6px; color: #b6ffcf; }
+html.terminal input, html.terminal select, html.terminal textarea { background: #020a05; color: #b6ffcf; border-color: #164a2a; border-radius: 4px; }
+html.terminal a { color: #39ff7a; }
+html.terminal .heros, html.terminal .heros-in { background: #020a05; }
+html.sans-transition.terminal .logo::after { animation: none; }
+
+/* ===== v32 : compte obligatoire pour commander ===== */
+.porte-compte { max-width: 560px; margin: 48px auto; padding: 36px 28px; text-align: center; background: var(--fond-doux); border: 1px solid var(--ligne); border-radius: 20px; }
+.porte-compte h2 { margin: 0 0 10px; font-size: 1.5rem; }
+.porte-compte p { margin: 0 0 20px; color: var(--gris); line-height: 1.55; }
+.porte-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.porte-compte.petite { margin: 8px 0 12px; padding: 20px 18px; text-align: start; max-width: none; border-radius: 16px; }
+.porte-compte.petite p { margin: 4px 0 14px; }
+.info-commande { margin-bottom: 18px; }
+.commande-grille[hidden], #progres[hidden] { display: none !important; }

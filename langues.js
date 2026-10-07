@@ -16,6 +16,12 @@
 
     // ---------- Traductions : [français, anglais, hébreu] ----------
     const DICO = [
+        ["Un compte est nécessaire pour commander", "An account is required to order", "נדרש חשבון כדי להזמין"],
+        ["Créez votre compte gratuit en 30 secondes : vos informations seront enregistrées et vous retrouverez votre historique de commandes.", "Create your free account in 30 seconds: your details will be saved and you'll find your order history.", "פתחו חשבון חינם תוך 30 שניות: הפרטים שלכם יישמרו ותמצאו את היסטוריית ההזמנות."],
+        ["J'ai déjà un compte", "I already have an account", "יש לי כבר חשבון"],
+        ["Créez-le en 30 secondes : votre panier est conservé.", "Create it in 30 seconds: your cart is kept.", "פתחו אותו תוך 30 שניות: העגלה שלכם נשמרת."],
+        ["Pour passer commande, connectez-vous ou créez un compte gratuit. Vous reviendrez ensuite directement à votre commande.", "To place an order, log in or create a free account. You'll then come straight back to your order.", "כדי להזמין, התחברו או פתחו חשבון חינם. לאחר מכן תחזרו ישר להזמנה."],
+        ["Terminal", "Terminal", "טרמינל"],
         ["Toutes", "All", "הכול"],
         ["Non lues", "Unread", "שלא נקראו"],
         ["Tout marquer comme lu", "Mark all as read", "סימון הכול כנקרא"],
