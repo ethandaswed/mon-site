@@ -1334,9 +1334,6 @@ html.menu-burger .langue-accueil { display: inline-flex !important; }
 [hidden] { display: none !important; }
 
 /* ===== v38 : détails ===== */
-/* prix en couleur neutre (le rouge pouvait faire croire que c'est cher) */
-.format-prix strong, .recap-prix strong, .ligne-prix, .tuile .tp, .tarifs td:last-child { color: var(--encre); }
-.sombre .format-prix strong, .sombre .legende span, .sombre .ligne-prix, .sombre .tuile .tp, .sombre .recap-prix strong { color: #f2f2f2; }
 /* mode sombre : la page / catégorie choisie ressort en rouge comme en mode clair */
 .sombre .liens a[aria-current="page"], .sombre .liens .icone-nav[aria-current="page"], .sombre .barre-icones .icone-nav[aria-current="page"] { color: var(--rouge); }
 .sombre .legal-onglets a[aria-current="true"], .sombre .legal-onglets a.actif { background: var(--rouge); color: #fff; }
@@ -1357,3 +1354,54 @@ html.menu-burger .sombre .liens > a[aria-current="page"]:not(.icone-nav) { color
 /* barre du haut opaque : le contenu ne passe plus en transparence derrière elle */
 nav { background: #fff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 .sombre nav { background: #161616 !important; }
+
+/* ===== v39 : mobile : nom au-dessus du prix, bien alignés à gauche (plus de décalage quand le nom passe sur 2 lignes) ===== */
+@media (max-width: 600px) {
+    .legende { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2px; text-align: left; }
+    html[dir="rtl"] .legende { align-items: flex-start; text-align: start; }
+    .legende strong { display: block; width: 100%; line-height: 1.25; overflow-wrap: anywhere; }
+    .legende span { display: block; }
+}
+
+/* ===== v40 : choix de l'affichage des créations ===== */
+.vues { display: inline-flex; gap: 2px; padding: 3px; border-radius: 12px; background: var(--fond-doux); }
+.vues button { display: grid; place-items: center; width: 38px; height: 34px; border: 0; border-radius: 9px; background: none; color: var(--gris); cursor: pointer; }
+.vues button:hover { color: var(--encre); }
+.vues button[aria-pressed="true"] { background: var(--rouge); color: #fff; }
+.cartes-projets.vue-grande { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px; }
+.cartes-projets.vue-compact { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.vue-compact .projet-corps { padding: 10px; gap: 3px; }
+.vue-compact .projet-corps h3 { font-size: .98rem; }
+.vue-compact .projet-corps small, .vue-compact .projet-corps .stock, .vue-compact .version, .vue-compact .cadre-poster { display: none; }
+.vue-compact .projet-corps .prix { font-size: 1rem; }
+.cartes-projets.vue-liste { grid-template-columns: 1fr; gap: 14px; }
+.vue-liste .projet { display: grid; grid-template-columns: 190px 1fr; align-items: stretch; }
+.vue-liste .projet-visuel { height: 100%; }
+.vue-liste .projet-visuel img { height: 100%; aspect-ratio: auto; min-height: 190px; object-fit: cover; }
+.vue-liste .projet-corps { justify-content: center; padding: 16px 20px; }
+@media (max-width: 600px) {
+    .vues button[data-vue="compact"] { display: none; }
+    .cartes-projets.vue-compact { grid-template-columns: repeat(2, 1fr); }
+    .vue-compact .projet-corps small, .vue-compact .projet-corps .stock, .vue-compact .version, .vue-compact .cadre-poster { display: revert; }
+    .cartes-projets.vue-grande { grid-template-columns: 1fr; }
+    .vue-liste .projet { grid-template-columns: 120px 1fr; }
+    .vue-liste .projet-visuel img { min-height: 140px; }
+    .vue-liste .projet-corps { padding: 12px 14px; }
+}
+
+/* v41 panier vide enrichi */
+.panier-vide h2 { margin: 0; font-size: 1.4rem; }
+.panier-vide p { max-width: 420px; margin: 0 0 8px; }
+.panier-vide-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.panier-vide-points { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: center; margin: 18px 0 6px; padding: 0; color: var(--gris); font-size: .95rem; }
+.panier-vide-points li { display: flex; align-items: center; gap: 6px; }
+.panier-vide-titre { margin: 26px 0 10px; font-size: 1.1rem; }
+.panier-vide-sug { display: grid; grid-template-columns: repeat(3, minmax(0, 150px)); gap: 14px; justify-content: center; width: 100%; }
+.panier-vide-sug a { display: grid; gap: 4px; text-decoration: none; color: inherit; text-align: center; }
+.panier-vide-sug img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
+.panier-vide-sug span { font-weight: 600; font-size: .92rem; }
+.panier-vide-sug small { color: var(--rouge, #c0392b); font-weight: 600; }
+@media (max-width: 480px) { .panier-vide-sug { grid-template-columns: repeat(3, 1fr); gap: 8px; } .panier-vide-sug span { font-size: .8rem; } }
+.bouton.secondaire { background: transparent; color: var(--rouge); box-shadow: inset 0 0 0 2px var(--rouge); }
+.bouton.secondaire:hover { background: var(--rouge); color: #fff; }
+.panier-vide-actions .bouton { font-size: 1rem; padding: 12px 22px; }

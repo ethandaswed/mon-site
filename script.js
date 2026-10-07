@@ -619,7 +619,11 @@ if (carrousel) {
     function rendrePanier() {
         const p = getPanier(), u = userCourant();
         if (!p.length) {
-            zp.innerHTML = '<div class="panier-vide"><span class="panier-vide-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 11.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L21.5 8H6"/></svg></span><p>Votre panier est vide.</p><a class="bouton" href="creations.html">Voir les créations</a></div>';
+            const sug = CREATIONS.filter((c) => c.dispo).slice(0, 3);
+            const pt = (ico, t) => '<li><span aria-hidden="true">' + ico + '</span>' + t + '</li>';
+            zp.innerHTML = '<div class="panier-vide"><span class="panier-vide-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 11.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L21.5 8H6"/></svg></span><h2>Votre panier est vide</h2><p>Chaque tableau est peint à la main, une pièce unique pour votre intérieur.</p><div class="panier-vide-actions"><a class="bouton" href="creations.html">Voir les créations</a><a class="bouton secondaire" href="commande.html">Commande sur mesure</a></div>' +
+                '<ul class="panier-vide-points">' + pt("🎨", "Peint à la main") + pt("🖼️", "Plusieurs tailles et cadres") + pt("💬", "Commande simple sur WhatsApp") + '</ul>' +
+                (sug.length ? '<h3 class="panier-vide-titre">Vous pourriez aimer</h3><div class="panier-vide-sug">' + sug.map((c) => '<a href="creations.html"><img src="./' + esc(c.fichier) + '" alt="' + esc(c.titre) + '" loading="lazy"><span>' + esc(c.titre) + '</span><small>' + esc(c.prix) + '</small></a>').join("") + '</div>' : '') + '</div>';
             return;
         }
         const total = p.reduce((s, i) => s + i.prix, 0);
@@ -932,6 +936,18 @@ if (carrousel) {
     ["tri", "filtre-prix", "filtre-dispo"].forEach((id) => $(id).addEventListener("change", afficher));
     $("reinitialiser").addEventListener("click", () => { Object.assign(f, { q: "", univers: "", tech: "" }); $("recherche").value = ""; $("filtre-prix").value = ""; $("filtre-dispo").checked = false; $("tri").value = "pertinence"; afficher(); });
     if ($("fenetre-produit")) $("fenetre-produit").addEventListener("close", afficher);
+    // Choix de l'affichage : grandes cartes, grille, compact, liste (mémorisé sur cet appareil)
+    const zoneCartes = document.querySelector(".cartes-projets"), boutonsVue = document.querySelectorAll(".vues [data-vue]");
+    const appliquerVue = (v) => {
+        if (!["grande", "grille", "compact", "liste"].includes(v)) v = "grille";
+        ["grande", "grille", "compact", "liste"].forEach((x) => zoneCartes.classList.toggle("vue-" + x, x === v));
+        boutonsVue.forEach((b) => b.setAttribute("aria-pressed", b.dataset.vue === v));
+    };
+    let vueSauvee = "grille"; try { vueSauvee = localStorage.getItem("eg_vue") || "grille"; } catch { }
+    if (zoneCartes) {
+        appliquerVue(vueSauvee);
+        boutonsVue.forEach((b) => b.addEventListener("click", () => { appliquerVue(b.dataset.vue); try { localStorage.setItem("eg_vue", b.dataset.vue); } catch { } }));
+    }
     afficher();
 })();
 

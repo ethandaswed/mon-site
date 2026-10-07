@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
     <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");if(p.theme==="sombre"||(p.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("sombre");if(p.texte==="grand")document.documentElement.classList.add("grand");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
     <script>try{if(innerWidth<=800)document.documentElement.classList.add("menu-burger")}catch(e){}try{var q=JSON.parse(localStorage.getItem("eg_prefs")||"{}"),c=document.documentElement.classList;if(q.contraste)c.add("contraste");if(q.police==="lisible")c.add("police-lisible");if(q.liens)c.add("liens-soulignes");if(q.flottants===false)c.add("sans-flottants");if(q.texte==="tres-grand")c.add("tres-grand")}catch(e){}</script>
-    <link rel="stylesheet" href="style.css?v=59">
+    <link rel="stylesheet" href="style.css?v=62">
 </head>
 <body>
 <a href="#contenu" class="lien-evitement">Aller au contenu</a>
@@ -49,7 +49,7 @@
             <button type="button" class="lien-danger" id="reinitialiser">Réinitialiser les filtres</button>
         </aside>
         <div class="resultats">
-            <div class="barre-tri"><p id="nb-resultats" aria-live="polite"></p><label for="tri">Trier par <select id="tri"><option value="pertinence">Sélection</option><option value="prix_asc">Prix croissant</option><option value="prix_desc">Prix décroissant</option><option value="nom">Nom (A à Z)</option><option value="dispo">Disponibles d'abord</option></select></label></div>
+            <div class="barre-tri"><p id="nb-resultats" aria-live="polite"></p><label for="tri">Trier par <select id="tri"><option value="pertinence">Sélection</option><option value="prix_asc">Prix croissant</option><option value="prix_desc">Prix décroissant</option><option value="nom">Nom (A à Z)</option><option value="dispo">Disponibles d'abord</option></select></label><div class="vues" role="group" aria-label="Affichage"><button type="button" data-vue="grande" aria-pressed="false" aria-label="Grandes cartes" title="Grandes cartes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="8" rx="1.5"/><rect x="3" y="13" width="18" height="8" rx="1.5"/></svg></button><button type="button" data-vue="grille" aria-pressed="true" aria-label="Grille" title="Grille"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></button><button type="button" data-vue="compact" aria-pressed="false" aria-label="Compact" title="Compact"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="9.5" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="3" y="9.5" width="5" height="5" rx="1"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><rect x="16" y="9.5" width="5" height="5" rx="1"/><rect x="3" y="16" width="5" height="5" rx="1"/><rect x="9.5" y="16" width="5" height="5" rx="1"/><rect x="16" y="16" width="5" height="5" rx="1"/></svg></button><button type="button" data-vue="liste" aria-pressed="false" aria-label="Liste" title="Liste"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg></button></div></div>
             <div class="cartes-projets"></div>
         </div>
     </div>
@@ -81,8 +81,8 @@
     <p class="pied-liens"><a href="legal.html#mentions">Mentions légales</a><a href="legal.html#confidentialite">Confidentialité</a><a href="legal.html#conditions">Conditions de vente</a><a href="parametres.html">Paramètres</a></p>
     <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=59"></script>
-<script src="extras.js?v=59"></script>
-<script src="langues.js?v=59"></script>
+<script src="script.js?v=62"></script>
+<script src="extras.js?v=62"></script>
+<script src="langues.js?v=62"></script>
 </body>
 </html>

@@ -16,6 +16,17 @@
 
     // ---------- Traductions : [français, anglais, hébreu] ----------
     const DICO = [
+        ["Votre panier est vide", "Your cart is empty", "העגלה שלכם ריקה"],
+        ["Chaque tableau est peint à la main, une pièce unique pour votre intérieur.", "Every painting is hand-painted, a unique piece for your home.", "כל ציור מצויר ביד, יצירה ייחודית לבית שלכם."],
+        ["Commande sur mesure", "Custom order", "הזמנה בהתאמה אישית"],
+        ["Peint à la main", "Hand-painted", "מצויר ביד"],
+        ["Plusieurs tailles et cadres", "Several sizes and frames", "מגוון גדלים ומסגרות"],
+        ["Commande simple sur WhatsApp", "Easy ordering on WhatsApp", "הזמנה פשוטה בוואטסאפ"],
+        ["Vous pourriez aimer", "You might like", "אולי יאהבו גם"],
+        ["Grandes cartes", "Large cards", "כרטיסים גדולים"],
+        ["Grille", "Grid", "רשת"],
+        ["Compact", "Compact", "קומפקטי"],
+        ["Liste", "List", "רשימה"],
         ["Éditeur du site", "Site publisher", "מפרסם האתר"],
         ["Ethan Gallery, atelier de tableaux et de portraits peints et dessinés à la main.", "Ethan Gallery, a studio of hand-painted and hand-drawn paintings and portraits.", "Ethan Gallery, סטודיו לציורים ופורטרטים מצוירים ביד."],
         ["Contact :", "Contact:", "יצירת קשר:"],
