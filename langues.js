@@ -16,6 +16,51 @@
 
     // ---------- Traductions : [français, anglais, hébreu] ----------
     const DICO = [
+        ["Éditeur du site", "Site publisher", "מפרסם האתר"],
+        ["Ethan Gallery, atelier de tableaux et de portraits peints et dessinés à la main.", "Ethan Gallery, a studio of hand-painted and hand-drawn paintings and portraits.", "Ethan Gallery, סטודיו לציורים ופורטרטים מצוירים ביד."],
+        ["Contact :", "Contact:", "יצירת קשר:"],
+        ["WhatsApp :", "WhatsApp:", "וואטסאפ:"],
+        ["Instagram :", "Instagram:", "אינסטגרם:"],
+        ["Propriété intellectuelle", "Intellectual property", "קניין רוחני"],
+        ["Les tableaux, dessins, photographies, vidéos, textes et le logo présents sur ce site sont la propriété de leur auteur. Toute reproduction, copie ou utilisation, même partielle, sans autorisation écrite préalable est interdite. Les posters imprimés sont des reproductions des œuvres de l'auteur, vendues pour un usage personnel.", "The paintings, drawings, photographs, videos, texts and logo on this site are the property of their author. Any reproduction, copying or use, even partial, without prior written permission is prohibited. The printed posters are reproductions of the author's works, sold for personal use.", "הציורים, הרישומים, הצילומים, הסרטונים, הטקסטים והלוגו המופיעים באתר זה הם רכושו של יוצרם. אסור לשכפל, להעתיק או להשתמש בהם, אפילו באופן חלקי, ללא אישור בכתב מראש. הפוסטרים המודפסים הם הדפסים של יצירות היוצר, והם נמכרים לשימוש אישי בלבד."],
+        ["Les personnages et univers représentés (mangas, films, séries, jeux) appartiennent à leurs ayants droit respectifs. Les tableaux sont des créations artistiques inspirées de ces univers.", "The characters and universes depicted (manga, films, series, games) belong to their respective rights holders. The paintings are artistic creations inspired by these universes.", "הדמויות והעולמות המוצגים (מנגה, סרטים, סדרות, משחקים) שייכים לבעלי הזכויות בהם. הציורים הם יצירות אמנותיות בהשראת עולמות אלה."],
+        ["Responsabilité", "Liability", "אחריות"],
+        ["Le soin apporté aux photos permet de bien présenter chaque tableau, mais les couleurs peuvent légèrement varier selon votre écran. Les liens vers des sites externes (WhatsApp, Instagram) ne sont pas sous le contrôle de l'éditeur.", "Care is taken with the photos to present each painting well, but colors may vary slightly depending on your screen. Links to external sites (WhatsApp, Instagram) are not under the publisher's control.", "הושקעה תשומת לב בצילומים כדי להציג כל ציור בצורה טובה, אך הצבעים עשויים להיראות מעט שונים בהתאם למסך שלכם. הקישורים לאתרים חיצוניים (וואטסאפ, אינסטגרם) אינם בשליטת המפרסם."],
+        ["Politique de confidentialité", "Privacy policy", "מדיניות פרטיות"],
+        ["En bref : ce site ne vous suit pas. Il n'utilise ni publicité, ni cookies de suivi, ni outil d'analyse de comportement.", "In short: this site does not track you. It uses no advertising, no tracking cookies and no behavior-analysis tools.", "בקצרה: האתר אינו עוקב אחריכם. אין בו פרסומות, עוגיות מעקב או כלי ניתוח התנהגות."],
+        ["Ce qui est enregistré sur votre appareil", "What is stored on your device", "מה נשמר במכשיר שלכם"],
+        ["Pour fonctionner, le site garde dans votre navigateur (« stockage local ») : votre panier, vos favoris, vos réglages (thème, taille du texte, langue…) et, si vous en créez un, votre compte. Ces informations restent sur votre appareil : elles ne sont pas envoyées à un serveur. Vous pouvez tout télécharger ou tout effacer à tout moment dans les paramètres du site.", "To work, the site keeps in your browser (“local storage”): your cart, your favorites, your settings (theme, text size, language…) and, if you create one, your account. This information stays on your device: it is not sent to a server. You can download or erase everything at any time in the site settings.", "כדי לפעול, האתר שומר בדפדפן שלכם (״אחסון מקומי״): את העגלה, את המועדפים, את ההגדרות (ערכת נושא, גודל טקסט, שפה…) ואם פתחתם חשבון, גם אותו. המידע הזה נשאר במכשיר שלכם ואינו נשלח לשרת. אפשר להוריד או למחוק הכול בכל עת בהגדרות האתר."],
+        ["Ouvrir les paramètres", "Open settings", "פתיחת ההגדרות"],
+        ["Ce que vous m'envoyez", "What you send me", "מה שאתם שולחים לי"],
+        ["Commande :", "Order:", "הזמנה:"],
+        ["le message est préparé sur le site puis envoyé par vous sur WhatsApp. Il contient les informations de votre commande (tableau, format, option cadre, message). Les photos que vous envoyez servent uniquement à réaliser votre tableau.", "the message is prepared on the site and then sent by you on WhatsApp. It contains your order information (painting, format, frame option, message). The photos you send are used only to make your painting.", "ההודעה מוכנה באתר ואתם שולחים אותה בוואטסאפ. היא כוללת את פרטי ההזמנה (ציור, גודל, אפשרות מסגרת, הודעה). התמונות שאתם שולחים משמשות אך ורק ליצירת הציור שלכם."],
+        ["Formulaire de contact :", "Contact form:", "טופס יצירת קשר:"],
+        ["votre nom, votre e-mail et votre message sont transmis à l'éditeur via le service Formspree, uniquement pour vous répondre.", "your name, email and message are sent to the publisher through the Formspree service, only to reply to you.", "השם, כתובת האימייל וההודעה שלכם מועברים למפרסם באמצעות שירות Formspree, אך ורק כדי להשיב לכם."],
+        ["Services extérieurs", "External services", "שירותים חיצוניים"],
+        ["Polices Google Fonts :", "Google Fonts:", "גופני Google Fonts:"],
+        ["le chargement des polices de caractères transmet votre adresse IP à Google.", "loading the fonts sends your IP address to Google.", "טעינת הגופנים מעבירה את כתובת ה-IP שלכם ל-Google."],
+        ["WhatsApp et Instagram :", "WhatsApp and Instagram:", "וואטסאפ ואינסטגרם:"],
+        ["si vous cliquez sur ces liens, vous quittez le site ; leurs propres règles de confidentialité s'appliquent.", "if you click on these links, you leave the site; their own privacy rules apply.", "אם תלחצו על הקישורים האלה, תעזבו את האתר; חלים עליהם כללי הפרטיות שלהם."],
+        ["Statistiques de visite :", "Visit statistics:", "סטטיסטיקת ביקורים:"],
+        ["le site mesure le nombre de visites avec un outil respectueux de la vie privée, sans cookie et sans profil individuel.", "the site counts visits with a privacy-friendly tool, with no cookies and no individual profile.", "האתר סופר ביקורים בכלי ששומר על הפרטיות, ללא עוגיות וללא פרופיל אישי."],
+        ["Conservation et vos droits", "Retention and your rights", "שמירת מידע וזכויותיכם"],
+        ["Les messages de commande et de contact sont conservés le temps nécessaire à la réalisation et au suivi de votre commande. Vous pouvez demander à tout moment l'accès à vos données, leur correction ou leur suppression en me contactant (voir les mentions légales).", "Order and contact messages are kept for as long as needed to carry out and follow up on your order. You can ask at any time for access to your data, or for its correction or deletion, by contacting me (see the legal notice).", "הודעות ההזמנה ויצירת הקשר נשמרות למשך הזמן הנדרש לביצוע ההזמנה ולמעקב אחריה. אפשר לבקש בכל עת גישה למידע שלכם, תיקון שלו או מחיקתו, באמצעות יצירת קשר איתי (ראו את ההצהרה המשפטית)."],
+        ["Les produits", "Products", "המוצרים"],
+        ["Tableaux originaux :", "Original paintings:", "ציורי מקור:"],
+        ["chaque original est une pièce unique, faite à la main. Une fois vendu, il n'est plus disponible.", "each original is a unique, handmade piece. Once sold, it is no longer available.", "כל ציור מקור הוא יצירה ייחודית שנעשתה ביד. לאחר שנמכר, הוא כבר אינו זמין."],
+        ["Posters imprimés :", "Printed posters:", "פוסטרים מודפסים:"],
+        ["reproduction d'un tableau de la galerie, avec ou sans cadre.", "a reproduction of a painting from the gallery, with or without a frame.", "הדפס של ציור מהגלריה, עם מסגרת או בלעדיה."],
+        ["Tableaux sur commande :", "Custom paintings:", "ציורים בהזמנה אישית:"],
+        ["réalisés d'après votre photo et votre idée, dans le format de votre choix.", "made from your photo and your idea, in the size of your choice.", "נעשים לפי התמונה והרעיון שלכם, בגודל לבחירתכם."],
+        ["Les prix sont indiqués en shekels (₪). Pour un tableau sur commande, le prix affiché est une estimation selon la taille et le style : le prix final vous est confirmé sur WhatsApp avant que je commence.", "Prices are shown in shekels (₪). For a custom painting, the displayed price is an estimate based on size and style: the final price is confirmed to you on WhatsApp before I start.", "המחירים מוצגים בשקלים (₪). בציור בהזמנה אישית המחיר המוצג הוא הערכה לפי הגודל והסגנון: המחיר הסופי יאושר לכם בוואטסאפ לפני שאתחיל."],
+        ["Une commande est prise en compte après confirmation, par WhatsApp, de la disponibilité et du prix. L'ajout au panier ou l'envoi du message ne vaut pas encore commande ferme.", "An order is taken into account after availability and price are confirmed on WhatsApp. Adding to the cart or sending the message is not yet a firm order.", "הזמנה נחשבת לאחר שהזמינות והמחיר אושרו בוואטסאפ. הוספה לעגלה או שליחת ההודעה אינן מהוות עדיין הזמנה סופית."],
+        ["Paiement et livraison", "Payment and delivery", "תשלום ומשלוח"],
+        ["Le mode de paiement et la livraison (ou le retrait) sont convenus ensemble sur WhatsApp avant l'envoi.", "The payment method and delivery (or pickup) are agreed together on WhatsApp before dispatch.", "אמצעי התשלום והמשלוח (או האיסוף) מתואמים יחד בוואטסאפ לפני השליחה."],
+        ["Tableaux faits main", "Handmade paintings", "ציורים בעבודת יד"],
+        ["Chaque tableau étant réalisé à la main, de légères différences avec les photos ou avec l'aperçu sont normales. Pour un tableau sur commande, je vous tiens au courant de l'avancement et vous pouvez me faire part de vos remarques avant la finition.", "As each painting is made by hand, slight differences from the photos or the preview are normal. For a custom painting, I keep you updated on progress and you can share your comments before the finishing touches.", "מכיוון שכל ציור נעשה ביד, הבדלים קלים מהתמונות או מהתצוגה המקדימה הם דבר רגיל. בציור בהזמנה אישית אעדכן אתכם בהתקדמות, ותוכלו להעיר לפני הגימור."],
+        ["Annulation et retours", "Cancellation and returns", "ביטול והחזרות"],
+        ["Un tableau sur commande est réalisé sur mesure : une fois commencé, il ne peut en principe ni être annulé, ni repris, ni échangé. Pour les autres produits, ou en cas de problème avec votre commande, contactez-moi rapidement : nous trouverons une solution ensemble.", "A custom painting is made to measure: once started, it can in principle be neither cancelled, taken back nor exchanged. For other products, or if there is a problem with your order, contact me quickly: we will find a solution together.", "ציור בהזמנה אישית נעשה במידה: לאחר שהתחלתי לעבוד עליו, ככלל אי אפשר לבטל אותו, להחזיר אותו או להחליף אותו. במוצרים האחרים, או אם יש בעיה עם ההזמנה, פנו אליי במהירות ונמצא פתרון ביחד."],
+        ["Dernière mise à jour : 7 octobre 2026.", "Last updated: 7 October 2026.", "עודכן לאחרונה: 7 באוקטובר 2026."],
         ["Un compte est nécessaire pour commander", "An account is required to order", "נדרש חשבון כדי להזמין"],
         ["Créez votre compte gratuit en 30 secondes : vos informations seront enregistrées et vous retrouverez votre historique de commandes.", "Create your free account in 30 seconds: your details will be saved and you'll find your order history.", "פתחו חשבון חינם תוך 30 שניות: הפרטים שלכם יישמרו ותמצאו את היסטוריית ההזמנות."],
         ["J'ai déjà un compte", "I already have an account", "יש לי כבר חשבון"],
@@ -523,6 +568,9 @@
     // ---------- Phrases avec nombre ou nom variable ----------
     // Chaque motif reçoit le texte français et renvoie [anglais, hébreu] (ou null).
     const MOTIFS = [
+        [/^Responsable de la publication : (.+)$/, (m) => ["Publisher: " + m[1], "אחראי על הפרסום: " + m[1]]],
+        [/^Adresse : (.+)$/, (m) => ["Address: " + m[1], "כתובת: " + m[1]]],
+        [/^Hébergeur du site : (.+)$/, (m) => ["Site host: " + m[1], "מארח האתר: " + m[1]]],
         [/^(.+) · (Avec cadre|Sans cadre)$/, (m) => [T(m[1], "en") + " · " + T(m[2], "en"), T(m[1], "he") + " · " + T(m[2], "he")]],
         [/^Exemple : (.+)$/, (m) => ["Example: " + T(m[1], "en"), "דוגמה: " + T(m[1], "he")]],
         [/^Note : (\d) sur 5$/, (m) => ["Rating: " + m[1] + " out of 5", "דירוג: " + m[1] + " מתוך 5"]],
@@ -570,7 +618,7 @@
         if (h === "Ethan Gallery" || !/[\u0590-\u05FF]/.test(h)) return h;
         h = h.replace(/Ethan Gallery/g, "גלריית איתן");
         // les derniers mots latins (WhatsApp, @pseudo, e-mail) sont isolés pour que le sens de lecture ne s'inverse pas
-        return h.replace(/[@A-Za-z][A-Za-z0-9_.@\-]*/g, "\u2066$&\u2069");
+        return h.replace(/[@A-Za-z][A-Za-z0-9_.@\-]*(?: [A-Za-z][A-Za-z0-9_.\-]*)*/g, "\u2066$&\u2069");
     }
     function T0(fr, lang) {
         if (!fr || lang === "fr") return fr;

@@ -1353,3 +1353,7 @@ html.menu-burger .sombre .liens > a[aria-current="page"]:not(.icone-nav) { color
 /* mentions légales : les onglets ne suivent plus le défilement */
 .legal-onglets { position: static; top: auto; padding: 0; background: none; }
 .bouton[href*="instagram.com"], .sombre .bouton[href*="instagram.com"], .bouton.contour[href*="instagram.com"] { background: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 45%, #6228d7 100%) !important; color: #fff !important; border-color: transparent !important; }
+
+/* barre du haut opaque : le contenu ne passe plus en transparence derrière elle */
+nav { background: #fff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.sombre nav { background: #161616 !important; }
