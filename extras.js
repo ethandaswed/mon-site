@@ -100,7 +100,7 @@ const NOTIFICATIONS = [];
     if (sectionVideos && VIDEOS.length) {
         sectionVideos.querySelector(".videos-grille").innerHTML = VIDEOS.map((v) =>
             '<figure class="video-carte"><video controls playsinline preload="metadata"' + (v.affiche ? ' poster="./' + esc(v.affiche) + '"' : "") +
-            ' src="./' + esc(v.fichier) + '#t=0.1"></video>' + (v.titre ? "<figcaption>" + esc(v.titre) + "</figcaption>" : "") + "</figure>").join("");
+            ' src="./' + esc(v.fichier) + '#t=0.1"></video></figure>').join("");
         // une seule vidéo à la fois
         sectionVideos.addEventListener("play", (e) => { sectionVideos.querySelectorAll("video").forEach((x) => { if (x !== e.target) x.pause(); }); }, true);
         sectionVideos.hidden = false;

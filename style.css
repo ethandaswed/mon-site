@@ -1418,3 +1418,28 @@ nav { background: #fff !important; -webkit-backdrop-filter: none !important; bac
 .bouton.secondaire { background: transparent; color: var(--rouge); box-shadow: inset 0 0 0 2px var(--rouge); }
 .bouton.secondaire:hover { background: var(--rouge); color: #fff; }
 .panier-vide-actions .bouton { font-size: 1rem; padding: 12px 22px; }
+
+/* v42 vidéos plus jolies + grille mobile 2 colonnes */
+#videos { background: linear-gradient(180deg, var(--fond-doux), transparent); }
+#videos .bloc h2 { text-align: center; }
+#videos .intro-bloc { text-align: center; max-width: 520px; margin-inline: auto; }
+.videos-grille { grid-template-columns: repeat(auto-fit, minmax(190px, 230px)); gap: 22px; }
+.video-carte { padding: 6px; border-radius: 24px; background: var(--carte-claire, #fff); border: 1px solid var(--ligne); box-shadow: 0 24px 44px -28px rgba(0,0,0,.5); transition: transform .25s, box-shadow .25s; }
+.video-carte:hover { transform: translateY(-6px); }
+.video-carte video { border-radius: 18px; box-shadow: none; }
+.sombre .video-carte { background: #1e1e1e; }
+@media (max-width: 700px) {
+    .videos-grille { display: flex; justify-content: flex-start; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 20px 18px; margin-inline: -20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .videos-grille::-webkit-scrollbar { display: none; }
+    .video-carte { flex: 0 0 66%; max-width: 260px; scroll-snap-align: center; }
+}
+@media (max-width: 600px) {
+    .cartes-projets.vue-grille { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .vue-grille .projet-corps { padding: 10px; }
+    .vue-grille .projet-corps small { display: none; }
+    .vue-grille .projet h3 { font-size: .95rem; }
+    .vue-grille .projet .prix { font-size: 1.05rem; }
+    .vue-grille .version, .vue-grille .cadre-poster { padding: 7px 6px; font-size: .78rem; }
+    .vue-grille .ajout { padding: 9px 6px; font-size: .85rem; }
+    .vue-grille .coeur { transform: scale(.75); transform-origin: top right; top: 6px; right: 6px; }
+}
