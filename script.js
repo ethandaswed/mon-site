@@ -77,7 +77,14 @@ const MOTS_CLES = {
     "Kid Buu": ["dragon ball", "dbz", "manga", "anime", "majin buu", "rose", "méchant"],
     "Joker": ["batman", "dc comics", "clown", "super-vilain", "comics", "crayon", "dessin"]
 };
-CREATIONS.forEach((c) => { c.mots = MOTS_CLES[c.titre] || []; });
+// Mots-clés communs ajoutés automatiquement : style, technique, couleurs citées dans la description
+const TAGS_CRAYON = ["tate langdon.jpeg", "batman qui rit.jpeg", "it.jpeg", "dessin joker.jpg.jpeg"];
+const COULEURS = ["rouge", "bleu", "noir", "blanc", "rose", "violet", "jaune", "vert", "orange", "gris", "doré"];
+CREATIONS.forEach((c) => {
+    const crayon = TAGS_CRAYON.includes(c.fichier), d = c.description.toLowerCase();
+    const plus = ["réaliste", "fait main", "pièce unique", crayon ? "crayon" : "peinture", ...COULEURS.filter((k) => d.includes(k))];
+    c.mots = [...new Set([...(MOTS_CLES[c.titre] || []), ...plus])];
+});
 
 const $ = (id) => document.getElementById(id);
 const tr = (fr) => (window.trad ? window.trad(fr) : fr); // traduction (voir langues.js)
