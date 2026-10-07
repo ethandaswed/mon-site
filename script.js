@@ -48,9 +48,8 @@ const CREATIONS = [
     ["ghost face.jpeg", "Ghost Face", "Une ambiance volontairement sombre. Le mélange du noir, du blanc et du rouge crée un contraste puissant.", "500 ₪", true, true],
     ["gohan beast.jpeg", "Gohan Beast", "Une création qui cherche à représenter toute la puissance de Gohan Beast : couleurs intenses, contrastes et détails.", "600 ₪", false, true],
     ["it.jpeg", "It", "Un portrait au crayon avec un travail particulier sur le visage, les ombres et les détails. Une atmosphère sombre et précise.", "400 ₪", true, true],
-    ["joker.jpeg", "Joker", "Une interprétation artistique et colorée du Joker, qui garde l'ambiance sombre et reconnaissable du personnage.", "500 ₪", true, false],
     ["kid buu.jpeg", "Kid Buu", "Une création très colorée inspirée de Kid Buu et de Dragon Ball, aux nuances de rose et aux couleurs intenses.", "600 ₪", true, true],
-    ["dessin joker.jpg.jpeg", "Joker - Crayon", "Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "400 ₪", true, true]
+    ["dessin joker.jpg.jpeg", "Joker", "Un portrait du Joker principalement au crayon, avec une attention particulière portée au visage, au regard et aux ombres.", "400 ₪", true, true]
 ].map(([fichier, titre, description, prix, dispo, accueil]) => ({ fichier, titre, description, prix, dispo, accueil }));
 
 const $ = (id) => document.getElementById(id);
@@ -70,6 +69,70 @@ if (menu && liens) {
     };
     menu.addEventListener("click", () => basculer(!liens.classList.contains("ouvert")));
     liens.addEventListener("click", (e) => { if (e.target.closest("a")) basculer(false); });
+
+    // Barre horizontale tant qu'elle tient ; menu ☰ seulement si elle déborde (petit écran, texte agrandi, autre langue)
+    const racine = document.documentElement;
+    const navEl = document.querySelector("nav");
+    // Dans le menu ☰ il n'y a que les onglets : loupe, cloche, compte et panier restent dans la barre du haut
+    const ranger = (burger) => {
+        const rech = $("btn-recherche"), notif = $("btn-notif"), cmd = liens.querySelector(".bouton-nav-commander");
+        const param = navEl.querySelector('a.icone-nav[href="parametres.html"]');
+        const cpt = navEl.querySelector('a.icone-nav[href="compte.html"]'), pan = navEl.querySelector('a.icone-nav[href="panier.html"]');
+        let b = navEl.querySelector(".barre-icones");
+        if (burger) {
+            if (!b) { b = document.createElement("div"); b.className = "barre-icones"; navEl.insertBefore(b, menu); }
+            [rech, notif, cpt, pan].forEach((e) => e && b.appendChild(e));
+        } else if (b) {
+            [rech, notif].forEach((e) => e && param && liens.insertBefore(e, param));
+            [cpt, pan].forEach((e) => e && cmd && liens.insertBefore(e, cmd));
+            b.remove();
+        }
+    };
+    let extrasOk = !!window.EG_EXTRAS_FAIT, policesOk = !(document.fonts && document.fonts.ready);
+    window.EG_MENU_PRET = (k) => {
+        if (k === "extras") extrasOk = true;
+        if (k === "polices") policesOk = true;
+        window.EG_AJUSTER_MENU();
+        if (extrasOk && policesOk) racine.classList.add("menu-pret"); // la barre n'apparaît qu'une fois en place : plus de saut au rechargement
+    };
+    window.addEventListener("load", () => { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => window.EG_MENU_PRET("polices")); else window.EG_MENU_PRET("polices"); });
+    setTimeout(() => { extrasOk = policesOk = true; window.EG_MENU_PRET(); }, 1200);
+    window.EG_AJUSTER_MENU = function () {
+        const etait = racine.classList.contains("menu-burger");
+        racine.classList.remove("menu-burger");
+        ranger(false);
+        let burger = window.innerWidth <= 800;
+        if (!burger) {
+            const rtl = racine.dir === "rtl";
+            const dernier = liens.lastElementChild.getBoundingClientRect();
+            const logo = navEl.querySelector(".logo").getBoundingClientRect();
+            const place = navEl.getBoundingClientRect();
+            const premier = liens.firstElementChild.getBoundingClientRect();
+            burger = rtl
+                ? dernier.left < place.left + 8 || premier.left > logo.left - 8
+                : dernier.right > place.right - 8 || premier.left < logo.right + 8;
+            if (!burger && navEl.scrollWidth > navEl.clientWidth + 1) burger = true;
+        }
+        racine.classList.toggle("menu-burger", burger);
+        if (burger) ranger(true);
+        // Écran large : les 4 onglets pile au centre de la page
+        const a0 = liens.querySelector(":scope > a"), a3 = liens.querySelectorAll(":scope > a")[3];
+        if (a0 && a3) {
+            a0.style.marginInlineStart = "";
+            if (!burger && window.innerWidth >= 1300 && racine.dir !== "rtl") {
+                const g = a0.getBoundingClientRect(), d = a3.getBoundingClientRect(), lg = liens.querySelector(".langue");
+                const voulu = (window.innerWidth - (d.right - g.left)) / 2 - g.left;
+                const libre = lg ? lg.getBoundingClientRect().left - d.right - 24 : 0;
+                a0.style.marginInlineStart = voulu > 0 && voulu <= libre ? voulu + "px" : "auto";
+            }
+        }
+        if (!burger || burger !== etait) basculer(false);
+    };
+    window.addEventListener("resize", window.EG_AJUSTER_MENU);
+    window.addEventListener("langue-changee", () => setTimeout(window.EG_AJUSTER_MENU, 50));
+    window.addEventListener("load", window.EG_AJUSTER_MENU);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(window.EG_AJUSTER_MENU);
+    window.EG_AJUSTER_MENU();
 }
 
 // =====================================================
@@ -280,7 +343,7 @@ if (carrousel) {
     const etat = (el, texte, type) => { el.textContent = texte; el.className = "message-etat visible " + type; };
 
     // Thème (réglage)
-    const PREFS0 = { theme: "clair", texte: "normal", anim: true, transitions: true };
+    const PREFS0 = { theme: "clair", texte: "normal", anim: true, transitions: true, contraste: false, police: "normal", liens: false, flottants: true };
     const getPrefs = () => ({ ...PREFS0, ...lire(K.prefs, {}) });
     function appliquerPrefs() {
         const p = getPrefs();
@@ -288,8 +351,14 @@ if (carrousel) {
         document.body.classList.toggle("sombre", sombre);
         document.documentElement.classList.toggle("sombre", sombre);
         document.documentElement.classList.toggle("grand", p.texte === "grand");
+        document.documentElement.classList.toggle("tres-grand", p.texte === "tres-grand");
+        document.documentElement.classList.toggle("contraste", !!p.contraste);
+        document.documentElement.classList.toggle("police-lisible", p.police === "lisible");
+        document.documentElement.classList.toggle("liens-soulignes", !!p.liens);
+        document.documentElement.classList.toggle("sans-flottants", p.flottants === false);
         document.body.classList.toggle("sans-anim", !p.anim);
         document.documentElement.classList.toggle("sans-transition", !p.transitions || !p.anim);
+        if (window.EG_AJUSTER_MENU) window.EG_AJUSTER_MENU();
     }
     const setPrefs = (n) => { ecrire(K.prefs, { ...getPrefs(), ...n }); appliquerPrefs(); };
     appliquerPrefs();
@@ -322,12 +391,12 @@ if (carrousel) {
         });
     }
     majBadge();
-    // Retire du panier les tableaux désormais en rupture de stock
+    // Retire du panier les tableaux désormais indisponibles
     const gardes = getPanier().filter((i) => { const c = CREATIONS.find((x) => "creation:" + x.fichier === i.id); return !c || c.dispo; });
     if (gardes.length !== getPanier().length) setPanier(gardes);
 
     function ajouter(item) {
-        if (item.indispo) { toast("Ce tableau est en rupture de stock"); return false; }
+        if (item.indispo) { toast("Ce tableau est indisponible"); return false; }
         const p = getPanier();
         if (p.some((x) => x.id === item.id)) { toast("Déjà dans votre panier"); return false; }
         p.push(item); setPanier(p); toast("✓ Ajouté au panier");
@@ -346,7 +415,7 @@ if (carrousel) {
         const vendu = !c.dispo;
         return { indispo: !c.dispo, id: "creation:" + c.fichier, titre: c.titre, prix: prixNum(c.prix), image: c.fichier,
             type: vendu ? "Sur commande (pièce déjà vendue, refaite à la main)" : "Pièce unique",
-            detail: vendu ? "Délai et prix confirmés sur WhatsApp" : (/partir/i.test(c.prix) ? "Prix de départ, confirmé sur WhatsApp" : "") };
+            detail: vendu ? "Prix confirmé sur WhatsApp" : (/partir/i.test(c.prix) ? "Prix de départ, confirmé sur WhatsApp" : "") };
     }
 
     const articleChoix = (c, ch) => ch.v === "poster" ? articlePoster(c, ch.cadre) : articleDe(c);
@@ -399,10 +468,10 @@ if (carrousel) {
         radio("cadre-produit", "sans").checked = !ch.cadre;
         radio("cadre-produit", "avec").checked = ch.cadre;
         $i("v-cadre").hidden = !poster;
-        $i("v-prix-original").textContent = c.dispo ? c.prix : "Vendu (rupture de stock)";
+        $i("v-prix-original").textContent = c.dispo ? c.prix : "Indisponible";
         $i("v-prix-poster").textContent = prixPoster(c, ch.cadre) + " ₪";
         $i("v-note").textContent = poster
-            ? "Reproduction imprimée de ce tableau. Format et délai confirmés avec vous sur WhatsApp."
+            ? "Reproduction imprimée de ce tableau. Format confirmé avec vous sur WhatsApp."
             : "Pièce unique, peinte ou dessinée à la main.";
 
         $i("produit-prix").textContent = art.prix + " ₪";
@@ -410,7 +479,7 @@ if (carrousel) {
         const stock = document.querySelector(".produit-stock");
         stock.hidden = !c.prix;
         stock.className = "produit-stock " + (ok ? "ok" : "rupture");
-        stock.textContent = poster ? "● Poster imprimé disponible" : c.dispo ? "● Pièce unique, disponible" : "● Rupture de stock";
+        stock.textContent = poster ? "● Poster imprimé disponible" : c.dispo ? "● Pièce unique, disponible" : "● Indisponible";
 
         const cmd = $i("produit-commander");
         cmd.hidden = !c.prix;
@@ -420,7 +489,7 @@ if (carrousel) {
         const b = $i("produit-panier"), f = $i("produit-favori");
         b.hidden = !c.prix;
         b.disabled = dedans || !ok;
-        b.textContent = dedans ? "✓ Dans le panier" : ok ? "Ajouter au panier · " + art.prix + " ₪" : "Indisponible (rupture de stock)";
+        b.textContent = dedans ? "✓ Dans le panier" : ok ? "Ajouter au panier · " + art.prix + " ₪" : "Indisponible";
         f.hidden = !c.prix;
         f.textContent = fav ? "♥ Dans mes favoris" : "♡ Ajouter aux favoris";
         f.setAttribute("aria-pressed", fav);
@@ -471,6 +540,16 @@ if (carrousel) {
         return btoa(unescape(encodeURIComponent(t)));
     }
     const sauverUser = (email, donnees) => { const u = getUsers(); u[email] = { ...u[email], ...donnees }; ecrire(K.users, u); };
+    window.EG_COMPTE = { courant: userCourant, sauver: sauverUser };
+
+    // Inscription / désinscription aux nouveautés par e-mail (reçue dans votre boîte via Formspree)
+    async function inscriptionMail(email, nom, actif) {
+        try {
+            const r = await fetch("https://formspree.io/f/xeaeoegv", { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({ email, nom, _subject: (actif ? "Inscription" : "Désinscription") + " aux nouveautés - Ethan Gallery", message: (actif ? "Cette personne souhaite recevoir les nouveautés par e-mail : " : "Cette personne ne souhaite plus recevoir les nouveautés par e-mail : ") + email }) });
+            return r.ok;
+        } catch { return false; }
+    }
 
     // Page panier
     const zp = document.getElementById("contenu-panier");
@@ -512,7 +591,7 @@ if (carrousel) {
                 p.map((i, n) => (n + 1) + ". " + i.titre + "\n   • Type : " + i.type + (i.detail ? "\n   • " + i.detail : "") + "\n   • Prix : " + i.prix + " ₪").join("\n") +
                 "\n\n💰 TOTAL : " + total + " ₪\n" + (note ? "\n📝 Message : " + note + "\n" : "") +
                 (photos.length ? "\n📸 Photos à envoyer juste après ce message : " + photos.join(", ") + "\n" : "") +
-                (p.some((i) => /^Sur commande/.test(i.type)) ? "\n⏳ Les articles « sur commande » sont des pièces déjà vendues : merci de m'indiquer le délai de réalisation." : "") + "\nMerci de me confirmer la disponibilité et le prix final.";
+                "\nMerci de me confirmer la disponibilité et le prix final.";
             window.open(lienWhatsApp(msg), "_blank", "noopener");
             if (u) sauverUser(u.email, { commandes: [{ date: new Date().toLocaleDateString("fr-FR"), total, articles: p.map((i) => i.titre) }, ...(u.commandes || [])].slice(0, 20) });
             setPanier([]);
@@ -562,18 +641,45 @@ if (carrousel) {
                 '<div class="champ"><label for="p-contact">Contact préféré</label><select id="p-contact">' + opt(["WhatsApp", "Appel", "E-mail", "Instagram"], u.contact || "WhatsApp") + '</select></div>' +
                 '<div class="champ"><label for="p-recep">Mode de réception</label><select id="p-recep">' + opt(["À convenir", "Remise en main propre", "Livraison"], u.reception || "À convenir") + '</select></div>' +
                 msg("p-msg") + '<button type="button" class="bouton" id="p-sauver">Enregistrer</button>') +
-            carte("Mes favoris (" + favs.length + ")", favs.length ? '<ul class="lignes-panier compact">' + favs.map((c) => '<li><img src="./' + esc(c.fichier) + '" alt=""><div><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix || "") + (c.dispo ? "" : " · rupture") + '</small></div>' +
+            carte("Mes favoris (" + favs.length + ")", favs.length ? '<ul class="lignes-panier compact">' + favs.map((c) => '<li><img src="./' + esc(c.fichier) + '" alt=""><div><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix || "") + (c.dispo ? "" : " · indisponible") + '</small></div>' +
                 (c.prix && c.dispo ? '<button type="button" class="mini" data-add="' + esc(c.fichier) + '">Ajouter</button>' : "") + '<button type="button" class="retirer" data-rm="' + esc(c.fichier) + '" aria-label="Retirer ' + esc(c.titre) + ' des favoris">✕</button></li>').join("") + '</ul>' : '<p>Aucun favori. Ouvrez un tableau et cliquez sur ♡.</p>') +
             carte("Sécurité", champ("s-ancien", "Mot de passe actuel", "", "password", "current-password") + champ("s-nouveau", "Nouveau mot de passe (6 caractères minimum)", "", "password", "new-password") + msg("s-msg") + '<button type="button" class="bouton contour" id="s-change">Changer le mot de passe</button>') +
             carte("Mes commandes", cmds.length ? '<ul class="lignes-panier compact">' + cmds.map((c) => '<li><div><strong>' + esc(c.date) + '</strong><small>' + c.articles.map(esc).join(", ") + '</small></div><span class="ligne-prix">' + c.total + ' ₪</span></li>').join("") + '</ul><button type="button" class="lien-danger" id="d-histo">Vider l\'historique</button>' : "<p>Aucune commande envoyée pour le moment.</p>") +
+            '<div id="notifications">' + carte("Mes notifications",
+                '<label class="reglage" for="n-site"><span class="reglage-txt"><strong>Notifications sur le site</strong><small>Une cloche vous prévient des nouveaux tableaux quand vous êtes connecté.</small></span><input type="checkbox" role="switch" class="interrupteur" id="n-site"' + (u.notifSite !== false ? " checked" : "") + '></label>' +
+                '<label class="reglage" for="n-mail"><span class="reglage-txt"><strong>Nouveautés par e-mail</strong><small>Un e-mail à l\'adresse de votre compte quand un nouveau tableau est publié.</small></span><input type="checkbox" role="switch" class="interrupteur" id="n-mail"' + (u.notifMail ? " checked" : "") + '></label>' +
+                '<h3 class="n-sous">Ce que je veux recevoir</h3>' +
+                [["nouveau", "Nouveaux tableaux", "Dès qu'une création est ajoutée."], ["promo", "Offres", "Réductions et occasions à ne pas manquer."], ["info", "Infos du site", "Nouveautés pratiques, annonces."]].map((o) => '<label class="reglage" for="nt-' + o[0] + '"><span class="reglage-txt"><strong>' + o[1] + '</strong><small>' + o[2] + '</small></span><input type="checkbox" role="switch" class="interrupteur n-opt" data-type="' + o[0] + '" id="nt-' + o[0] + '"' + (!u.notifTypes || u.notifTypes[o[0]] !== false ? " checked" : "") + '></label>').join("") +
+                '<label class="reglage" for="n-toast"><span class="reglage-txt"><strong>Message à ma connexion</strong><small>Un petit message vous signale les notifications non lues quand vous arrivez sur le site.</small></span><input type="checkbox" role="switch" class="interrupteur" id="n-toast"' + (u.notifToast !== false ? " checked" : "") + '></label>' + msg("n-msg")) + '</div>' +
             carte("Mes données", '<p>Téléchargez une copie de vos informations ou supprimez votre compte.</p><button type="button" class="bouton contour" id="d-export">Télécharger mes données</button><button type="button" class="lien-danger" id="p-suppr">Supprimer mon compte</button>') +
             '</div>';
         const $$ = (id) => document.getElementById(id);
+        if (location.hash === "#notifications") setTimeout(() => { const n = $$("notifications"); if (n) n.scrollIntoView({ block: "start" }); }, 60);
         $$("p-sauver").addEventListener("click", () => {
             const nom = $$("p-nom").value.trim();
             if (!nom) return etat($$("p-msg"), "Le nom ne peut pas être vide.", "erreur");
             sauverUser(u.email, { nom, tel: $$("p-tel").value.trim(), ville: $$("p-ville").value.trim(), adresse: $$("p-adr").value.trim(), contact: $$("p-contact").value, reception: $$("p-recep").value });
             etat($$("p-msg"), "Informations enregistrées.", "ok");
+        });
+        $$("n-site").addEventListener("change", (e) => {
+            sauverUser(u.email, { notifSite: e.target.checked });
+            etat($$("n-msg"), e.target.checked ? "Notifications du site activées." : "Notifications du site désactivées.", "ok");
+            if (window.EG_NOTIF) window.EG_NOTIF.maj();
+        });
+        document.querySelectorAll(".n-opt").forEach((box) => box.addEventListener("change", () => {
+            const types = { ...((userCourant() || {}).notifTypes || {}) }; types[box.dataset.type] = box.checked;
+            sauverUser(u.email, { notifTypes: types });
+            etat($$("n-msg"), "Préférences enregistrées.", "ok");
+            if (window.EG_NOTIF) window.EG_NOTIF.maj();
+        }));
+        $$("n-toast").addEventListener("change", (e) => { sauverUser(u.email, { notifToast: e.target.checked }); etat($$("n-msg"), "Préférences enregistrées.", "ok"); });
+        $$("n-mail").addEventListener("change", async (e) => {
+            const box = e.target, voulu = box.checked;
+            box.disabled = true; etat($$("n-msg"), "Enregistrement…", "ok");
+            const ok = await inscriptionMail(u.email, u.nom, voulu);
+            box.disabled = false;
+            if (ok) { sauverUser(u.email, { notifMail: voulu }); etat($$("n-msg"), voulu ? "C'est noté : vous recevrez les nouveautés par e-mail." : "Vous ne recevrez plus les nouveautés par e-mail.", "ok"); }
+            else { box.checked = !voulu; etat($$("n-msg"), "Impossible d'enregistrer pour le moment. Vérifiez votre connexion et réessayez.", "erreur"); }
         });
         $$("s-change").addEventListener("click", async () => {
             const m = $$("s-msg"), nouveau = $$("s-nouveau").value;
@@ -612,13 +718,28 @@ if (carrousel) {
         zr.innerHTML =
             '<section class="carte-reglages"><h2>Apparence</h2>' +
             ligne("Thème", "Automatique suit le réglage de votre téléphone ou de votre ordinateur.", seg("theme", [["clair", "Clair", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'], ["sombre", "Sombre", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'], ["auto", "Automatique", '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>']], pr.theme)) +
-            ligne("Taille du texte", "", seg("texte", [["normal", "Normale"], ["grand", "Grande"]], pr.texte)) + '</section>' +
+            ligne("Taille du texte", "", seg("texte", [["normal", "Normale"], ["grand", "Grande"], ["tres-grand", "Très grande"]], pr.texte)) + '</section>' +
             '<section class="carte-reglages"><h2>Mouvement</h2>' +
             inter("r-anim", "Animations activées", "Effets d\'apparition et survols animés.", pr.anim) +
             inter("r-trans", "Transition entre les pages", "Fondu rapide quand vous changez de page.", pr.transitions) + '</section>' +
+            '<section class="carte-reglages"><h2>Accessibilité</h2>' +
+            inter("r-contraste", "Contraste renforcé", "Textes plus foncés (ou plus clairs en mode sombre) et bordures plus visibles.", pr.contraste) +
+            inter("r-police", "Police facile à lire", "Une police plus large et plus espacée, pour lire sans effort.", pr.police === "lisible") +
+            inter("r-liens", "Souligner les liens", "Les liens sont toujours soulignés pour mieux les repérer.", pr.liens) + '</section>' +
+            '<section class="carte-reglages"><h2>Affichage</h2>' +
+            inter("r-flottants", "Boutons WhatsApp et Instagram flottants", "Les deux boutons ronds en bas de l\'écran. Désactivez-les si vous les trouvez gênants.", pr.flottants !== false) + '</section>' +
             '<section class="carte-reglages"><h2>Langue</h2>' +
             ligne("Langue du site", "", '<div class="seg" role="group" data-langue data-no-trad>' + [["fr", "Français"], ["en", "English"], ["he", "עברית"]].map(([v, n]) =>
                 '<button type="button" data-val="' + v + '" lang="' + v + '" aria-pressed="' + (lg === v) + '"><span>' + n + '</span></button>').join("") + '</div>') + '</section>' +
+            '<section class="carte-reglages"><h2>Notifications</h2>' + (userCourant()
+                ? ligne("Nouveautés et e-mails", "Choisissez comment être prévenu des nouveaux tableaux.", '<a class="mini-bouton" href="compte.html#notifications">Gérer</a>')
+                : ligne("Être prévenu des nouveaux tableaux", "Connectez-vous pour recevoir des notifications sur le site et par e-mail.", '<a class="mini-bouton" href="compte.html">Me connecter</a>')) + '</section>' +
+            '<section class="carte-reglages"><h2>Mes données</h2>' +
+            '<p class="note-donnees">Tout reste sur cet appareil : le site ne vous suit pas. <a href="legal.html#confidentialite">En savoir plus</a></p>' +
+            ligne("Télécharger mes données", "Favoris, panier, compte et réglages dans un fichier.", '<button type="button" class="mini-bouton" id="r-export">Télécharger</button>') +
+            ligne("Vider mes favoris", "", '<button type="button" class="mini-bouton" id="r-fav" data-danger>Vider</button>') +
+            ligne("Vider mon panier", "", '<button type="button" class="mini-bouton" id="r-panier" data-danger>Vider</button>') +
+            ligne("Tout supprimer", "Compte, favoris, panier et réglages de cet appareil.", '<button type="button" class="mini-bouton danger" id="r-tout" data-danger>Tout supprimer</button>') + '</section>' +
             '<p class="reglages-bas"><button type="button" class="lien-danger" id="r-reset">Réinitialiser les réglages</button></p>';
     }
     if (zr) {
@@ -632,11 +753,37 @@ if (carrousel) {
                 g.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
                 return;
             }
-            if (e.target.id === "r-reset") { ecrire(K.prefs, PREFS0); appliquerPrefs(); rendreParametres(); }
+            if (e.target.id === "r-reset") { ecrire(K.prefs, PREFS0); appliquerPrefs(); rendreParametres(); return; }
+            const bt = e.target.closest(".mini-bouton");
+            if (!bt) return;
+            // les actions qui effacent demandent une seconde confirmation (4 secondes)
+            if (bt.hasAttribute("data-danger") && !bt.dataset.conf) {
+                bt.dataset.conf = "1"; bt.dataset.txt = bt.textContent; bt.textContent = "Cliquer pour confirmer"; bt.classList.add("danger");
+                setTimeout(() => { if (bt.isConnected && bt.dataset.conf) { bt.textContent = bt.dataset.txt; delete bt.dataset.conf; if (bt.id !== "r-tout") bt.classList.remove("danger"); } }, 4000);
+                return;
+            }
+            if (bt.id === "r-export") {
+                const out = {};
+                try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith("eg_")) out[k] = lire(k, null); } } catch { }
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: "application/json" }));
+                a.download = "mes-donnees-ethan-gallery.json"; document.body.appendChild(a); a.click(); a.remove();
+                toast("Fichier téléchargé");
+            } else if (bt.id === "r-fav") { ecrire(K.favoris, []); toast("Favoris vidés"); }
+            else if (bt.id === "r-panier") { setPanier([]); toast("Panier vidé"); }
+            else if (bt.id === "r-tout") {
+                try { Object.keys(localStorage).filter((k) => k.startsWith("eg_")).forEach((k) => localStorage.removeItem(k)); } catch { }
+                location.reload();
+            }
+            if (bt.dataset.conf) { bt.textContent = bt.dataset.txt; delete bt.dataset.conf; if (bt.id !== "r-tout") bt.classList.remove("danger"); }
         });
         zr.addEventListener("change", (e) => {
             if (e.target.id === "r-anim") setPrefs({ anim: e.target.checked });
             if (e.target.id === "r-trans") setPrefs({ transitions: e.target.checked });
+            if (e.target.id === "r-contraste") setPrefs({ contraste: e.target.checked });
+            if (e.target.id === "r-police") setPrefs({ police: e.target.checked ? "lisible" : "normal" });
+            if (e.target.id === "r-liens") setPrefs({ liens: e.target.checked });
+            if (e.target.id === "r-flottants") setPrefs({ flottants: e.target.checked });
         });
         // si la langue change ailleurs, on garde les boutons à jour
         document.addEventListener("langue-changee", (ev) => zr.querySelectorAll("[data-langue] button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.val === ev.detail)));
@@ -652,7 +799,7 @@ if (carrousel) {
     const CRAYON = ["tate langdon.jpeg", "batman qui rit.jpeg", "it.jpeg", "dessin joker.jpg.jpeg"];
     const UNIVERS = {
         "Manga et anime": ["sukuna.jpeg", "pain naruto shippuden.jpeg", "ken kaneki.jpeg", "eijiro kirishima.jpeg", "ichigo.jpeg", "gohan.jpeg", "black goku.jpeg", "gohan beast.jpeg", "kid buu.jpeg"],
-        "Super-héros et comics": ["deadpool in love.jpeg", "moon knight.jpeg", "spider team.jpeg", "batman qui rit.jpeg", "deadpool.jpeg", "joker.jpeg", "dessin joker.jpg.jpeg"],
+        "Super-héros et comics": ["deadpool in love.jpeg", "moon knight.jpeg", "spider team.jpeg", "batman qui rit.jpeg", "deadpool.jpeg", "dessin joker.jpg.jpeg"],
         "Horreur et séries": ["tate langdon.jpeg", "eddie stranger things.jpeg", "ghost face.jpeg", "it.jpeg"]
     };
     const liste = CREATIONS.filter((c) => c.prix).map((c) => ({ ...c,
@@ -690,7 +837,7 @@ if (carrousel) {
             vSel.options[1].textContent = "Poster · " + prixPoster(c, ch.cadre) + " ₪";
             prix.textContent = art.prix + " ₪";
             stock.className = "stock " + (ok ? "ok" : "non");
-            stock.textContent = poster ? "● Poster imprimé disponible" : c.dispo ? "● Pièce unique en stock" : "● Original vendu";
+            stock.textContent = poster ? "● Poster disponible" : c.dispo ? "● Original disponible" : "● Indisponible";
             btn.disabled = !ok || dedans;
             btn.textContent = !ok ? "Indisponible" : dedans ? "✓ Dans le panier" : "Ajouter au panier";
         };

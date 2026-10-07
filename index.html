@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Ethan Gallery - Tableaux personnalisés</title>
     <meta name="description" content="Ethan Gallery : transformez vos photos en tableaux personnalisés, peints et dessinés à la main. Envoyez votre photo et votre idée, je m'occupe du reste.">
     <meta name="theme-color" content="#e00000">
@@ -15,14 +15,17 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
     <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");if(p.theme==="sombre"||(p.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("sombre");if(p.texte==="grand")document.documentElement.classList.add("grand");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
-    <link rel="stylesheet" href="style.css?v=19">
+    <script>try{if(innerWidth<=800)document.documentElement.classList.add("menu-burger")}catch(e){}try{var q=JSON.parse(localStorage.getItem("eg_prefs")||"{}"),c=document.documentElement.classList;if(q.contraste)c.add("contraste");if(q.police==="lisible")c.add("police-lisible");if(q.liens)c.add("liens-soulignes");if(q.flottants===false)c.add("sans-flottants");if(q.texte==="tres-grand")c.add("tres-grand")}catch(e){}</script>
+    <link rel="stylesheet" href="style.css?v=46">
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ethan Gallery", "description": "Tableaux et portraits personnalisés, peints et dessinés à la main.", "telephone": "+972559955591", "sameAs": ["https://instagram.com/Ethan_bitan"]}</script>
 </head>
 <body>
+<a href="#contenu" class="lien-evitement">Aller au contenu</a>
 <nav>
     <a href="index.html" class="logo">Ethan Gallery</a>
     <button class="menu-mobile" id="menu-mobile" aria-label="Ouvrir le menu" aria-expanded="false" type="button">☰</button>
@@ -31,7 +34,7 @@
         <a href="commande.html" class="bouton-nav-commander">Commander</a>
     </div>
 </nav>
-<main>
+<main id="contenu">
 
 <section class="heros">
     <div class="heros-in">
@@ -52,9 +55,17 @@
     <div class="bloc vitrine">
         <div class="vitrine-tete">
             <h2>Mes dernières créations</h2>
-            <a href="creations.html" class="lien-fleche">Voir les 23 créations</a>
+            <a href="creations.html" class="lien-fleche" id="lien-toutes">Voir toutes les créations</a>
         </div>
         <div class="grille-dessins"></div>
+    </div>
+</section>
+
+<section class="zone" id="videos" hidden>
+    <div class="bloc">
+        <h2>Dans l'atelier</h2>
+        <p class="intro-bloc">Quelques instants avec moi : la peinture, le travail, le résultat.</p>
+        <div class="videos-grille"></div>
     </div>
 </section>
 
@@ -64,7 +75,7 @@
         <ol class="parcours">
             <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>1. Envoyez votre photo</h3><p>Une photo nette et bien éclairée donne le meilleur résultat. Ajoutez-la sur la page Commander.</p></li>
             <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span><h3>2. Choisissez votre format</h3><p>Trois tailles, un style, et quelques mots sur vos couleurs et votre idée. Le prix s'affiche tout de suite.</p></li>
-            <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span><h3>3. Je peins, vous recevez</h3><p>Nous confirmons ensemble le prix et le délai sur WhatsApp, puis je réalise votre tableau à la main.</p></li>
+            <li><span class="parcours-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span><h3>3. Je peins, vous recevez</h3><p>Nous confirmons ensemble le prix sur WhatsApp, puis je réalise votre tableau à la main.</p></li>
         </ol>
         <p class="lien-bas"><a href="fonctionnement.html" class="lien-fleche">Tous les détails et les questions fréquentes</a></p>
     </div>
@@ -112,16 +123,28 @@
             <h2>À propos de moi</h2>
             <p>Je m'appelle Ethan et ma passion est l'art. J'aime dessiner, peindre et donner vie à mes idées à travers des créations uniques. Au fil du temps, j'ai développé mon propre style et commencé à réaliser des portraits et des tableaux personnalisés.</p>
             <p>À travers Ethan Gallery, je souhaite partager mon univers et créer des œuvres qui ont une vraie signification pour chaque personne.</p>
+            <ul class="atouts"><li>100 % fait main</li><li>Pièces uniques</li><li>Posters imprimés en option</li></ul>
             <p><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener" class="lien-fleche">Plus de créations sur Instagram @Ethan_bitan</a></p>
         </div>
         <figure class="apropos-img"><img src="./dark-angel.jpeg" alt="Tableau Dark Angel, peint à la main" loading="lazy"></figure>
     </div>
 </section>
 
+<section class="zone" id="nouveautes">
+    <div class="bloc nouveautes">
+        <h2>Ne ratez pas mon prochain tableau</h2>
+        <p class="intro-bloc">Chaque tableau est une pièce unique. Dites-moi que vous voulez être prévenu, ou suivez-moi pour voir mes créations en avant-première.</p>
+        <div class="actions">
+            <a href="https://wa.me/972559955591?text=Bonjour%2C%20pr%C3%A9venez-moi%20quand%20vous%20publiez%20un%20nouveau%20tableau." target="_blank" rel="noopener" class="bouton whatsapp">Me prévenir sur WhatsApp</a>
+            <a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener" class="bouton contour">Me suivre sur Instagram</a>
+        </div>
+    </div>
+</section>
+
 <section class="appel" id="contact">
     <div class="appel-in">
         <h2>Votre prochaine œuvre commence par une photo.</h2>
-        <p>Envoyez-la moi avec votre idée. Je vous confirme le prix et le délai sur WhatsApp avant de commencer.</p>
+        <p>Envoyez-la moi avec votre idée. Je vous confirme le prix sur WhatsApp avant de commencer.</p>
         <div class="actions">
             <a href="commande.html" class="bouton">Commander mon tableau</a>
             <a href="https://wa.me/972559955591" target="_blank" rel="noopener" class="bouton whatsapp">Écrire sur WhatsApp</a>
@@ -138,7 +161,7 @@
         <p id="produit-description"></p>
         <p id="produit-prix"></p>
         <button type="button" class="bouton whatsapp" id="produit-commander">Commander sur WhatsApp</button>
-        <p id="produit-sur-mesure" hidden><a href="commande.html">Je veux un tableau dans le même style</a></p>
+        <p id="produit-sur-mesure" hidden><a href="commande.html">Ce tableau est unique : je peux en peindre une version pour vous</a></p>
     </div>
 </dialog>
 </main>
@@ -148,10 +171,11 @@
         <div class="pied-col"><span class="pied-titre">Découvrir</span><a href="creations.html">Créations</a><a href="fonctionnement.html">Comment ça marche</a><a href="commande.html">Commander</a></div>
         <div class="pied-col"><span class="pied-titre">Contact</span><a href="https://wa.me/972559955591" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/Ethan_bitan" target="_blank" rel="noopener">Instagram @Ethan_bitan</a><a href="contact.html">Formulaire de contact</a></div>
     </div>
+    <p class="pied-liens"><a href="legal.html#mentions">Mentions légales</a><a href="legal.html#confidentialite">Confidentialité</a><a href="legal.html#conditions">Conditions de vente</a><a href="parametres.html">Paramètres</a></p>
     <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=19"></script>
-<script src="extras.js?v=19"></script>
-<script src="langues.js?v=19"></script>
+<script src="script.js?v=46"></script>
+<script src="extras.js?v=46"></script>
+<script src="langues.js?v=46"></script>
 </body>
 </html>

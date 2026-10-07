@@ -16,6 +16,38 @@ const AVIS = [];
 //    Exemple : { titre: "Portrait de Max", avant: "max-photo.jpg", apres: "max-tableau.jpg" }
 const AVANT_APRES = [];
 
+// 3) Vos vidéos « dans l'atelier » (la section reste cachée tant que la liste est vide).
+//    Mettez les fichiers vidéo (.mp4) à côté de index.html. Format vertical (téléphone) conseillé.
+//    affiche = image de couverture (facultatif). Exemple :
+//    { fichier: "atelier1.mp4", titre: "Je peins un portrait", affiche: "atelier1.jpg" }
+const VIDEOS = [
+    { fichier: "atelier1.mp4", titre: "Kid Buu", affiche: "atelier1.jpg" },
+    { fichier: "atelier2.mp4", titre: "Ghost Face : le résultat", affiche: "atelier2.jpg" },
+    { fichier: "atelier3.mp4", titre: "Tate Langdon : le début", affiche: "atelier3.jpg" },
+    { fichier: "atelier4.mp4", titre: "Ghost Face : étape par étape", affiche: "atelier4.jpg" }
+];
+
+// 4) Votre présentation (facultatif).
+//    PHOTO_ETHAN : votre photo (ex. "ethan.jpg"), elle remplace l'image dans « À propos ».
+//    HISTOIRE : 2-3 phrases en plus (pourquoi vous peignez, ce que vous aimez).
+const PHOTO_ETHAN = "";
+const HISTOIRE = "";
+
+// 5) Informations légales (facultatif : une ligne vide n'est pas affichée).
+//    nomComplet : votre nom complet · adresse : adresse de l'atelier ou de contact
+//    hebergeur : nom du service qui héberge le site (ex. "Netlify", "GitHub Pages")
+//    goatcounter : nom de votre compte GoatCounter (statistiques de visites sans cookie, gratuit sur goatcounter.com).
+//    Exemple : goatcounter: "ethangallery"  (laissez "" pour ne pas mesurer les visites)
+const INFOS = { nomComplet: "", adresse: "", hebergeur: "", goatcounter: "" };
+
+// 6) Notifications du site (la cloche, pour les personnes connectées).
+//    Ajoutez une ligne à CHAQUE nouveauté : la plus récente en premier. date = AAAA-MM-JJ.
+//    lien = page ou tableau à ouvrir (facultatif), par exemple "creations.html#kid-buu".
+//    type (facultatif) : "nouveau" (par défaut), "promo" (offre) ou "info" : change l'icône ; image (facultatif) : une petite photo, ex. "kidbuu.jpg".
+//    Exemple : { date: "2026-10-12", type: "nouveau", titre: "Nouveau tableau : Itachi", texte: "Une pièce unique, 600 ₪.", lien: "creations.html", image: "" }
+//    Les personnes inscrites par e-mail vous arrivent dans votre boîte (Formspree) : écrivez-leur en copie cachée.
+const NOTIFICATIONS = [];
+
 // =====================================================
 // Code (pas besoin d'y toucher)
 // =====================================================
@@ -61,6 +93,277 @@ const AVANT_APRES = [];
             (p.titre ? "<figcaption>" + esc(p.titre) + "</figcaption>" : "") + "</figure>").join("");
         g.addEventListener("input", (e) => { if (e.target.type === "range") e.target.closest(".ba").style.setProperty("--p", e.target.value); });
         sectionBA.hidden = false;
+    }
+
+    // ---------- Vidéos de l'atelier ----------
+    const sectionVideos = byId("videos");
+    if (sectionVideos && VIDEOS.length) {
+        sectionVideos.querySelector(".videos-grille").innerHTML = VIDEOS.map((v) =>
+            '<figure class="video-carte"><video controls playsinline preload="metadata"' + (v.affiche ? ' poster="./' + esc(v.affiche) + '"' : "") +
+            ' src="./' + esc(v.fichier) + '#t=0.1"></video>' + (v.titre ? "<figcaption>" + esc(v.titre) + "</figcaption>" : "") + "</figure>").join("");
+        // une seule vidéo à la fois
+        sectionVideos.addEventListener("play", (e) => { sectionVideos.querySelectorAll("video").forEach((x) => { if (x !== e.target) x.pause(); }); }, true);
+        sectionVideos.hidden = false;
+    }
+
+    // ---------- À propos : photo et histoire ----------
+    const apropos = document.querySelector("#apropos");
+    if (apropos) {
+        if (PHOTO_ETHAN) { const im = apropos.querySelector(".apropos-img img"); if (im) { im.src = "./" + PHOTO_ETHAN; im.alt = "Ethan, peintre"; } }
+        if (HISTOIRE) { const p = document.createElement("p"); p.setAttribute("data-no-trad", ""); p.textContent = HISTOIRE; const t = apropos.querySelector(".apropos-texte h2"); if (t) t.insertAdjacentElement("afterend", p); }
+    }
+
+    // ---------- Nombre de créations dans le lien de l'accueil ----------
+    const lienToutes = byId("lien-toutes");
+    if (lienToutes && typeof CREATIONS !== "undefined") {
+        const n = CREATIONS.filter((c) => c.prix).length;
+        if (n) lienToutes.textContent = "Voir les " + n + " créations";
+    }
+
+    // ---------- Zoom sur l'image d'un tableau ----------
+    const imgProduit = byId("produit-image");
+    if (imgProduit) {
+        const zoom = document.createElement("dialog");
+        zoom.id = "zoom-image";
+        zoom.setAttribute("aria-label", "Agrandir l'image");
+        zoom.innerHTML = '<button type="button" class="zoom-fermer" aria-label="Fermer le zoom">×</button><div class="zoom-scene"><img alt=""></div><p class="zoom-aide">Cliquez pour zoomer</p>';
+        document.body.appendChild(zoom);
+        const scene = zoom.querySelector(".zoom-scene"), zi = zoom.querySelector("img");
+        imgProduit.classList.add("zoomable");
+        imgProduit.title = "Agrandir l'image";
+        const ouvrir = () => { zi.src = imgProduit.src; zi.alt = imgProduit.alt; zoom.classList.remove("zoome"); scene.scrollTo(0, 0); zoom.showModal(); };
+        imgProduit.addEventListener("click", ouvrir);
+        zi.addEventListener("click", (e) => {
+            const r = zi.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+            const zoome = zoom.classList.toggle("zoome");
+            if (zoome) { scene.scrollLeft = fx * scene.scrollWidth - scene.clientWidth / 2; scene.scrollTop = fy * scene.scrollHeight - scene.clientHeight / 2; }
+            else scene.scrollTo(0, 0);
+            zoom.querySelector(".zoom-aide").hidden = zoome;
+        });
+        zoom.querySelector(".zoom-fermer").addEventListener("click", () => zoom.close());
+        zoom.addEventListener("click", (e) => { if (e.target === zoom || e.target === scene) zoom.close(); });
+    }
+
+    // ---------- Page « Informations légales » : lignes facultatives ----------
+    if (byId("l-nom")) {
+        if (INFOS.nomComplet) byId("l-resp").textContent = "Responsable de la publication : " + INFOS.nomComplet + " (Ethan).";
+        if (INFOS.adresse) { const e = byId("l-adresse"); e.textContent = "Adresse : " + INFOS.adresse; e.hidden = false; }
+        if (INFOS.hebergeur) { const e = byId("l-heberg"); e.textContent = "Hébergeur du site : " + INFOS.hebergeur + "."; e.hidden = false; }
+        if (INFOS.goatcounter) byId("l-stats").hidden = false;
+    }
+
+    // ---------- Statistiques de visites (facultatif, sans cookie) ----------
+    if (INFOS.goatcounter && location.protocol.startsWith("http")) {
+        const sc = document.createElement("script");
+        sc.async = true; sc.src = "https://gc.zgo.at/count.js";
+        sc.setAttribute("data-goatcounter", "https://" + INFOS.goatcounter + ".goatcounter.com/count");
+        document.head.appendChild(sc);
+    }
+
+    // ---------- Données structurées (Google) : un produit par tableau ----------
+    if (byId("fenetre-produit") && typeof CREATIONS !== "undefined" && document.querySelector(".cartes-projets")) {
+        const page = location.href.split("#")[0];
+        const ld = {
+            "@context": "https://schema.org", "@type": "ItemList", "name": "Créations d'Ethan Gallery",
+            "itemListElement": CREATIONS.filter((c) => c.prix).map((c, i) => ({
+                "@type": "ListItem", "position": i + 1,
+                "item": {
+                    "@type": "Product", "name": c.titre, "description": c.description,
+                    "image": new URL(c.fichier, location.href).href,
+                    "url": page + "#" + encodeURIComponent(c.fichier.replace(/\.[^.]+$/, "")),
+                    "brand": { "@type": "Brand", "name": "Ethan Gallery" },
+                    "offers": { "@type": "Offer", "priceCurrency": "ILS", "price": String((c.prix.match(/\d+/) || [0])[0]),
+                        "availability": c.dispo ? "https://schema.org/InStock" : "https://schema.org/SoldOut", "itemCondition": "https://schema.org/NewCondition" }
+                }
+            }))
+        };
+        const sj = document.createElement("script"); sj.type = "application/ld+json"; sj.textContent = JSON.stringify(ld); document.head.appendChild(sj);
+    }
+
+    // ---------- Recherche d'un tableau : panneau qui s'ouvre juste sous la loupe du menu ----------
+    const liens = document.querySelector(".liens");
+    const premierIcone = liens && liens.querySelector(".icone-nav");
+    const normaliser = (t) => String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    const tabs = () => (typeof CREATIONS !== "undefined" ? CREATIONS.filter((c) => c.prix) : []);
+    const slugDe = (c) => encodeURIComponent(c.fichier.replace(/\.[^.]+$/, ""));
+    if (liens && !byId("btn-recherche")) {
+        const LOUPE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>';
+        const bt = document.createElement("button");
+        bt.type = "button"; bt.id = "btn-recherche"; bt.className = "icone-nav icone-btn";
+        bt.setAttribute("aria-label", "Rechercher un tableau"); bt.setAttribute("aria-haspopup", "dialog"); bt.setAttribute("aria-expanded", "false");
+        bt.innerHTML = LOUPE.replace('width="20" height="20"', 'width="22" height="22"');
+        liens.insertBefore(bt, premierIcone);
+
+        const pan = document.createElement("div");
+        pan.id = "recherche-globale"; pan.hidden = true;
+        pan.setAttribute("role", "dialog"); pan.setAttribute("aria-label", "Rechercher un tableau");
+        pan.innerHTML = '<div class="rg-champ">' + LOUPE + '<input type="search" id="rg-input" placeholder="Rechercher un tableau…" autocomplete="off" enterkeyhint="search" aria-label="Rechercher un tableau"><button type="button" class="rg-fermer" aria-label="Fermer">×</button></div>' +
+            '<div class="rg-corps"><p class="rg-etiquette" aria-live="polite"></p><ul class="rg-grille" id="rg-grille"></ul><ul class="rg-liste" id="rg-liste" role="listbox" hidden></ul>' +
+            '<p class="rg-vide" id="rg-vide" hidden>Aucun tableau ne porte ce nom. <a href="commande.html">Je veux un tableau sur mesure</a></p></div>' +
+            '<div class="rg-pied"><a href="creations.html">Voir toutes les créations</a></div>';
+        document.body.appendChild(pan);
+        const input = pan.querySelector("#rg-input"), grille = pan.querySelector("#rg-grille"), liste = pan.querySelector("#rg-liste"), vide = pan.querySelector("#rg-vide"), etiq = pan.querySelector(".rg-etiquette");
+        let actif = -1;
+        const surligne = (titre, q) => {
+            const k = q ? normaliser(titre).indexOf(q) : -1;
+            return k < 0 ? esc(titre) : esc(titre.slice(0, k)) + "<mark>" + esc(titre.slice(k, k + q.length)) + "</mark>" + esc(titre.slice(k + q.length));
+        };
+        const rendre = () => {
+            const q = normaliser(input.value.trim());
+            const tous = tabs();
+            actif = -1;
+            if (!q) {
+                // à vide : une vitrine de tableaux à découvrir
+                const sugg = tous.filter((c) => c.dispo).slice(0, 6);
+                etiq.textContent = "À découvrir";
+                grille.innerHTML = sugg.map((c) => '<li><a href="creations.html#' + slugDe(c) + '"><span class="rg-vignette"><img src="./' + esc(c.fichier) + '" alt="" loading="lazy"></span><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix) + '</small></a></li>').join("");
+                grille.hidden = false; liste.hidden = true; vide.hidden = true; return;
+            }
+            const trouves = tous.filter((c) => normaliser(c.titre).includes(q)).slice(0, 8);
+            etiq.textContent = trouves.length ? (trouves.length === 1 ? "1 tableau" : trouves.length + " tableaux") : "";
+            liste.innerHTML = trouves.map((c) => '<li role="option"><a href="creations.html#' + slugDe(c) + '"><img src="./' + esc(c.fichier) + '" alt="" loading="lazy"><span class="rg-txt"><strong>' + surligne(c.titre, q) + '</strong><small>' + esc(c.prix) + (c.dispo ? "" : " · indisponible") + '</small></span></a></li>').join("");
+            grille.hidden = true; liste.hidden = !trouves.length; vide.hidden = !!trouves.length;
+        };
+        // le panneau se place juste sous la loupe, avec une petite flèche qui la désigne
+        const placer = () => {
+            const r = bt.getBoundingClientRect(), vw = document.documentElement.clientWidth;
+            const nav = document.querySelector("nav"), haut = nav ? nav.getBoundingClientRect().bottom : r.bottom;
+            const l = Math.min(440, vw - 24);
+            let gauche = r.left + r.width / 2 - l / 2;
+            if (document.documentElement.dir !== "rtl") gauche = Math.min(gauche, vw - l - 12);
+            gauche = Math.max(12, Math.min(gauche, vw - l - 12));
+            pan.style.width = l + "px"; pan.style.left = gauche + "px"; pan.style.top = Math.round(haut + 8) + "px";
+            pan.style.setProperty("--fleche", Math.round(Math.max(24, Math.min(l - 24, r.left + r.width / 2 - gauche))) + "px");
+        };
+        const fermer = () => { if (pan.hidden) return; pan.hidden = true; bt.setAttribute("aria-expanded", "false"); };
+        const ouvrir = () => {
+            if (liens.classList.contains("ouvert")) { liens.classList.remove("ouvert"); const mm = byId("menu-mobile"); if (mm) { mm.setAttribute("aria-expanded", "false"); mm.textContent = "☰"; } }
+            input.value = ""; rendre(); placer(); pan.hidden = false; bt.setAttribute("aria-expanded", "true");
+            setTimeout(() => input.focus({ preventScroll: true }), 30);
+        };
+        bt.addEventListener("click", (e) => { e.stopPropagation(); pan.hidden ? ouvrir() : fermer(); });
+        input.addEventListener("input", rendre);
+        pan.querySelector(".rg-fermer").addEventListener("click", () => { fermer(); bt.focus(); });
+        pan.addEventListener("click", (e) => { if (e.target.closest("a")) setTimeout(fermer, 0); });
+        document.addEventListener("click", (e) => { if (!pan.hidden && !pan.contains(e.target) && !bt.contains(e.target)) fermer(); });
+        window.addEventListener("resize", () => { if (!pan.hidden) placer(); });
+        input.addEventListener("keydown", (e) => {
+            const items = [...(liste.hidden ? grille : liste).querySelectorAll("a")];
+            if (e.key === "Escape") { fermer(); bt.focus(); }
+            else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!items.length) return; actif = (actif + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length; items.forEach((a, i) => a.classList.toggle("actif", i === actif)); items[actif].scrollIntoView({ block: "nearest" }); }
+            else if (e.key === "Enter") { const a = items[actif >= 0 ? actif : 0]; if (a && input.value.trim()) { e.preventDefault(); a.click(); } else if (a && actif >= 0) { e.preventDefault(); a.click(); } }
+        });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName || "")) && !document.querySelector("dialog[open]")) { e.preventDefault(); ouvrir(); }
+            else if (e.key === "Escape") fermer();
+        });
+    }
+
+    // ---------- Notifications (cloche) ----------
+    if (liens && !byId("btn-notif")) {
+        const compte = () => (window.EG_COMPTE ? window.EG_COMPTE.courant() : null);
+        const bell = document.createElement("button");
+        bell.type = "button"; bell.id = "btn-notif"; bell.className = "icone-nav icone-btn";
+        bell.setAttribute("aria-label", "Notifications"); bell.setAttribute("aria-haspopup", "dialog"); bell.setAttribute("aria-expanded", "false");
+        bell.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-notif" id="badge-notif" hidden></span>';
+        liens.insertBefore(bell, byId("btn-recherche") ? byId("btn-recherche").nextSibling : premierIcone);
+        const pan = document.createElement("div");
+        pan.id = "panneau-notif"; pan.hidden = true; pan.setAttribute("role", "dialog"); pan.setAttribute("aria-label", "Notifications");
+        document.body.appendChild(pan);
+        const badge = byId("badge-notif");
+        const L = () => langue();
+        const T3 = (fr, en, he) => (L() === "he" ? he : L() === "en" ? en : fr);
+        const cle = (n) => String(n.id || (n.date + "|" + n.titre));
+        const type = (n) => (n.type === "promo" || n.type === "info" ? n.type : "nouveau");
+        const ICONES = {
+            nouveau: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>',
+            promo: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>',
+            info: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>'
+        };
+        const NOMS = { nouveau: ["Nouveau tableau", "New painting", "ציור חדש"], promo: ["Offre", "Offer", "הצעה"], info: ["Info", "News", "מידע"] };
+        const voulu = (u, n) => !u || !u.notifTypes || u.notifTypes[type(n)] !== false;
+        const triees = (u) => NOTIFICATIONS.filter((n) => voulu(u, n)).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+        const estLue = (u, n) => (u.notifLues || []).indexOf(cle(n)) > -1 || String(n.date) <= (u.notifVu || "");
+        const nonLues = (u) => (u && u.notifSite !== false ? triees(u).filter((n) => !estLue(u, n)) : []);
+        let filtre = "tout";
+        const maj = () => {
+            const n = nonLues(compte()).length;
+            badge.textContent = n > 9 ? "9+" : n; badge.hidden = !n;
+            bell.classList.toggle("a-du-neuf", n > 0);
+            bell.setAttribute("aria-label", n ? "Notifications (" + n + ")" : "Notifications");
+        };
+        const jours = (d) => { const a = new Date(d + "T00:00:00"), b = new Date(); b.setHours(0, 0, 0, 0); return Math.round((b - a) / 864e5); };
+        const dateTxt = (d) => {
+            const j = jours(d);
+            if (j === 0) return T3("Aujourd'hui", "Today", "היום");
+            if (j === 1) return T3("Hier", "Yesterday", "אתמול");
+            if (j > 1 && j < 7) return T3("Il y a " + j + " jours", j + " days ago", "לפני " + j + " ימים");
+            try { return new Date(d + "T00:00:00").toLocaleDateString(L() === "he" ? "he-IL" : L() === "en" ? "en-GB" : "fr-FR", { day: "numeric", month: "long" }); } catch { return d; }
+        };
+        const marquer = (u, cles) => {
+            const dej = new Set(u.notifLues || []); cles.forEach((k) => dej.add(k));
+            window.EG_COMPTE.sauver(u.email, { notifLues: Array.from(dej).slice(-300) });
+        };
+        const rouage = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
+        function contenu() {
+            const u = compte();
+            const tete = (outils) => '<div class="np-tete"><h2>Notifications</h2>' + (outils || "") + '</div>';
+            const vide = (ico, titre, texte, actions) => '<div class="np-vide"><span class="np-vide-ico">' + ico + '</span><strong>' + titre + '</strong><p>' + texte + '</p>' + (actions ? '<div class="np-actions">' + actions + '</div>' : "") + '</div>';
+            const cloche = '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+            if (!u) return tete() + vide(cloche, "Restez au courant", "Connectez-vous pour être prévenu des nouveaux tableaux, sur le site et par e-mail.", '<a class="bouton" href="compte.html">Me connecter</a>');
+            if (u.notifSite === false) return tete() + vide(cloche, "Notifications désactivées", "Les notifications du site sont désactivées.", '<a class="bouton contour" href="compte.html#notifications">Gérer mes notifications</a>');
+            const toutes = triees(u), nl = toutes.filter((n) => !estLue(u, n));
+            const liste = filtre === "non" ? nl : toutes;
+            const outils = '<div class="np-outils">' + (nl.length ? '<button type="button" class="np-btn" id="np-tout">Tout marquer comme lu</button>' : "") + '<a class="np-roue" href="compte.html#notifications" aria-label="Gérer mes notifications" title="Gérer mes notifications">' + rouage + '</a></div>';
+            const onglets = '<div class="np-onglets" role="tablist"><button type="button" role="tab" data-f="tout" class="' + (filtre === "tout" ? "actif" : "") + '" aria-selected="' + (filtre === "tout") + '">Toutes</button><button type="button" role="tab" data-f="non" class="' + (filtre === "non" ? "actif" : "") + '" aria-selected="' + (filtre === "non") + '">Non lues' + (nl.length ? ' <b class="np-n">' + nl.length + '</b>' : "") + '</button></div>';
+            if (!toutes.length) return tete(outils) + vide(cloche, "Rien de nouveau", "Vous serez prévenu ici dès qu'un nouveau tableau est publié.");
+            const corps = liste.length ? '<ul class="np-liste">' + liste.map((n) => {
+                const k = cle(n), t = type(n), nonlue = !estLue(u, n);
+                const nom = T3(NOMS[t][0], NOMS[t][1], NOMS[t][2]);
+                const img = n.image ? '<img class="np-vignette" src="' + esc(n.image) + '" alt="" loading="lazy">' : "";
+                const interieur = '<span class="np-ico t-' + t + '" title="' + esc(nom) + '">' + ICONES[t] + '</span><span class="np-corps"><strong data-no-trad>' + esc(n.titre) + '</strong>' + (n.texte ? '<span class="np-p" data-no-trad>' + esc(n.texte) + '</span>' : "") + '<small data-no-trad>' + esc(nom) + ' · ' + esc(dateTxt(n.date)) + '</small></span>' + img + (nonlue ? '<span class="np-point" aria-label="' + T3("Non lue", "Unread", "לא נקרא") + '"></span>' : "");
+                return '<li class="' + (nonlue ? "non-lue" : "") + '">' + (n.lien ? '<a class="np-item" href="' + esc(n.lien) + '" data-k="' + esc(k) + '">' + interieur + '</a>' : '<button type="button" class="np-item" data-k="' + esc(k) + '">' + interieur + '</button>') + '</li>';
+            }).join("") + '</ul>' : vide(cloche, "Tout est à jour", "Vous n'avez aucune notification non lue.");
+            return tete(outils) + onglets + corps + '<div class="np-actions np-pied"><a class="lien-fleche" href="compte.html#notifications">Gérer mes notifications</a></div>';
+        }
+        const fermer = () => { pan.hidden = true; bell.setAttribute("aria-expanded", "false"); };
+        const rendre = () => { pan.innerHTML = contenu(); };
+        const ouvrir = () => { const tn = byId("toast-notif"); if (tn) tn.remove(); filtre = "tout"; rendre(); pan.hidden = false; bell.setAttribute("aria-expanded", "true"); const f = pan.querySelector(".np-item, .np-btn, .bouton"); if (f && document.activeElement === bell) { /* le focus reste sur la cloche */ } };
+        bell.addEventListener("click", (e) => { e.stopPropagation(); if (!pan.hidden) return fermer(); ouvrir(); });
+        pan.addEventListener("click", (e) => {
+            const u = compte(); if (!u) return;
+            const f = e.target.closest("[data-f]");
+            if (f) { filtre = f.dataset.f; rendre(); return; }
+            if (e.target.closest("#np-tout")) { marquer(u, triees(u).map(cle)); rendre(); maj(); return; }
+            const it = e.target.closest(".np-item");
+            if (it) { marquer(u, [it.dataset.k]); maj(); if (it.tagName === "BUTTON") rendre(); }
+        });
+        document.addEventListener("click", (e) => { if (e.target.isConnected && !pan.hidden && !pan.contains(e.target) && !bell.contains(e.target)) fermer(); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pan.hidden) { fermer(); bell.focus(); } });
+        window.addEventListener("langue-changee", () => { if (!pan.hidden) rendre(); });
+        window.EG_NOTIF = { maj };
+        maj();
+
+        // Petit message à l'arrivée (une fois par visite) quand il y a du neuf
+        try {
+            const u = compte();
+            if (u && u.notifSite !== false && u.notifToast !== false && !sessionStorage.getItem("eg_toast_notif")) {
+                const n = nonLues(u);
+                if (n.length) {
+                    sessionStorage.setItem("eg_toast_notif", "1");
+                    const t = document.createElement("div");
+                    t.id = "toast-notif"; t.setAttribute("role", "status");
+                    const un = n.length === 1;
+                    t.innerHTML = '<span class="np-ico t-' + type(n[0]) + '">' + ICONES[type(n[0])] + '</span><span class="tn-txt" data-no-trad><strong>' + esc(un ? n[0].titre : T3(n.length + " nouvelles notifications", n.length + " new notifications", n.length + " התראות חדשות")) + '</strong>' + (un && n[0].texte ? '<small>' + esc(n[0].texte) + '</small>' : "") + '</span><button type="button" class="tn-voir" data-no-trad>' + T3("Voir", "View", "לצפייה") + '</button><button type="button" class="tn-x" aria-label="' + T3("Fermer", "Close", "סגירה") + '">✕</button>';
+                    document.body.appendChild(t);
+                    const retirer = () => { t.classList.remove("visible"); setTimeout(() => t.remove(), 300); };
+                    t.querySelector(".tn-voir").addEventListener("click", (ev) => { ev.stopPropagation(); retirer(); if (pan.hidden) ouvrir(); });
+                    t.querySelector(".tn-x").addEventListener("click", retirer);
+                    setTimeout(() => t.classList.add("visible"), 900);
+                    setTimeout(retirer, 9000);
+                }
+            }
+        } catch { }
     }
 
     // ---------- Aperçu dans une pièce ----------
@@ -152,11 +455,22 @@ const AVANT_APRES = [];
     if (!byId("wa-flottant")) {
         const wa = document.createElement("a");
         wa.id = "wa-flottant";
-        wa.href = lienWhatsApp("Bonjour, j'ai une question sur vos tableaux.");
+        wa.href = "https://wa.me/" + NUMERO_WHATSAPP;
         wa.target = "_blank"; wa.rel = "noopener";
         wa.setAttribute("aria-label", "Une question ? Écrivez-moi sur WhatsApp");
         wa.innerHTML = '<span class="wa-label">Une question ? Écrivez-moi</span>';
         document.body.appendChild(wa);
+    }
+
+    // ---------- Bouton Instagram flottant ----------
+    if (!byId("ig-flottant")) {
+        const ig = document.createElement("a");
+        ig.id = "ig-flottant";
+        ig.href = "https://instagram.com/Ethan_bitan";
+        ig.target = "_blank"; ig.rel = "noopener";
+        ig.setAttribute("aria-label", "Voir mon Instagram");
+        ig.innerHTML = '<span class="wa-label">Mon Instagram</span>';
+        document.body.appendChild(ig);
     }
 
     // ---------- Partage d'un tableau + lien direct ----------
@@ -201,3 +515,5 @@ const AVANT_APRES = [];
         depuisLien();
     }
 })();
+window.EG_EXTRAS_FAIT = true;
+if (window.EG_MENU_PRET) window.EG_MENU_PRET("extras");
