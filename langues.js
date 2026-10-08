@@ -16,6 +16,13 @@
 
     // ---------- Traductions : [français, anglais, hébreu] ----------
     const DICO = [
+        ["Code promo", "Promo code", "קוד קופון"],
+        ["Entrez votre code", "Enter your code", "הזינו את הקוד"],
+        ["Appliquer", "Apply", "החלה"],
+        ["Entrez un code promo.", "Enter a promo code.", "הזינו קוד קופון."],
+        ["Ce code n'est pas valide.", "This code is not valid.", "הקוד אינו תקף."],
+        ["Connectez-vous à votre compte pour utiliser un code promo.", "Sign in to your account to use a promo code.", "התחברו לחשבון כדי להשתמש בקוד קופון."],
+        ["Ce code est valable une seule fois, pour une première commande.", "This code is valid once only, for a first order.", "הקוד תקף פעם אחת בלבד, להזמנה ראשונה."],
         ["Touchez un format ci-dessus, puis choisissez la pièce.", "Tap a size above, then choose the room.", "לחצו על גודל למעלה ואז בחרו את החדר."],
         ["Voir chez moi ↓", "See it at home ↓", "ראו אצלי בבית ↓"],
         ["Salon", "Living room", "סלון"],
@@ -591,6 +598,8 @@
     // ---------- Phrases avec nombre ou nom variable ----------
     // Chaque motif reçoit le texte français et renvoie [anglais, hébreu] (ou null).
     const MOTIFS = [
+        [/^Offre en cours : de -(\d+)% à -(\d+)% sur une sélection de tableaux et de posters( jusqu'au (.+))?$/, (m) => ["Current offer: " + m[1] + "% to " + m[2] + "% off selected paintings and posters" + (m[4] ? " until " + m[4] : ""), "מבצע: הנחה של " + m[1] + "% עד " + m[2] + "% על מבחר ציורים ופוסטרים" + (m[4] ? " עד " + m[4] : "")]],
+        [/^Code (\S+) appliqué : -(\d+)%$/, (m) => ["Code " + m[1] + " applied: -" + m[2] + "%", "הקוד " + m[1] + " הופעל: -" + m[2] + "%"]],
         [/^Responsable de la publication : (.+)$/, (m) => ["Publisher: " + m[1], "אחראי על הפרסום: " + m[1]]],
         [/^Adresse : (.+)$/, (m) => ["Address: " + m[1], "כתובת: " + m[1]]],
         [/^Hébergeur du site : (.+)$/, (m) => ["Site host: " + m[1], "מארח האתר: " + m[1]]],

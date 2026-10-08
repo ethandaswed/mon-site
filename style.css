@@ -1507,3 +1507,27 @@ nav { background: #fff !important; -webkit-backdrop-filter: none !important; bac
     .format-voir { font-size: .7rem; margin-top: 4px; }
     .seg-env { width: 100%; } .seg-env button { padding: 9px 2px; font-size: .85rem; }
 }
+
+/* v44 promo + code promo */
+.prix-barre { color: var(--gris); font-weight: 500; font-size: .78em; text-decoration: line-through; margin-inline-end: 4px; }
+.prix-solde { color: var(--rouge); font-weight: 800; }
+.badge-promo { display: inline-block; font-style: normal; font-weight: 700; font-size: .62em; line-height: 1; padding: 3px 7px; border-radius: 99px; background: var(--rouge); color: #fff; vertical-align: middle; white-space: nowrap; margin-inline-start: 4px; }
+.format-prix strong .prix-barre { display: block; font-size: .7em; }
+.format-prix strong .badge-promo { margin-top: 2px; }
+.projet .prix .prix-barre, .legende .prix-barre { display: inline; }
+.bandeau-promo { background: var(--rouge); color: #fff; text-align: center; font-weight: 700; font-size: .95rem; padding: 9px 16px; }
+.code-promo { max-width: 760px; margin: 22px auto 0; text-align: left; }
+.code-promo label { display: block; font-weight: 700; margin-bottom: 6px; }
+.code-ligne { display: flex; gap: 10px; }
+.code-ligne input { flex: 1; min-width: 0; text-transform: uppercase; font: inherit; padding: 12px 14px; border: 2px solid #ddd; border-radius: 10px; background: #fff; color: var(--encre); }
+.code-ligne .bouton { padding: 12px 20px; font-size: 1rem; }
+.sombre .code-ligne input { background: #1c1c1c; border-color: #333; }
+.sous-total { max-width: 760px; margin: 14px auto 0 !important; text-align: right; color: var(--gris) !important; }
+@media (max-width: 600px) {
+    .lignes-panier:not(.compact) li { display: grid; grid-template-columns: 72px 1fr auto; grid-template-areas: "img info x" "img prix prix"; align-items: start; column-gap: 12px; row-gap: 4px; }
+    .lignes-panier:not(.compact) li > img, .lignes-panier:not(.compact) li > .pastille { grid-area: img; }
+    .lignes-panier:not(.compact) li > div { grid-area: info; }
+    .lignes-panier:not(.compact) li > .ligne-prix { grid-area: prix; white-space: normal; }
+    .lignes-panier:not(.compact) li > .retirer { grid-area: x; }
+    .sous-total { text-align: left; }
+}

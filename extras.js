@@ -172,7 +172,7 @@ const NOTIFICATIONS = [];
                     "image": new URL(c.fichier, location.href).href,
                     "url": page + "#" + encodeURIComponent(c.fichier.replace(/\.[^.]+$/, "")),
                     "brand": { "@type": "Brand", "name": "Ethan Gallery" },
-                    "offers": { "@type": "Offer", "priceCurrency": "ILS", "price": String((c.prix.match(/\d+/) || [0])[0]),
+                    "offers": { "@type": "Offer", "priceCurrency": "ILS", "price": String(prixOriginal(c)),
                         "availability": c.dispo ? "https://schema.org/InStock" : "https://schema.org/SoldOut", "itemCondition": "https://schema.org/NewCondition" }
                 }
             }))
@@ -543,6 +543,17 @@ const NOTIFICATIONS = [];
         if (!racine.classList.contains("verrou") || window.innerWidth > 800) return;
         if (!e.target.closest(".rg-corps, #panneau-notif")) e.preventDefault();
     }, { passive: false });
+})();
+// Bandeau de promotion (accueil et créations)
+(() => {
+    if (typeof promoActive !== "function" || !promoActive()) return;
+    if (!document.querySelector(".heros") && !document.querySelector(".cartes-projets")) return;
+    const mini = Math.min(...PROMO.paliers.map((p) => p[1])), maxi = Math.max(...PROMO.paliers.map((p) => p[1]));
+    const d = document.createElement("div");
+    d.className = "bandeau-promo";
+    d.textContent = "Offre en cours : de -" + mini + "% à -" + maxi + "% sur une sélection de tableaux et de posters" + (PROMO.fin ? " jusqu'au " + new Date(PROMO.fin + "T12:00:00").toLocaleDateString("fr-FR") : "");
+    const cible = document.querySelector("main") || document.querySelector(".heros") || document.querySelector(".zone");
+    if (cible) cible.parentNode.insertBefore(d, cible);
 })();
 window.EG_EXTRAS_FAIT = true;
 if (window.EG_MENU_PRET) window.EG_MENU_PRET("extras");

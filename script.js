@@ -4,6 +4,36 @@
 const NUMERO_WHATSAPP = "972559955591";
 const PRIX_TAILLES = { "30x40": 400, "50x70": 650, "70x100": 900 };
 
+// PROMOTION EN COURS (vraie baisse de prix : le client paie le prix réduit)
+// oeuvres : titres des créations en promo (originaux ET posters). Les autres restent au prix normal.
+// paliers : [prix minimum du tableau original, % de réduction]. Mettre actif:false pour tout arrêter.
+// surMesure : true = la promo s'applique aussi aux formats sur mesure.
+// fin : date de fin facultative au format "2026-12-31" (laisser "" pour aucune date).
+const PROMO = { actif: true, fin: "", surMesure: false, paliers: [[900, 15], [600, 12], [0, 10]],
+    oeuvres: ["Michael Jackson", "Street Fighter", "Dark Angel", "Sukuna", "Moon Knight", "Gohan", "Deadpool", "Ken Kaneki"] };
+// CODES PROMO : un code = un % de réduction sur le panier. Valable une fois par compte, pour la 1re commande.
+const CODES_PROMO = { "FIRST10": 10 };
+const promoActive = () => PROMO.actif && (!PROMO.fin || Date.now() <= new Date(PROMO.fin + "T23:59:59").getTime());
+const prixBase = (c) => Number((String(c.prix).match(/\d+/) || [0])[0]);
+const palierPct = (base) => { const p = PROMO.paliers.find(([m]) => base >= m); return p ? p[1] : 0; };
+const reduire = (prix, base) => Math.round(prix * (1 - palierPct(base) / 100) / 5) * 5;
+const enPromo = (c) => promoActive() && PROMO.oeuvres.includes(c.titre);
+const prixSM = (t) => { const p = PRIX_TAILLES[t]; return p && promoActive() && PROMO.surMesure ? reduire(p, p) : p; };
+const prixHtml = (base, solde) => {
+    solde = solde == null ? base : solde;
+    if (!base || solde >= base) return (solde || base) + " ₪";
+    return '<s class="prix-barre">' + base + ' ₪</s> <span class="prix-solde">' + solde + ' ₪</span> <em class="badge-promo">-' + Math.round((1 - solde / base) * 100) + '%</em>';
+};
+const codeRemise = (t) => CODES_PROMO[String(t || "").trim().toUpperCase()] || 0;
+const _lireJ = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
+const userLocal = () => { const e = _lireJ("eg_session", null), us = _lireJ("eg_users", {}); return e && us[e] ? { email: e, u: us[e], us } : null; };
+const codePossible = () => { const x = userLocal(); return !!x && !(x.u.commandes && x.u.commandes.length) && !x.u.codeUtilise; };
+const noterCommande = (total, titres, code) => {
+    const x = userLocal(); if (!x) return;
+    x.us[x.email] = { ...x.u, commandes: [{ date: new Date().toLocaleDateString("fr-FR"), total, articles: titres }, ...(x.u.commandes || [])].slice(0, 20), ...(code ? { codeUtilise: code } : {}) };
+    try { localStorage.setItem("eg_users", JSON.stringify(x.us)); localStorage.removeItem("eg_code"); } catch { }
+};
+
 // Poster imprimé : le prix va de 150 à 200 ₪ selon le prix du tableau original
 // (tableau à 400 ₪ ou moins = 150 ₪, tableau à 1000 ₪ ou plus = 200 ₪).
 // SUPPLEMENT_CADRE : supplément facturé quand le poster est livré avec cadre (en ₪).
@@ -13,8 +43,9 @@ function prixPoster(c, avecCadre) {
     const t = Math.min(1, Math.max(0, (base - POSTER.baseMin) / (POSTER.baseMax - POSTER.baseMin)));
     return Math.round((POSTER.min + t * (POSTER.max - POSTER.min)) / 10) * 10 + (avecCadre ? POSTER.SUPPLEMENT_CADRE : 0);
 }
+const prixPosterSolde = (c, avecCadre) => enPromo(c) ? reduire(prixPoster(c, avecCadre), prixBase(c)) : prixPoster(c, avecCadre);
 function articlePoster(c, avecCadre) {
-    return { id: "poster:" + c.fichier + ":" + (avecCadre ? "cadre" : "nu"), titre: "Poster " + c.titre, prix: prixPoster(c, avecCadre),
+    return { id: "poster:" + c.fichier + ":" + (avecCadre ? "cadre" : "nu"), titre: "Poster " + c.titre, prix: prixPosterSolde(c, avecCadre), base: prixPoster(c, avecCadre),
         image: c.fichier, type: "Poster imprimé", detail: avecCadre ? "Avec cadre" : "Sans cadre" };
 }
 
@@ -22,7 +53,7 @@ function articlePoster(c, avecCadre) {
 // Partagé entre les cartes de la page Créations et la fenêtre d'un tableau.
 const CHOIX = {};
 const choixDe = (c) => CHOIX[c.fichier] || (CHOIX[c.fichier] = { v: c.dispo ? "original" : "poster", cadre: false });
-const prixOriginal = (c) => Number((String(c.prix).match(/\d+/) || [0])[0]);
+const prixOriginal = (c) => c.dispo && enPromo(c) ? reduire(prixBase(c), prixBase(c)) : prixBase(c);
 
 // Pour ajouter une création : ajoutez UNE ligne dans cette liste.
 // [fichier image, titre, description, prix affiché, disponible ?, afficher sur l'accueil ?]
@@ -206,7 +237,7 @@ if (fenetre) {
         if (exigerCompte()) return;
         const c = creationActive, ch = choixDe(c);
         const texte = ch.v === "poster"
-            ? "Bonjour, je suis intéressé par le poster imprimé du tableau " + c.titre + " (" + (ch.cadre ? "avec cadre" : "sans cadre") + ", " + prixPoster(c, ch.cadre) + " ₪). Est-il disponible ?"
+            ? "Bonjour, je suis intéressé par le poster imprimé du tableau " + c.titre + " (" + (ch.cadre ? "avec cadre" : "sans cadre") + ", " + prixPosterSolde(c, ch.cadre) + " ₪). Est-il disponible ?"
             : "Bonjour, je suis intéressé par le tableau original " + c.titre + " (" + prixOriginal(c) + " ₪). Est-il toujours disponible ?";
         window.open(lienWhatsApp(texte), "_blank", "noopener");
     });
@@ -226,7 +257,7 @@ if (grille) {
         const img = b.querySelector("img");
         img.src = "./" + c.fichier; img.alt = c.titre;
         b.querySelector("strong").textContent = c.titre;
-        b.querySelector(".legende > span").textContent = c.prix;
+        b.querySelector(".legende > span").innerHTML = c.dispo ? prixHtml(prixBase(c), prixOriginal(c)) : prixBase(c) + " ₪";
         b.addEventListener("click", () => ouvrirCreation(c));
         grille.appendChild(b);
     });
@@ -242,7 +273,7 @@ document.querySelectorAll("[data-oeuvre]").forEach((el) => {
 // =====================================================
 // PRIX (une seule source : PRIX_TAILLES)
 // =====================================================
-document.querySelectorAll("[data-prix]").forEach((el) => { el.textContent = PRIX_TAILLES[el.dataset.prix] + " ₪"; });
+document.querySelectorAll("[data-prix]").forEach((el) => { el.innerHTML = prixHtml(PRIX_TAILLES[el.dataset.prix], prixSM(el.dataset.prix)); });
 const VALEURS_POSTER = { min: POSTER.min, max: POSTER.max + 0, cadre: POSTER.SUPPLEMENT_CADRE };
 document.querySelectorAll("[data-poster]").forEach((el) => { el.textContent = VALEURS_POSTER[el.dataset.poster] + " ₪"; });
 
@@ -264,7 +295,7 @@ if (bouton) {
         if (dt) dt.textContent = f.name;
     });
     taille.addEventListener("change", () => {
-        prix.textContent = PRIX_TAILLES[taille.value] ? "Prix estimé : " + PRIX_TAILLES[taille.value] + " ₪" : "";
+        prix.innerHTML = PRIX_TAILLES[taille.value] ? "Prix estimé : " + prixHtml(PRIX_TAILLES[taille.value], prixSM(taille.value)) : "";
     });
 
     const montrer = (el, texte, type) => {
@@ -296,11 +327,12 @@ if (bouton) {
             "🎨 NOUVELLE DEMANDE - ETHAN GALLERY\n\n" +
             "📐 Taille : " + taille.value + " cm\n" +
             "🎨 Style : " + style + "\n" +
-            "💰 Prix estimé : " + PRIX_TAILLES[taille.value] + " ₪\n\n" +
+            "💰 Prix estimé : " + prixSM(taille.value) + " ₪" + (prixSM(taille.value) < PRIX_TAILLES[taille.value] ? " (au lieu de " + PRIX_TAILLES[taille.value] + " ₪, offre en cours)" : "") + "\n\n" +
             (window.EG_CADEAU ? window.EG_CADEAU() : "") +
             "✍️ Idée du tableau :\n" + idee + "\n\n" +
             "📸 Ma photo : " + f.name + "\nJe vous l'envoie juste après ce message dans cette conversation.";
         window.open(lienWhatsApp(message), "_blank", "noopener");
+        noterCommande(prixSM(taille.value), ["Tableau sur mesure " + taille.value + " cm"]);
         montrer($("info-whatsapp"), "Dernière étape : WhatsApp vient de s'ouvrir avec votre demande. Envoyez le message, puis envoyez aussi votre photo dans la conversation pour que je puisse commencer.", "info-whatsapp");
     });
 }
@@ -476,7 +508,7 @@ if (carrousel) {
     }
     function articleDe(c) {
         const vendu = !c.dispo;
-        return { indispo: !c.dispo, id: "creation:" + c.fichier, titre: c.titre, prix: prixNum(c.prix), image: c.fichier,
+        return { indispo: !c.dispo, id: "creation:" + c.fichier, titre: c.titre, prix: vendu ? prixNum(c.prix) : prixOriginal(c), base: prixNum(c.prix), image: c.fichier,
             type: vendu ? "Sur commande (pièce déjà vendue, refaite à la main)" : "Pièce unique",
             detail: vendu ? "Prix confirmé sur WhatsApp" : (/partir/i.test(c.prix) ? "Prix de départ, confirmé sur WhatsApp" : "") };
     }
@@ -531,13 +563,13 @@ if (carrousel) {
         radio("cadre-produit", "sans").checked = !ch.cadre;
         radio("cadre-produit", "avec").checked = ch.cadre;
         $i("v-cadre").hidden = !poster;
-        $i("v-prix-original").textContent = c.dispo ? c.prix : "Indisponible";
-        $i("v-prix-poster").textContent = prixPoster(c, ch.cadre) + " ₪";
+        $i("v-prix-original").innerHTML = c.dispo ? prixHtml(prixBase(c), prixOriginal(c)) : "Indisponible";
+        $i("v-prix-poster").innerHTML = prixHtml(prixPoster(c, ch.cadre), prixPosterSolde(c, ch.cadre));
         $i("v-note").textContent = poster
             ? "Reproduction imprimée de ce tableau. Format confirmé avec vous sur WhatsApp."
             : "Pièce unique, peinte ou dessinée à la main.";
 
-        $i("produit-prix").textContent = art.prix + " ₪";
+        $i("produit-prix").innerHTML = art.base && art.base > art.prix ? prixHtml(art.base, art.prix) : art.prix + " ₪";
         $i("produit-prix").hidden = !c.prix;
         const stock = document.querySelector(".produit-stock");
         stock.hidden = !c.prix;
@@ -586,7 +618,7 @@ if (carrousel) {
             const manque = !f ? "Ajoutez une photo." : !taille ? "Choisissez une taille." : !style ? "Choisissez un style." : !idee ? "Décrivez votre idée." : "";
             if (manque) return etat(err, manque, "erreur");
             err.className = "message-etat";
-            ajouter({ id: "sur-mesure:" + Date.now(), titre: "Tableau sur mesure " + taille + " cm", prix: PRIX_TAILLES[taille], type: "Sur mesure", detail: "Style : " + style + " | Idée : " + idee + (window.EG_CADEAU ? window.EG_CADEAU(true) : ""), photo: f.name });
+            ajouter({ id: "sur-mesure:" + Date.now(), titre: "Tableau sur mesure " + taille + " cm", prix: prixSM(taille), base: PRIX_TAILLES[taille], type: "Sur mesure", detail: "Style : " + style + " | Idée : " + idee + (window.EG_CADEAU ? window.EG_CADEAU(true) : ""), photo: f.name });
             toast("✓ Ajouté au panier. Retrouvez-le dans votre panier.");
         });
     }
@@ -616,8 +648,28 @@ if (carrousel) {
 
     // Page panier
     const zp = document.getElementById("contenu-panier");
+    // Remet les prix du panier à jour (promo, ancien panier) avant affichage ou envoi
+    const rafraichir = (i) => {
+        if (/^creation:/.test(i.id)) {
+            const c = CREATIONS.find((x) => "creation:" + x.fichier === i.id);
+            if (c) { const b = prixNum(c.prix); return { ...i, base: b, prix: c.dispo ? prixOriginal(c) : b }; }
+        } else if (/^poster:/.test(i.id)) {
+            const [, f, k] = i.id.split(":"), c = CREATIONS.find((x) => x.fichier === f);
+            if (c) return { ...i, base: prixPoster(c, k === "cadre"), prix: prixPosterSolde(c, k === "cadre") };
+        } else if (/^sur-mesure:/.test(i.id)) {
+            const t = (i.titre.match(/\d+x\d+/) || [])[0];
+            if (t && PRIX_TAILLES[t]) return { ...i, base: PRIX_TAILLES[t], prix: prixSM(t) };
+        }
+        return i;
+    };
+    const panierAJour = () => getPanier().map(rafraichir);
+    const calculPanier = (p) => {
+        const sous = p.reduce((s, i) => s + i.prix, 0), code = String(lire("eg_code", "")).toUpperCase();
+        const pct = code && codePossible() ? codeRemise(code) : 0, remise = Math.round(sous * pct / 100);
+        return { sous, pct, remise, code: pct ? code : "", total: sous - remise };
+    };
     function rendrePanier() {
-        const p = getPanier(), u = userCourant();
+        const p = panierAJour(), u = userCourant();
         if (!p.length) {
             const sug = CREATIONS.filter((c) => c.dispo).slice(0, 3);
             const pt = (ico, t) => '<li><span aria-hidden="true">' + ico + '</span>' + t + '</li>';
@@ -626,13 +678,14 @@ if (carrousel) {
                 (sug.length ? '<h3 class="panier-vide-titre">Vous pourriez aimer</h3><div class="panier-vide-sug">' + sug.map((c) => '<a href="creations.html"><img src="./' + esc(c.fichier) + '" alt="' + esc(c.titre) + '" loading="lazy"><span>' + esc(c.titre) + '</span><small>' + esc(c.prix) + '</small></a>').join("") + '</div>' : '') + '</div>';
             return;
         }
-        const total = p.reduce((s, i) => s + i.prix, 0);
+        const calc = calculPanier(p), total = calc.total;
+        const codeBloc = '<div class="code-promo"><label for="code-champ">Code promo</label><div class="code-ligne"><input id="code-champ" type="text" autocomplete="off" autocapitalize="characters" placeholder="Entrez votre code" value="' + esc(calc.code) + '"><button type="button" class="bouton contour" id="appliquer-code">Appliquer</button></div><p id="code-msg" class="message-etat' + (calc.pct ? ' visible ok' : '') + '" role="status">' + (calc.pct ? 'Code ' + esc(calc.code) + ' appliqué : -' + calc.pct + '%' : '') + '</p></div>';
         zp.innerHTML = '<ul class="lignes-panier">' + p.map((i, n) =>
             '<li>' + (i.image ? '<img src="./' + esc(i.image) + '" alt="">' : '<span class="pastille" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span>') +
             '<div><strong>' + esc(i.titre) + '</strong><small>' + esc(i.type) + (i.detail ? " · " + esc(i.detail) : "") + '</small></div>' +
-            '<span class="ligne-prix">' + i.prix + ' ₪</span>' +
+            '<span class="ligne-prix">' + (i.base && i.base > i.prix ? prixHtml(i.base, i.prix) : i.prix + ' ₪') + '</span>' +
             '<button type="button" class="retirer" data-n="' + n + '" aria-label="Retirer ' + esc(i.titre) + '">✕</button></li>').join("") +
-            '</ul><p class="total-panier">Total : <strong>' + total + ' ₪</strong></p>' +
+            '</ul>' + codeBloc + (calc.pct ? '<p class="sous-total">Sous-total : ' + calc.sous + ' ₪<br>Code ' + esc(calc.code) + ' (-' + calc.pct + '%) : -' + calc.remise + ' ₪</p>' : '') + '<p class="total-panier">Total : <strong>' + total + ' ₪</strong></p>' +
             '<div class="formulaire"><div class="champ"><label for="c-nom">Votre nom</label><input id="c-nom" type="text" autocomplete="name" value="' + esc(u ? u.nom : "") + '"></div>' +
             '<div class="champ"><label for="c-tel">Téléphone (facultatif)</label><input id="c-tel" type="tel" autocomplete="tel" value="' + esc(u ? u.tel || "" : "") + '"></div>' +
             '<div class="champ"><label for="c-note">Message (facultatif)</label><textarea id="c-note" placeholder="Livraison, remise en main propre, questions..."></textarea></div>' +
@@ -646,22 +699,32 @@ if (carrousel) {
             const r = e.target.closest(".retirer");
             if (r) { const p = getPanier(); p.splice(Number(r.dataset.n), 1); setPanier(p); rendrePanier(); return; }
             if (e.target.id === "vider-panier") { setPanier([]); rendrePanier(); return; }
+            if (e.target.id === "appliquer-code") {
+                const saisi = document.getElementById("code-champ").value.trim().toUpperCase(), m = document.getElementById("code-msg");
+                const refus = (t) => { m.textContent = t; m.className = "message-etat visible erreur"; };
+                if (!saisi) return refus("Entrez un code promo.");
+                if (!codeRemise(saisi)) return refus("Ce code n'est pas valide.");
+                if (!compteConnecte()) return refus("Connectez-vous à votre compte pour utiliser un code promo.");
+                if (!codePossible()) return refus("Ce code est valable une seule fois, pour une première commande.");
+                try { localStorage.setItem("eg_code", JSON.stringify(saisi)); } catch { }
+                rendrePanier(); return;
+            }
             const lc = e.target.closest("[data-retour]"); if (lc) { try { sessionStorage.setItem("eg_retour", lc.dataset.retour); } catch { } return; }
             if (e.target.id === "envoyer-commande" && exigerCompte()) return;
             if (e.target.id !== "envoyer-commande") return;
             const nom = document.getElementById("c-nom").value.trim(), tel = document.getElementById("c-tel").value.trim(), note = document.getElementById("c-note").value.trim();
             if (!nom) return etat(document.getElementById("c-erreur"), "Indiquez votre nom pour la commande.", "erreur");
-            const p = getPanier(), total = p.reduce((s, i) => s + i.prix, 0), u = userCourant();
+            const p = panierAJour(), calc = calculPanier(p), total = calc.total, u = userCourant();
             const photos = p.filter((i) => i.photo).map((i) => i.photo);
             const msg = "🛒 NOUVELLE COMMANDE - ETHAN GALLERY\n\n" +
                 "👤 Nom : " + nom + "\n" + (tel ? "📞 Téléphone : " + tel + "\n" : "") + (u ? "📧 Compte : " + u.email + "\n🗣️ Contact préféré : " + (u.contact || "WhatsApp") + "\n📦 Réception : " + (u.reception || "À convenir") + "\n" + (u.adresse ? "📍 Adresse : " + u.adresse + (u.ville ? ", " + u.ville : "") + "\n" : "") : "") +
                 "\n🧾 ARTICLES (" + p.length + ")\n" +
                 p.map((i, n) => (n + 1) + ". " + i.titre + "\n   • Type : " + i.type + (i.detail ? "\n   • " + i.detail : "") + "\n   • Prix : " + i.prix + " ₪").join("\n") +
-                "\n\n💰 TOTAL : " + total + " ₪\n" + (note ? "\n📝 Message : " + note + "\n" : "") +
+                (calc.pct ? "\n\n🏷️ Code promo " + calc.code + " (-" + calc.pct + "%) : -" + calc.remise + " ₪ (1re commande)" : "") + "\n\n💰 TOTAL : " + total + " ₪\n" + (note ? "\n📝 Message : " + note + "\n" : "") +
                 (photos.length ? "\n📸 Photos à envoyer juste après ce message : " + photos.join(", ") + "\n" : "") +
                 "\nMerci de me confirmer la disponibilité et le prix final.";
             window.open(lienWhatsApp(msg), "_blank", "noopener");
-            if (u) sauverUser(u.email, { commandes: [{ date: new Date().toLocaleDateString("fr-FR"), total, articles: p.map((i) => i.titre) }, ...(u.commandes || [])].slice(0, 20) });
+            if (u) noterCommande(total, p.map((i) => i.titre), calc.code);
             setPanier([]);
             zp.innerHTML = '<p class="message-etat visible ok">WhatsApp vient de s\'ouvrir avec votre commande. Envoyez le message' + (photos.length ? ", puis vos photos" : "") + ' dans la conversation.</p><a class="bouton" href="creations.html">Continuer mes achats</a>';
         });
@@ -712,7 +775,7 @@ if (carrousel) {
                 '<div class="champ"><label for="p-contact">Contact préféré</label><select id="p-contact">' + opt(["WhatsApp", "Appel", "E-mail", "Instagram"], u.contact || "WhatsApp") + '</select></div>' +
                 '<div class="champ"><label for="p-recep">Mode de réception</label><select id="p-recep">' + opt(["À convenir", "Remise en main propre", "Livraison"], u.reception || "À convenir") + '</select></div>' +
                 msg("p-msg") + '<button type="button" class="bouton" id="p-sauver">Enregistrer</button>') +
-            carte("Mes favoris (" + favs.length + ")", favs.length ? '<ul class="lignes-panier compact">' + favs.map((c) => '<li><img src="./' + esc(c.fichier) + '" alt=""><div><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix || "") + (c.dispo ? "" : " · indisponible") + '</small></div>' +
+            carte("Mes favoris (" + favs.length + ")", favs.length ? '<ul class="lignes-panier compact">' + favs.map((c) => '<li><img src="./' + esc(c.fichier) + '" alt=""><div><strong>' + esc(c.titre) + '</strong><small>' + esc(c.prix ? (c.dispo ? prixOriginal(c) : prixBase(c)) + " ₪" : "") + (c.dispo ? "" : " · indisponible") + '</small></div>' +
                 (c.prix && c.dispo ? '<button type="button" class="mini" data-add="' + esc(c.fichier) + '">Ajouter</button>' : "") + '<button type="button" class="retirer" data-rm="' + esc(c.fichier) + '" aria-label="Retirer ' + esc(c.titre) + ' des favoris">✕</button></li>').join("") + '</ul>' : '<p>Aucun favori. Ouvrez un tableau et cliquez sur ♡.</p>') +
             carte("Sécurité", champ("s-ancien", "Mot de passe actuel", "", "password", "current-password") + champ("s-nouveau", "Nouveau mot de passe (6 caractères minimum)", "", "password", "new-password") + msg("s-msg") + '<button type="button" class="bouton contour" id="s-change">Changer le mot de passe</button>') +
             carte("Mes commandes", cmds.length ? '<ul class="lignes-panier compact">' + cmds.map((c) => '<li><div><strong>' + esc(c.date) + '</strong><small>' + c.articles.map(esc).join(", ") + '</small></div><span class="ligne-prix">' + c.total + ' ₪</span></li>').join("") + '</ul><button type="button" class="lien-danger" id="d-histo">Vider l\'historique</button>' : "<p>Aucune commande envoyée pour le moment.</p>") +
@@ -897,7 +960,7 @@ if (carrousel) {
         el.innerHTML = `<button type="button" class="projet-visuel" aria-label="Voir ${c.titre}"><img loading="lazy" src="./${c.fichier}" alt="Tableau ${c.titre}">${c.dispo ? "" : '<span class="badge-rupture">Original vendu</span>'}</button>` +
             `<button type="button" class="coeur" aria-pressed="${!!fav}" aria-label="Favori : ${c.titre}">${fav ? "♥" : "♡"}</button>` +
             `<div class="projet-corps"><small>${c.univers}, ${c.tech.toLowerCase()}</small><h3>${c.titre}</h3><p class="prix"></p><p class="stock"></p>` +
-            `<select class="version" aria-label="Version de ${c.titre}"><option value="original"${c.dispo ? "" : " disabled"}>Original · ${c.dispo ? c.prix : "vendu"}</option><option value="poster"></option></select>` +
+            `<select class="version" aria-label="Version de ${c.titre}"><option value="original"${c.dispo ? "" : " disabled"}>Original · ${c.dispo ? prixOriginal(c) + " ₪" : "vendu"}</option><option value="poster"></option></select>` +
             `<select class="cadre-poster" aria-label="Cadre du poster ${c.titre}"><option value="sans">Sans cadre</option><option value="avec">Avec cadre (+${POSTER.SUPPLEMENT_CADRE} ₪)</option></select>` +
             `<button type="button" class="bouton ajout"></button></div>`;
         const vSel = el.querySelector(".version"), cSel = el.querySelector(".cadre-poster"), btn = el.querySelector(".ajout");
@@ -905,8 +968,8 @@ if (carrousel) {
         const maj = () => {
             const ch = choixDe(c), poster = ch.v === "poster", art = EG.articleChoix(c, ch), ok = poster || c.dispo, dedans = EG.aDansPanier(art.id);
             vSel.value = ch.v; cSel.value = ch.cadre ? "avec" : "sans"; cSel.hidden = !poster;
-            vSel.options[1].textContent = "Poster · " + prixPoster(c, ch.cadre) + " ₪";
-            prix.textContent = art.prix + " ₪";
+            vSel.options[1].textContent = "Poster · " + prixPosterSolde(c, ch.cadre) + " ₪";
+            prix.innerHTML = art.base && art.base > art.prix ? prixHtml(art.base, art.prix) : art.prix + " ₪";
             stock.className = "stock " + (ok ? "ok" : "non");
             stock.textContent = poster ? "● Poster disponible" : c.dispo ? "● Original disponible" : "● Indisponible";
             btn.disabled = !ok || dedans;
@@ -970,7 +1033,7 @@ if (carrousel) {
         [["r-photo", photo.files[0] ? photo.files[0].name : "À ajouter", !!photo.files[0]], ["r-taille", lib(champs.taille), !!champs.taille.value],
          ["r-style", lib(champs.style), !!champs.style.value], ["r-idee", idee.value.trim() ? "Renseignée" : "À décrire", !!idee.value.trim()]]
             .forEach(([id, t, ok]) => { $(id).textContent = t; $(id).closest("li").classList.toggle("ok", ok); });
-        $("r-prix").textContent = PRIX_TAILLES[champs.taille.value] ? PRIX_TAILLES[champs.taille.value] + " ₪" : "—";
+        $("r-prix").innerHTML = PRIX_TAILLES[champs.taille.value] ? prixHtml(PRIX_TAILLES[champs.taille.value], prixSM(champs.taille.value)) : "—";
     };
     ["change", "input"].forEach((ev) => document.addEventListener(ev, (e) => { if (e.target.closest && e.target.closest(".formulaire")) maj(); }));
     maj();
