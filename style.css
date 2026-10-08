@@ -779,7 +779,7 @@ html[dir="rtl"] #wa-flottant { right: auto; left: 18px; }
 .piece-bloc { max-width: 720px; margin: 54px auto 0; text-align: center; }
 .piece-bloc h3 { font-size: 1.5rem; margin-bottom: .3em; }
 .piece-bloc .seg { margin: 6px 0 18px; }
-.piece-scene { --w: 50; --h: 70; position: relative; overflow: hidden; aspect-ratio: 320 / 240; border-radius: 18px; box-shadow: 0 24px 50px -30px rgba(0,0,0,.5); text-align: start; background: #ebe5dd; }
+.piece-scene { --w: 50; --h: 70; --mh: 35.4%; --gap: 8.4%; position: relative; overflow: hidden; aspect-ratio: 320 / 240; border-radius: 18px; box-shadow: 0 24px 50px -30px rgba(0,0,0,.5); text-align: start; background: #ebe5dd; }
 .piece-mur { position: absolute; inset: 0 0 10% 0; background: linear-gradient(180deg, #f3eee7, #e6dfd5); }
 .piece-sol { position: absolute; left: 0; right: 0; bottom: 0; height: 10%; background: linear-gradient(180deg, #b98d61, #9b7249); border-top: 3px solid #f6f2ec; }
 .piece-canape { position: absolute; left: 50%; bottom: 8.5%; width: 62.5%; height: 35.4%; transform: translateX(-50%); }
@@ -792,12 +792,12 @@ html[dir="rtl"] #wa-flottant { right: auto; left: 18px; }
 .c-coussin.g { left: 13%; } .c-coussin.d { right: 13%; background: #a9b8a8; transform: rotate(6deg); }
 .piece-plante { position: absolute; right: 7%; bottom: 8.5%; width: 5%; height: 24%; background: #7a5a3b; border-radius: 3px 3px 8px 8px; }
 .piece-plante::before { content: ""; position: absolute; left: 50%; bottom: 92%; width: 220%; height: 150%; transform: translateX(-50%); background: radial-gradient(60% 60% at 30% 70%, #4f8a55 98%, transparent 100%), radial-gradient(60% 60% at 70% 60%, #3f7a47 98%, transparent 100%), radial-gradient(50% 60% at 50% 30%, #5b9a62 98%, transparent 100%); }
-.piece-tableau { position: absolute; margin: 0; left: 50%; bottom: calc(8.5% + 35.4% + 8.4%); width: calc(var(--w) / 320 * 100%); aspect-ratio: var(--w) / var(--h); transform: translateX(-50%); background: #fff; border: 3px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.1), 0 14px 18px -8px rgba(0,0,0,.45); transition: width .35s ease, aspect-ratio .35s ease; display: grid; place-items: center; overflow: hidden; background: linear-gradient(135deg, #e00000, #7a0010); }
+.piece-tableau { position: absolute; margin: 0; left: 50%; bottom: calc(8.5% + var(--mh) + var(--gap)); width: calc(var(--w) / 320 * 100%); aspect-ratio: var(--w) / var(--h); transform: translateX(-50%); background: #fff; border: 3px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.1), 0 14px 18px -8px rgba(0,0,0,.45); transition: width .35s ease, aspect-ratio .35s ease; display: grid; place-items: center; overflow: hidden; background: linear-gradient(135deg, #e00000, #7a0010); }
 .piece-tableau img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
 .piece-scene.avec-image .piece-tableau img { display: block; }
 .piece-vide { color: rgba(255,255,255,.85); font: 600 .72rem var(--police); text-align: center; padding: 0 6px; }
 .piece-scene.avec-image .piece-vide { display: none; }
-.piece-cote { position: absolute; left: 50%; bottom: calc(8.5% + 35.4% + 3.2%); transform: translateX(-50%); background: rgba(17,17,17,.82); color: #fff; font: 700 .78rem var(--police); padding: 3px 11px; border-radius: 99px; white-space: nowrap; }
+.piece-cote { position: absolute; left: 50%; bottom: calc(8.5% + var(--mh) + var(--gap) + 2%); transform: translateX(-50%); background: rgba(17,17,17,.82); color: #fff; font: 700 .78rem var(--police); padding: 3px 11px; border-radius: 99px; white-space: nowrap; }
 .piece-legende { margin: 14px 0 0; color: var(--gris); }
 .piece-legende .piece-nom { font-weight: 700; color: var(--encre); margin-inline-end: 8px; }
 .piece-autre { background: none; border: 0; cursor: pointer; font: 700 1rem var(--police); padding: 0; }
@@ -1442,4 +1442,68 @@ nav { background: #fff !important; -webkit-backdrop-filter: none !important; bac
     .vue-grille .version, .vue-grille .cadre-poster { padding: 7px 6px; font-size: .78rem; }
     .vue-grille .ajout { padding: 9px 6px; font-size: .85rem; }
     .vue-grille .coeur { transform: scale(.75); transform-origin: top right; top: 6px; right: 6px; }
+}
+
+/* v43 formats = sélecteur + plusieurs pièces */
+.format[role="button"] { cursor: pointer; position: relative; }
+.format[role="button"][aria-pressed="true"] { border-color: var(--rouge); box-shadow: 0 0 0 2px var(--rouge), 0 16px 34px -22px rgba(0,0,0,.45); }
+.format-voir { display: inline-block; margin-top: 8px; font-size: .85rem; font-weight: 700; color: var(--gris); }
+.format[aria-pressed="true"] .format-voir { color: var(--rouge); }
+.format[aria-pressed="true"] .format-voir::before { content: "✓ "; }
+.seg-env { margin: 6px 0 18px; }
+.piece-bloc { margin-top: 36px; }
+/* éléments de pièce : cachés par défaut */
+.piece-lit, .piece-chevet, .piece-bureau, .piece-console { position: absolute; display: none; }
+.piece-lit i, .piece-bureau i, .piece-console i, .piece-chevet i { position: absolute; display: block; }
+.env-salon { --mh: 35.4%; }
+.env-chambre { --mh: 37.5%; --gap: 4%; } .env-bureau { --mh: 41%; --gap: 4%; } .env-entree { --mh: 33%; --gap: 8.4%; } .env-salon { --gap: 8.4%; }
+.env-salon .piece-canape, .env-salon .piece-plante { display: block; }
+.env-chambre .piece-plante, .env-entree .piece-plante { display: block; }
+.env-chambre .piece-canape, .env-bureau .piece-canape, .env-entree .piece-canape, .env-bureau .piece-plante { display: none; }
+.env-chambre .piece-lit { display: block; } .env-chambre .piece-chevet { display: block; }
+.env-bureau .piece-bureau { display: block; } .env-entree .piece-console { display: block; }
+.env-chambre .piece-plante { right: 3%; }
+.env-chambre .piece-mur { background: linear-gradient(180deg, #e3e9e6, #d3dcd8); }
+.env-bureau .piece-mur { background: linear-gradient(180deg, #eae7f0, #dcd8e6); }
+.env-entree .piece-mur { background: linear-gradient(180deg, #f1e8e0, #e4d6c9); }
+.sombre .env-chambre .piece-mur { background: linear-gradient(180deg, #232826, #1a1f1d); }
+.sombre .env-bureau .piece-mur { background: linear-gradient(180deg, #25232b, #1b1a20); }
+.sombre .env-entree .piece-mur { background: linear-gradient(180deg, #2b2622, #211c19); }
+/* chambre : lit 160 cm */
+.piece-lit { left: 50%; bottom: 8.5%; width: 52%; height: 37.5%; transform: translateX(-50%); }
+.l-tete { left: 0; right: 0; top: 0; height: 100%; background: #8a6a52; border-radius: 14px 14px 4px 4px; }
+.l-matelas { left: 2%; right: 2%; bottom: 14%; height: 36%; background: #f3efe9; border-radius: 10px 10px 4px 4px; }
+.l-couette { left: 1%; right: 1%; bottom: 8%; height: 26%; background: #8fa3ad; border-radius: 6px 6px 10px 10px; box-shadow: 0 8px 12px -8px rgba(0,0,0,.4); }
+.l-oreiller { bottom: 46%; width: 38%; height: 17%; background: #fff; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,.18); }
+.l-oreiller.g { left: 8%; } .l-oreiller.d { right: 8%; }
+.l-pied { left: 0; right: 0; bottom: 0; height: 12%; background: #6e5440; border-radius: 4px; }
+.piece-chevet { bottom: 8.5%; width: 8%; height: 19%; }
+.piece-chevet.g { left: 13%; } .piece-chevet.d { right: 13%; }
+.piece-chevet > i { left: 0; right: 0; top: 0; bottom: 0; background: #7a5a3b; border-radius: 3px; box-shadow: inset 0 -5px 0 rgba(0,0,0,.15); }
+.piece-chevet > i.lampe::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: 100%; height: 85%; background: #f1d28a; border-radius: 40% 40% 6% 6%; }
+/* bureau 140 cm */
+.piece-bureau { left: 50%; bottom: 8.5%; width: 46%; height: 36%; transform: translateX(-50%); }
+.b-plateau { left: 0; right: 0; top: 14%; height: 8%; background: #b08968; border-radius: 4px; box-shadow: 0 6px 10px -6px rgba(0,0,0,.4); }
+.b-pied { top: 22%; bottom: 0; width: 4%; background: #6e5440; } .b-pied.g { left: 6%; } .b-pied.d { right: 6%; }
+.b-laptop { left: 26%; width: 32%; bottom: 86%; height: 26%; background: #2c3238; border-radius: 4px 4px 0 0; border: 2px solid #9aa3aa; border-bottom: 0; }
+.b-lampe { right: 12%; width: 10%; bottom: 86%; height: 30%; background: #e6b450; border-radius: 50% 50% 8% 8%; }
+.b-livres { left: 6%; width: 12%; bottom: 86%; height: 12%; background: linear-gradient(#c0504d 0 33%, #4a6fa5 33% 66%, #e0c36a 66%); border-radius: 2px; }
+/* entrée : console 100 cm */
+.piece-console { left: 50%; bottom: 8.5%; width: 32%; height: 33%; transform: translateX(-50%); }
+.k-plateau { left: 0; right: 0; top: 0; height: 9%; background: #8b6b4f; border-radius: 4px; }
+.k-tiroir { left: 4%; right: 4%; top: 9%; height: 26%; background: #7a5a3b; border-radius: 3px; box-shadow: inset 0 -3px 0 rgba(0,0,0,.15); }
+.k-pied { top: 35%; bottom: 0; width: 5%; background: #6e5440; } .k-pied.g { left: 6%; } .k-pied.d { right: 6%; }
+.k-vase { left: 12%; width: 12%; bottom: 100%; height: 24%; background: #e8e3da; border-radius: 40% 40% 30% 30% / 20% 20% 60% 60%; box-shadow: inset -4px 0 0 rgba(0,0,0,.08); }
+.k-livres { right: 10%; width: 22%; bottom: 100%; height: 14%; background: linear-gradient(#4a6fa5 0 50%, #c0504d 50%); border-radius: 2px; }
+@media (max-width: 600px) {
+    .formats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .format { padding: 14px 6px 14px; border-radius: 14px; }
+    .format > p:not(.format-prix) { display: none; }
+    .format h3 { font-size: .9rem; }
+    .format-visuel { height: 86px; margin-bottom: 10px; }
+    .format-cadre { height: calc(var(--h) * .8px); border-width: 3px; }
+    .format .format-prix { font-size: .75rem; margin-top: 4px; }
+    .format-prix strong { display: block; font-size: 1.05rem; }
+    .format-voir { font-size: .7rem; margin-top: 4px; }
+    .seg-env { width: 100%; } .seg-env button { padding: 9px 2px; font-size: .85rem; }
 }

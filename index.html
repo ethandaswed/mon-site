@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap">
     <script>try{var p=JSON.parse(localStorage.getItem("eg_prefs")||"{}");if(p.transitions===false||p.anim===false)document.documentElement.classList.add("sans-transition");if(p.theme==="sombre"||(p.theme==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("sombre");if(p.texte==="grand")document.documentElement.classList.add("grand");var l=localStorage.getItem("eg_lang");if(l==="en"||l==="he"){document.documentElement.lang=l;document.documentElement.dir=l==="he"?"rtl":"ltr"}}catch(e){}</script>
     <script>try{if(innerWidth<=800)document.documentElement.classList.add("menu-burger")}catch(e){}try{var q=JSON.parse(localStorage.getItem("eg_prefs")||"{}"),c=document.documentElement.classList;if(q.contraste)c.add("contraste");if(q.police==="lisible")c.add("police-lisible");if(q.liens)c.add("liens-soulignes");if(q.flottants===false)c.add("sans-flottants");if(q.texte==="tres-grand")c.add("tres-grand")}catch(e){}</script>
-    <link rel="stylesheet" href="style.css?v=64">
+    <link rel="stylesheet" href="style.css?v=66">
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Ethan Gallery", "description": "Tableaux et portraits personnalisés, peints et dessinés à la main.", "telephone": "+972559955591", "sameAs": ["https://instagram.com/Ethan_bitan"]}</script>
 </head>
 <body>
@@ -94,12 +94,12 @@
         <h2>Les formats et les prix</h2>
         <p class="intro-bloc">Chaque tableau est peint sur mesure. Le prix est annoncé d'avance et confirmé avec vous avant de commencer.</p>
         <div class="formats">
-            <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:30;--h:40"></span></div><h3>30 × 40 cm</h3><p>Bureau, étagère</p><p class="format-prix">à partir de <strong data-prix="30x40"></strong></p></div>
-            <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:50;--h:70"></span></div><h3>50 × 70 cm</h3><p>Salon, chambre</p><p class="format-prix">à partir de <strong data-prix="50x70"></strong></p></div>
-            <div class="format"><div class="format-visuel"><span class="format-cadre" style="--w:70;--h:100"></span></div><h3>70 × 100 cm</h3><p>Grand format, pièce maîtresse</p><p class="format-prix">à partir de <strong data-prix="70x100"></strong></p></div>
+            <div class="format" role="button" tabindex="0" data-t="30x40" aria-pressed="false"><div class="format-visuel"><span class="format-cadre" style="--w:30;--h:40"></span></div><h3>30 × 40 cm</h3><p>Bureau, étagère</p><p class="format-prix">à partir de <strong data-prix="30x40"></strong></p><span class="format-voir">Voir chez moi ↓</span></div>
+            <div class="format" role="button" tabindex="0" data-t="50x70" aria-pressed="false"><div class="format-visuel"><span class="format-cadre" style="--w:50;--h:70"></span></div><h3>50 × 70 cm</h3><p>Salon, chambre</p><p class="format-prix">à partir de <strong data-prix="50x70"></strong></p><span class="format-voir">Voir chez moi ↓</span></div>
+            <div class="format" role="button" tabindex="0" data-t="70x100" aria-pressed="false"><div class="format-visuel"><span class="format-cadre" style="--w:70;--h:100"></span></div><h3>70 × 100 cm</h3><p>Grand format, pièce maîtresse</p><p class="format-prix">à partir de <strong data-prix="70x100"></strong></p><span class="format-voir">Voir chez moi ↓</span></div>
         </div>
-        <p class="note-poster" data-i18n="note-poster">Vous préférez une version plus abordable ? Chaque création existe aussi en <strong>poster imprimé</strong>, de <span data-poster="min"></span> à <span data-poster="max"></span>, avec un cadre en option (+<span data-poster="cadre"></span>).</p>
         <div class="piece-bloc" id="piece-accueil"></div>
+        <p class="note-poster" data-i18n="note-poster">Vous préférez une version plus abordable ? Chaque création existe aussi en <strong>poster imprimé</strong>, de <span data-poster="min"></span> à <span data-poster="max"></span>, avec un cadre en option (+<span data-poster="cadre"></span>).</p>
         <div class="cadeau-carte">
             <span class="cadeau-ico" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>
             <div class="cadeau-texte"><h3>Offrez un tableau unique</h3><p>Anniversaire, mariage, naissance, fête : un portrait peint à la main à partir d'une photo, c'est un cadeau dont on se souvient. Indiquez simplement pour qui il est et la date souhaitée.</p></div>
@@ -174,8 +174,8 @@
     <p class="pied-liens"><a href="legal.html#mentions">Mentions légales</a><a href="legal.html#confidentialite">Confidentialité</a><a href="legal.html#conditions">Conditions de vente</a><a href="parametres.html">Paramètres</a></p>
     <p class="pied-bas">© 2026 Ethan Gallery. Originaux faits main, posters imprimés en option.</p>
 </footer>
-<script src="script.js?v=64"></script>
-<script src="extras.js?v=64"></script>
-<script src="langues.js?v=64"></script>
+<script src="script.js?v=66"></script>
+<script src="extras.js?v=66"></script>
+<script src="langues.js?v=66"></script>
 </body>
 </html>

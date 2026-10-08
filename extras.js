@@ -367,11 +367,21 @@ const NOTIFICATIONS = [];
     }
 
     // ---------- Aperçu dans une pièce ----------
-    const PIECE = '<div class="piece-scene" role="img" aria-label="Aperçu du tableau au-dessus d\'un canapé de 2 mètres">' +
+    const PIECE = '<div class="piece-scene env-salon" role="img" aria-label="Aperçu du tableau dans une pièce">' +
         '<div class="piece-mur"></div><div class="piece-sol"></div><div class="piece-plante"></div>' +
         '<div class="piece-canape"><i class="c-dos"></i><i class="c-assise"></i><i class="c-bras g"></i><i class="c-bras d"></i><i class="c-coussin g"></i><i class="c-coussin d"></i></div>' +
+        '<div class="piece-lit"><i class="l-tete"></i><i class="l-pied"></i><i class="l-matelas"></i><i class="l-couette"></i><i class="l-oreiller g"></i><i class="l-oreiller d"></i></div>' +
+        '<div class="piece-chevet g"><i></i></div><div class="piece-chevet d"><i class="lampe"></i></div>' +
+        '<div class="piece-bureau"><i class="b-laptop"></i><i class="b-lampe"></i><i class="b-livres"></i><i class="b-plateau"></i><i class="b-pied g"></i><i class="b-pied d"></i></div>' +
+        '<div class="piece-console"><i class="k-vase"></i><i class="k-livres"></i><i class="k-plateau"></i><i class="k-tiroir"></i><i class="k-pied g"></i><i class="k-pied d"></i></div>' +
         '<figure class="piece-tableau"><img alt=""><span class="piece-vide">Votre photo</span></figure>' +
         '<span class="piece-cote"></span></div>';
+    const ENVS = { salon: "Salon", chambre: "Chambre", bureau: "Bureau", entree: "Entrée" };
+    const ENV_ALT = { salon: "Aperçu du tableau au-dessus d'un canapé de 2 mètres", chambre: "Aperçu du tableau au-dessus d'un lit de 160 cm", bureau: "Aperçu du tableau au-dessus d'un bureau de 140 cm", entree: "Aperçu du tableau au-dessus d'une console d'entrée de 100 cm" };
+    function majEnv(scene, env) {
+        Object.keys(ENVS).forEach((k) => scene.classList.toggle("env-" + k, k === env));
+        scene.setAttribute("aria-label", ENV_ALT[env] || "");
+    }
     function majPiece(scene, { src, taille, exemple }) {
         const [w, h] = (taille || "50x70").split("x").map(Number);
         scene.style.setProperty("--w", w); scene.style.setProperty("--h", h);
@@ -383,26 +393,34 @@ const NOTIFICATIONS = [];
     }
     const formatLibelle = { "30x40": "30 × 40 cm", "50x70": "50 × 70 cm", "70x100": "70 × 100 cm" };
 
-    // Accueil : formats + choix du tableau
+    // Accueil : les formats servent aussi de sélecteur pour l'aperçu
     const acc = byId("piece-accueil");
     if (acc) {
         const choix = CREATIONS.filter((c) => c.accueil && c.dispo);
-        let i = 0, taille = "50x70";
+        let i = 0, taille = "50x70", env = "salon";
         acc.innerHTML = "<h3>Voyez la taille chez vous</h3>" +
-            '<p class="intro-bloc">Choisissez un format pour voir le tableau au-dessus d\'un canapé de 2 mètres.</p>' +
-            '<div class="seg" role="group" aria-label="Format">' + Object.keys(formatLibelle).map((k) => '<button type="button" data-t="' + k + '" aria-pressed="' + (k === taille) + '">' + formatLibelle[k] + "</button>").join("") + "</div>" +
+            '<p class="intro-bloc">Touchez un format ci-dessus, puis choisissez la pièce.</p>' +
+            '<div class="seg seg-env" role="group" aria-label="Pièce">' + Object.keys(ENVS).map((k) => '<button type="button" data-e="' + k + '" aria-pressed="' + (k === env) + '">' + ENVS[k] + "</button>").join("") + "</div>" +
             PIECE + '<p class="piece-legende"><span class="piece-nom"></span> <button type="button" class="lien-fleche piece-autre">Voir un autre tableau</button></p>';
         const scene = acc.querySelector(".piece-scene");
+        const cartes = document.querySelectorAll(".format[data-t]");
         const maj = () => {
             const c = choix[i % choix.length];
+            majEnv(scene, env);
             majPiece(scene, { src: c ? "./" + c.fichier : "", taille });
             acc.querySelector(".piece-nom").textContent = c ? c.titre : "";
-            acc.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.t === taille));
+            acc.querySelectorAll(".seg-env button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.e === env));
+            cartes.forEach((k) => k.setAttribute("aria-pressed", k.dataset.t === taille));
         };
-        acc.addEventListener("click", (e) => {
-            const b = e.target.closest(".seg button");
-            if (b) { taille = b.dataset.t; maj(); return; }
-            if (e.target.closest(".piece-autre")) { i++; maj(); }
+        const choisir = (k) => { taille = k.dataset.t; maj(); };
+        cartes.forEach((k) => {
+            k.addEventListener("click", () => choisir(k));
+            k.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); choisir(k); } });
+        });
+        acc.addEventListener("click", (ev) => {
+            const b = ev.target.closest(".seg-env button");
+            if (b) { env = b.dataset.e; maj(); return; }
+            if (ev.target.closest(".piece-autre")) { i++; maj(); }
         });
         maj();
         if (!choix.length) acc.querySelector(".piece-autre").hidden = true;

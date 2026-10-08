@@ -16,6 +16,18 @@
 
     // ---------- Traductions : [français, anglais, hébreu] ----------
     const DICO = [
+        ["Touchez un format ci-dessus, puis choisissez la pièce.", "Tap a size above, then choose the room.", "לחצו על גודל למעלה ואז בחרו את החדר."],
+        ["Voir chez moi ↓", "See it at home ↓", "ראו אצלי בבית ↓"],
+        ["Salon", "Living room", "סלון"],
+        ["Chambre", "Bedroom", "חדר שינה"],
+        ["Bureau", "Office", "משרד"],
+        ["Entrée", "Entryway", "כניסה"],
+        ["Pièce", "Room", "חדר"],
+        ["Aperçu du tableau au-dessus d'un lit de 160 cm", "Preview of the painting above a 160 cm bed", "תצוגת הציור מעל מיטה ברוחב 160 ס״מ"],
+        ["Aperçu du tableau au-dessus d'un bureau de 140 cm", "Preview of the painting above a 140 cm desk", "תצוגת הציור מעל שולחן עבודה ברוחב 140 ס״מ"],
+        ["Aperçu du tableau au-dessus d'une console d'entrée de 100 cm", "Preview of the painting above a 100 cm entryway console", "תצוגת הציור מעל קונסולת כניסה ברוחב 100 ס״מ"],
+        ["Aperçu du tableau au-dessus d'un canapé de 2 mètres", "Preview of the painting above a 2-metre sofa", "תצוגת הציור מעל ספה באורך 2 מטרים"],
+        ["Aperçu du tableau dans une pièce", "Preview of the painting in a room", "תצוגת הציור בחדר"],
         ["Votre panier est vide", "Your cart is empty", "העגלה שלכם ריקה"],
         ["Chaque tableau est peint à la main, une pièce unique pour votre intérieur.", "Every painting is hand-painted, a unique piece for your home.", "כל ציור מצויר ביד, יצירה ייחודית לבית שלכם."],
         ["Commande sur mesure", "Custom order", "הזמנה בהתאמה אישית"],
